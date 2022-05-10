@@ -15,8 +15,14 @@
 			}
 		},
 		onLoad() {
-			const s:string = '666';
-			console.log(typeof s);
+			wx.cloud.callFunction({
+				name:"hello",
+				data:{
+					
+				},
+			}).then((res)=>{
+				console.log(res);
+			})
 		},
 		methods: {
 
