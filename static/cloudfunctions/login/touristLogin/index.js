@@ -22,7 +22,7 @@ exports.main = async (event, context) => {
 
   let res = {};
   if (isAbsent.data.length == 0) {
-    console.log(wxContext.OPENID + userInfo.nickName + "初次登录");
+    console.log(wxContext.OPENID + userInfo.nickName + "游客初次登录");
     res = await userDb.add({
       data: {
         _openid: wxContext.OPENID,
@@ -37,7 +37,7 @@ exports.main = async (event, context) => {
       }
     })
   } else {
-    console.log(wxContext.OPENID + userInfo.nickName + "再次登录")
+    console.log(wxContext.OPENID + userInfo.nickName + "游客再次登录")
     res = await userDb.doc(isAbsent.data[0]._id).update({
       data: {
         lastLoginTime: new Date()

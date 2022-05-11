@@ -63,7 +63,10 @@ import $parent from './libs/function/$parent.js'
 // 获取sys()和os()工具方法
 // 获取设备信息，挂载到$u的sys()(system的缩写)属性中，
 // 同时把安卓和ios平台的名称"ios"和"android"挂到$u.os()中，方便取用
-import {sys, os} from './libs/function/sys.js'
+import {
+	sys,
+	os
+} from './libs/function/sys.js'
 // 防抖方法
 import debounce from './libs/function/debounce.js'
 // 节流方法
@@ -117,8 +120,8 @@ const $u = {
 uni.$u = $u
 
 const install = Vue => {
-	Vue.mixin(mixin) 
-  // #ifndef VUE3
+	Vue.mixin(mixin)
+	// #ifndef VUE3
 	if (Vue.prototype.openShare) {
 		Vue.mixin(mpShare);
 	}
@@ -135,10 +138,10 @@ const install = Vue => {
 		return timeFrom(timestamp, format)
 	})
 	Vue.prototype.$u = $u
-  // #endif
-  // #ifdef VUE3
-  Vue.config.globalProperties.$u = $u
-  // #endif
+	// #endif
+	// #ifdef VUE3
+	Vue.config.globalProperties.$u = $u
+	// #endif
 }
 
 export default {

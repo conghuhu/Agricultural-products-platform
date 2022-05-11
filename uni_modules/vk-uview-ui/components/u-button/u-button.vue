@@ -262,7 +262,7 @@ export default {
 		// 按钮点击
 		click(e) {
 			// 进行节流控制，每this.throttle毫秒内，只在开始处执行
-			// this.$u.throttle(() => {
+			this.$u.throttle(() => {
 				// 如果按钮时disabled和loading状态，不触发水波纹效果
 				if (this.loading === true || this.disabled === true) return;
 				// 是否开启水波纹效果
@@ -274,7 +274,7 @@ export default {
 					});
 				}
 				this.$emit('click', e);
-			// }, this.throttleTime, true, this.btnTimerId);
+			}, this.throttleTime, true, this.btnTimerId);
 		},
 		// 查询按钮的节点信息
 		getWaveQuery(e) {

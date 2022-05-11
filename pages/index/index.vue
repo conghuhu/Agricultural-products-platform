@@ -10,18 +10,13 @@
 </template>
 
 <script lang="ts">
-	import {
-		useCounterStore
-	} from '@/stores/counter';
+	import request from '@/api/request';
 	import {
 		ref
-	} from 'vue'
-	import request from '@/api/request';
-
+	} from 'vue';
 	export default {
 		setup() {
-			const title = ref("hello");
-
+			const title = ref("hello")
 			async function merChantLogin() {
 				// 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
 				// 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
@@ -33,32 +28,49 @@
 				})
 				const result = await request("login", {
 					userInfo: res.userInfo,
-					status: 'merChant',
+					status: 0, // 商家
 					type: 'merChantLogin'
 				});
 				await wx.setStorage({
 					key: "userInfo",
-					data: Object.assign(res.userInfo, result.result),
+					data: Object.assign(res.userInfo, result),
 					encrypt: true,
 				})
-				console.log(res);
 				wx.hideLoading();
 			}
 
 			async function touristLogin() {
-
+				// 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
+				// 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
+				const res = await wx.getUserProfile({
+					desc: '用于身份认证', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+				});
+				wx.showLoading({
+					title: '加载中',
+				})
+				const result = await request("login", {
+					userInfo: res.userInfo,
+					status: 1, // 游客
+					type: 'touristLogin'
+				});
+				await wx.setStorage({
+					key: "userInfo",
+					data: Object.assign(res.userInfo, result),
+					encrypt: true,
+				})
+				wx.hideLoading();
 			}
-
 			return {
 				title,
 				merChantLogin,
 				touristLogin
 			}
 		},
-		onLoad() {
-			request("hello", {}).then((res) => {
-				console.log(res);
+		async onLoad() {
+			const res = await request("login", {
+				type: 'checkLogin'
 			})
+			console.log(res.data);
 		},
 	}
 </script>

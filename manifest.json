@@ -51,10 +51,12 @@
     /* 小程序特有相关 */
     "mp-weixin" : {
         "appid" : "wx59f6a3ecb7f339e9",
-        "setting" : {
-            "urlCheck" : false,
-            "es6" : true
-        },
+		"setting" : {
+		    "urlCheck" : false,
+		    "es6" : true,
+		    "postcss" : true,
+		    "minified" : true
+		},
 		"cloudfunctionRoot": "static/cloudfunctions/",
         "usingComponents" : true,
         "permission" : {

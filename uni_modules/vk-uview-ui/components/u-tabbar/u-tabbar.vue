@@ -14,17 +14,11 @@
 				<view :class="[
 					midButton && item.midButton ? 'u-tabbar__content__circle__button' : 'u-tabbar__content__item__button'
 				]">
-					<u-icon
-						:size="midButton && item.midButton ? midButtonSize : iconSize"
-						:name="elIconPath(index)"
-						img-mode="scaleToFill"
-						:color="elColor(index)"
-						:custom-prefix="item.customIcon ? 'custom-icon' : 'uicon'"
-					></u-icon>
-					<u-badge :count="item.count" :is-dot="item.isDot"
-						v-if="item.count"
-						:offset="[-2, getOffsetRight(item.count, item.isDot)]"
-					></u-badge>
+					<u-icon :size="midButton && item.midButton ? midButtonSize : iconSize" :name="elIconPath(index)"
+						img-mode="scaleToFill" :color="elColor(index)"
+						:custom-prefix="item.customIcon ? 'custom-icon' : 'uicon'"></u-icon>
+					<u-badge :count="item.count" :is-dot="item.isDot" v-if="item.count"
+						:offset="[-2, getOffsetRight(item.count, item.isDot)]"></u-badge>
 				</view>
 				<view class="u-tabbar__content__item__text" :style="{
 					color: elColor(index)
@@ -49,17 +43,17 @@
 
 <script>
 	export default {
-    emits: ["update:modelValue", "input", "change"],
+		emits: ["update:modelValue", "input", "change"],
 		props: {
-      // 通过v-model绑定current值
-      value: {
-        type: [String, Number],
-        default: 0
-      },
-      modelValue: {
-        type: [String, Number],
-        default: 0
-      },
+			// 通过v-model绑定current值
+			value: {
+				type: [String, Number],
+				default: 0
+			},
+			modelValue: {
+				type: [String, Number],
+				default: 0
+			},
 			// 显示与否
 			show: {
 				type: Boolean,
@@ -132,7 +126,7 @@
 		},
 		created() {
 			// 是否隐藏原生tabbar
-			if(this.hideTabBar) uni.hideTabBar();
+			if (this.hideTabBar) uni.hideTabBar();
 			// 获取引入了u-tabbar页面的路由地址，该地址没有路径前面的"/"
 			let pages = getCurrentPages();
 			// 页面栈中的最后一个即为项为当前页面，route属性为页面路径
@@ -147,8 +141,8 @@
 					let pagePath = this.list[index].pagePath;
 					// 如果定义了pagePath属性，意味着使用系统自带tabbar方案，否则使用一个页面用几个组件模拟tabbar页面的方案
 					// 这两个方案对处理tabbar item的激活与否方式不一样
-					if(pagePath) {
-						if(pagePath == this.pageUrl || pagePath == '/' + this.pageUrl) {
+					if (pagePath) {
+						if (pagePath == this.pageUrl || pagePath == '/' + this.pageUrl) {
 							return this.list[index].selectedIconPath;
 						} else {
 							return this.list[index].iconPath;
@@ -163,8 +157,8 @@
 				return (index) => {
 					// 判断方法同理于elIconPath
 					let pagePath = this.list[index].pagePath;
-					if(pagePath) {
-						if(pagePath == this.pageUrl || pagePath == '/' + this.pageUrl) return this.activeColor;
+					if (pagePath) {
+						if (pagePath == this.pageUrl || pagePath == '/' + this.pageUrl) return this.activeColor;
 						else return this.inactiveColor;
 					} else {
 						return index == this.getValue() ? this.activeColor : this.inactiveColor;
@@ -176,17 +170,17 @@
 			this.midButton && this.getMidButtonLeft();
 		},
 		methods: {
-      getValue(){
-        // #ifndef VUE3
-        return this.value;
-        // #endif
-        
-        // #ifdef VUE3
-        return this.modelValue;
-        // #endif
-      },
+			getValue() {
+				// #ifndef VUE3
+				return this.value;
+				// #endif
+
+				// #ifdef VUE3
+				return this.modelValue;
+				// #endif
+			},
 			async clickHandler(index) {
-				if(this.beforeSwitch && typeof(this.beforeSwitch) === 'function') {
+				if (this.beforeSwitch && typeof(this.beforeSwitch) === 'function') {
 					// 执行回调，同时传入索引当作参数
 					// 在微信，支付宝等环境(H5正常)，会导致父组件定义的customBack()函数体中的this变成子组件的this
 					// 通过bind()方法，绑定父组件的this，让this.customBack()的this为父组件的上下文
@@ -199,7 +193,7 @@
 						}).catch(err => {
 
 						})
-					} else if(beforeSwitch === true) {
+					} else if (beforeSwitch === true) {
 						// 如果返回true
 						this.switchTab(index);
 					}
@@ -212,7 +206,7 @@
 				// 发出事件和修改v-model绑定的值
 				this.$emit('change', index);
 				// 如果有配置pagePath属性，使用uni.switchTab进行跳转
-				if(this.list[index].pagePath) {
+				if (this.list[index].pagePath) {
 					uni.switchTab({
 						url: this.list[index].pagePath
 					})
@@ -220,15 +214,15 @@
 					// 如果配置了papgePath属性，将不会双向绑定v-model传入的value值
 					// 因为这个模式下，不再需要v-model绑定的value值了，而是通过getCurrentPages()适配
 					this.$emit('input', index);
-          this.$emit("update:modelValue", index);
+					this.$emit("update:modelValue", index);
 				}
 			},
 			// 计算角标的right值
 			getOffsetRight(count, isDot) {
 				// 点类型，count大于9(两位数)，分别设置不同的right值，避免位置太挤
-				if(isDot) {
+				if (isDot) {
 					return -20;
-				} else if(count > 9) {
+				} else if (count > 9) {
 					return -40;
 				} else {
 					return -30;
@@ -236,7 +230,8 @@
 			},
 			// 获取凸起按钮外层元素的left值，让其水平居中
 			getMidButtonLeft() {
-				let windowWidth = this.$u.sys().windowWidth;
+				
+				let windowWidth = uni.$u.sys().windowWidth;
 				// 由于安卓中css计算left: 50%的结果不准确，故用js计算
 				this.midButtonLeft = (windowWidth / 2) + 'px';
 			}
@@ -246,6 +241,7 @@
 
 <style scoped lang="scss">
 	@import "../../libs/css/style.components.scss";
+
 	.u-fixed-placeholder {
 		/* #ifndef APP-NVUE */
 		box-sizing: content-box;
