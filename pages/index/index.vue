@@ -4,7 +4,8 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
-		<u-button type="primary">主要按钮</u-button>
+		<u-button type="primary" @click="">我是商家</u-button>
+		<u-button type="primary">我要游客</u-button>
 	</view>
 </template>
 
@@ -22,7 +23,10 @@
 			const title = ref("hello");
 			const counter = useCounterStore();
 			counter.increment();
-			console.log(counter.count)
+			console.log(counter.count);
+			
+			
+			
 			return {
 				title
 			}
