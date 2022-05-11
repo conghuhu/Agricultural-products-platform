@@ -206,8 +206,12 @@
 				// 发出事件和修改v-model绑定的值
 				this.$emit('change', index);
 				// 如果有配置pagePath属性，使用uni.switchTab进行跳转
-				if (this.list[index].pagePath) {
+				if (this.list[index].pagePath && !this.list[index].custom) {
 					uni.switchTab({
+						url: this.list[index].pagePath
+					})
+				} else if (this.list[index].custom) {
+					uni.redirectTo({
 						url: this.list[index].pagePath
 					})
 				} else {
@@ -230,7 +234,7 @@
 			},
 			// 获取凸起按钮外层元素的left值，让其水平居中
 			getMidButtonLeft() {
-				
+
 				let windowWidth = uni.$u.sys().windowWidth;
 				// 由于安卓中css计算left: 50%的结果不准确，故用js计算
 				this.midButtonLeft = (windowWidth / 2) + 'px';

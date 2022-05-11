@@ -1,12 +1,15 @@
 <template>
 	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}</text>
+		<view v-show="!loading">
+			<image class="logo" src="/static/logo.png"></image>
+			<view class="text-area">
+				<text class="title">{{title}}</text>
+			</view>
+
+			<u-button type="primary" @click="merChantLogin">我是商家</u-button>
+			<u-button type="primary" @click="touristLogin">我要游客</u-button>
 		</view>
 
-		<u-button type="primary" @click="merChantLogin">我是商家</u-button>
-		<u-button type="primary" @click="touristLogin">我要游客</u-button>
 	</view>
 </template>
 
@@ -17,7 +20,8 @@
 	} from 'vue';
 	export default {
 		setup() {
-			const title = ref("hello")
+			const title = ref("hello");
+			const loading = ref(true);
 			async function merChantLogin() {
 				// 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
 				// 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
@@ -38,8 +42,8 @@
 					encrypt: true,
 				})
 				wx.hideLoading();
-				uni.reLaunch({
-					url:"../../pages/Merchants/index"
+				uni.redirectTo({
+					url: "../../pages/Merchants/Shop/Shop"
 				})
 			}
 
@@ -63,22 +67,35 @@
 					encrypt: true,
 				})
 				wx.hideLoading();
-				await uni.reLaunch({
-					url:"../../pages/Tourists/HomeBar/HomeBar"
+				uni.redirectTo({
+					url: "../../pages/Tourists/HomeBar/HomeBar"
 				})
 			}
 			return {
 				title,
+				loading,
 				merChantLogin,
 				touristLogin
-
 			}
 		},
 		async onLoad() {
-			const res = await request("login", {
+			wx.showLoading({
+				title: '',
+			})
+			const res: {
+				data: any[]
+			} = await request("login", {
 				type: 'checkLogin'
 			})
-			console.log(res.data);
+
+			if (res.data.length === 1) {
+				uni.redirectTo({
+					url: res.data[0].status === 0 ? "../../pages/Merchants/Shop/Shop" :
+						"../../pages/Tourists/HomeBar/HomeBar"
+				})
+			}
+			this.loading = false
+			wx.hideLoading();
 		},
 	}
 </script>

@@ -8,13 +8,6 @@
 				"enablePullDownRefresh": false
 			}
 		}, {
-			"path": "pages/Merchants/index",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
 			"path": "pages/Tourists/HomeBar/HomeBar",
 			"style": {
 				"navigationBarTitleText": "",
@@ -49,7 +42,52 @@
 				"enablePullDownRefresh": false
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/Merchants/PersonCenter/PersonCenter",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/Merchants/OrderCenter/OrderCenter",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/Merchants/GoodsPutaway/GoodsPutaway",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/Merchants/Shop/Shop",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/Merchants/LearnCenter/LearnCenter",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -61,13 +99,12 @@
 		"selectedColor": "#303133",
 		"backgroundColor": "#FFFFFF",
 		"borderStyle": "black",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/Tourists/HomeBar/HomeBar",
 				"text": "首页"
 			},
 			{
-				"pagePath":"pages/Tourists/ClassificationBar/ClassificationBar",
+				"pagePath": "pages/Tourists/ClassificationBar/ClassificationBar",
 				"text": "分类"
 			},
 			{
@@ -82,6 +119,26 @@
 				"pagePath": "pages/Tourists/MeBar/MeBar",
 				"text": "我的"
 			}
+			// {
+			// 	"pagePath": "pages/Merchants/Shop/Shop",
+			// 	"text": "店铺"
+			// },
+			// {
+			// 	"pagePath": "pages/Merchants/LearnCenter/LearnCenter",
+			// 	"text": "学习"
+			// },
+			// {
+			// 	"pagePath": "pages/Merchants/GoodsPutaway/GoodsPutaway",
+			// 	"text": "上架"
+			// },
+			// {
+			// 	"pagePath": "pages/Merchants/OrderCenter/OrderCenter",
+			// 	"text": "订单"
+			// },
+			// {
+			// 	"pagePath": "pages/Merchants/PersonCenter/PersonCenter",
+			// 	"text": "个人"
+			// }
 		]
 	}
 }
