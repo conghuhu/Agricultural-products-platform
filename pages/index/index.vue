@@ -4,7 +4,7 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
-		<u-button type="primary" @click="">我是商家</u-button>
+		<u-button type="primary" @click="getuser">我是商家</u-button>
 		<u-button type="primary">我要游客</u-button>
 	</view>
 </template>
@@ -24,11 +24,16 @@
 			const counter = useCounterStore();
 			counter.increment();
 			console.log(counter.count);
-			
-			
-			
+			async function getuser() {
+				request("hello", {}).then((res) => {
+					
+				})
+			}
+
+
 			return {
-				title
+				title,
+				getuser
 			}
 		},
 		onLoad() {
