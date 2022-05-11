@@ -4,6 +4,7 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
+
 		<u-button type="primary" @click="merChantLogin">我是商家</u-button>
 		<u-button type="primary" @click="touristLogin">我要游客</u-button>
 	</view>
@@ -37,6 +38,9 @@
 					encrypt: true,
 				})
 				wx.hideLoading();
+				uni.reLaunch({
+					url:"../../pages/Merchants/index"
+				})
 			}
 
 			async function touristLogin() {
@@ -59,11 +63,15 @@
 					encrypt: true,
 				})
 				wx.hideLoading();
+				await uni.reLaunch({
+					url:"../../pages/Tourists/HomeBar/HomeBar"
+				})
 			}
 			return {
 				title,
 				merChantLogin,
 				touristLogin
+
 			}
 		},
 		async onLoad() {
