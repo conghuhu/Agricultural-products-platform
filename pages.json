@@ -5,89 +5,115 @@
 			"style": {
 
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		}, {
-			"path": "pages/Tourists/HomeBar/HomeBar",
+			<<
+			<<
+			<< < HEAD ===
+			===
+			=
+			"path": "pages/Merchants/index",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			>>>
+			>>>
+			> fe8722306b877045600e143ad1ec9c9b1d11d2be "path": "pages/Tourists/HomeBar/HomeBar",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		}, {
 			"path": "pages/Tourists/ClassificationBar/ClassificationBar",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		}, {
 			"path": "pages/Tourists/MeBar/MeBar",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		}, {
 			"path": "pages/Tourists/ShoppingBar/ShoppingBar",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/Tourists/MenuBar/MenuBar",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
+		}, {
+
+			"path": "pages/Merchants/PersonCenter/PersonCenter",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/Merchants/OrderCenter/OrderCenter",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/Merchants/GoodsPutaway/GoodsPutaway",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/Merchants/Shop/Shop",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/Merchants/LearnCenter/LearnCenter",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/Tourists/Location/Location",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+
+			}
+
 		}
-	    ,{
-            "path" : "pages/Merchants/PersonCenter/PersonCenter",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/Merchants/OrderCenter/OrderCenter",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/Merchants/GoodsPutaway/GoodsPutaway",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/Merchants/Shop/Shop",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/Merchants/LearnCenter/LearnCenter",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -119,26 +145,6 @@
 				"pagePath": "pages/Tourists/MeBar/MeBar",
 				"text": "我的"
 			}
-			// {
-			// 	"pagePath": "pages/Merchants/Shop/Shop",
-			// 	"text": "店铺"
-			// },
-			// {
-			// 	"pagePath": "pages/Merchants/LearnCenter/LearnCenter",
-			// 	"text": "学习"
-			// },
-			// {
-			// 	"pagePath": "pages/Merchants/GoodsPutaway/GoodsPutaway",
-			// 	"text": "上架"
-			// },
-			// {
-			// 	"pagePath": "pages/Merchants/OrderCenter/OrderCenter",
-			// 	"text": "订单"
-			// },
-			// {
-			// 	"pagePath": "pages/Merchants/PersonCenter/PersonCenter",
-			// 	"text": "个人"
-			// }
 		]
 	}
 }

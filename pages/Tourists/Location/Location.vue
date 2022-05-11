@@ -1,14 +1,17 @@
 <template>
 	<view>
 		<view>
-			<u-navbar title="当前位置" :is-back="true" :background="background">
+			<u-navbar title="选择地址" :is-back="true" :background="background">
 				<view class="slot-wrap" @click="rightClick()">
-					获取当前位置
 				</view>
+
 			</u-navbar>
 		</view>
 		<view>
-			<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
+			<u-search placeholder="请输入位置" v-model="keyword" @change="search()"></u-search>
+		</view>
+		<view>
+			<u-tabbar :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
 		</view>
 	</view>
 </template>
@@ -20,6 +23,7 @@
 	} from 'vue'
 	export default {
 		setup() {
+			//tabbar
 			const list = reactive([{
 					iconPath: "home",
 					selectedIconPath: "home-fill",
@@ -61,6 +65,7 @@
 					pagePath: "/pages/Tourists/MeBar/MeBar"
 				},
 			])
+			//页面nav信息配置
 			const current = ref(0);
 			const background = ref({
 				backgroundColor: '#001f3f',
@@ -75,15 +80,27 @@
 			})
 			async function rightClick() {
 				console.log(11111)
-				uni.redirectTo({
-					url:"../Location/Location"
+				uni.reLaunch({
+					url: "../HomeBar/HomeBar"
 				})
+			}
+			const keyword = ref("")
+			async function search() {
+				await wx.startLocationUpdateBackground("gcj02")
+				const {
+					latitude,
+					longitude
+				} = await wx.getLocation();
+				const res = await wx.choosePoi(2,latitude,longitude);
+				console.log(res)
 			}
 			return {
 				list,
 				current,
 				background,
-				rightClick
+				rightClick,
+				keyword,
+				search
 			}
 		}
 
