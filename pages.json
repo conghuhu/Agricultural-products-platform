@@ -8,23 +8,8 @@
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
-		}, {
-			<<
-			<<
-			<< < HEAD ===
-			===
-			=
-			"path": "pages/Merchants/index",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-			}
-
-		}, {
-			>>>
-			>>>
-			> fe8722306b877045600e143ad1ec9c9b1d11d2be "path": "pages/Tourists/HomeBar/HomeBar",
+		},  {
+			"path": "pages/Tourists/HomeBar/HomeBar",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
