@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "copy-webpack-plugin": "^10.2.4"
+  },
+  "dependencies": {
+    "pinia": "^2.0.14"
   }
 }

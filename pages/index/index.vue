@@ -8,25 +8,29 @@
 </template>
 
 <script lang="ts">
+	import {
+		useCounterStore
+	} from '@/stores/counter';
+	import {
+		ref
+	} from 'vue'
+	import request from '@/api/request';
+
 	export default {
-		data() {
+		setup() {
+			const title = ref("hello");
+			const counter = useCounterStore();
+			counter.increment();
+			console.log(counter.count)
 			return {
-				title: 'Hello'
+				title
 			}
 		},
 		onLoad() {
-			wx.cloud.callFunction({
-				name:"hello",
-				data:{
-					
-				},
-			}).then((res)=>{
+			request("hello", {}).then((res) => {
 				console.log(res);
 			})
 		},
-		methods: {
-
-		}
 	}
 </script>
 
