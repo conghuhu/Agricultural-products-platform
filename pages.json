@@ -3,7 +3,50 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/Merchants/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/Tourists/HomeBar/HomeBar",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/Tourists/ClassificationBar/ClassificationBar",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/Tourists/MeBar/MeBar",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/Tourists/ShoppingBar/ShoppingBar",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/Tourists/MenuBar/MenuBar",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
 			}
 		}
 	],
@@ -12,5 +55,33 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#909399",
+		"selectedColor": "#303133",
+		"backgroundColor": "#FFFFFF",
+		"borderStyle": "black",
+		"list": [
+			{
+				"pagePath": "pages/Tourists/HomeBar/HomeBar",
+				"text": "首页"
+			},
+			{
+				"pagePath":"pages/Tourists/ClassificationBar/ClassificationBar",
+				"text": "分类"
+			},
+			{
+				"pagePath": "pages/Tourists/MenuBar/MenuBar",
+				"text": "菜单"
+			},
+			{
+				"pagePath": "pages/Tourists/ShoppingBar/ShoppingBar",
+				"text": "购物车"
+			},
+			{
+				"pagePath": "pages/Tourists/MeBar/MeBar",
+				"text": "我的"
+			}
+		]
 	}
 }
