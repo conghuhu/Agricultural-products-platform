@@ -1,6 +1,6 @@
 <template>
 	<view>
-		999
+		<Nav title="科学助农" />
 		<u-tabbar v-model="current" :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
 	</view>
 </template>
