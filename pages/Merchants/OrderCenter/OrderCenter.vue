@@ -1,6 +1,6 @@
 <template>
 	<view>
-		6111
+		<Nav title="订单中心" />
 		<u-tabbar v-model="current" :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
 	</view>
 </template>

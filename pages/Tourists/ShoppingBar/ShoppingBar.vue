@@ -1,4 +1,5 @@
 <template>
+	<Nav title="我的购物车"></Nav>
 	<view>
 		<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
 	</view>

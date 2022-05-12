@@ -1,6 +1,6 @@
 <template>
 	<view>
-		8888
+		<Nav title="商品上架" />
 		<u-tabbar v-model="current" :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
 	</view>
 </template>

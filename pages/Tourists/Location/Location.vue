@@ -4,12 +4,22 @@
 			<u-navbar title="选择地址" :is-back="true" :background="background">
 				<view class="slot-wrap" @click="rightClick()">
 				</view>
-
 			</u-navbar>
 		</view>
-		<view>
-			<u-search placeholder="请输入位置" v-model="keyword" @change="search()"></u-search>
+		
+		
+		<view style="display: flex;justify-content: space-between;align-items: center; margin-top: 10px;">
+			<view style="flex: 5;">
+				<u-search bg-color="#f2f2f2" placeholder="请输入位置" v-model="keyword" @change="search()"></u-search>
+			</view>
+			<view style="flex: 1;">
+				<u-button :hairLine="false" @click="insertAdress()">新增地址</u-button>
+			</view>
 		</view>
+		
+		
+		
+		
 		<view>
 			<u-tabbar :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
 		</view>
@@ -41,8 +51,7 @@
 			})
 			async function rightClick() {
 				console.log(11111)
-				uni.reLaunch({
-					url: "../HomeBar/HomeBar"
+				uni.navigateBack({
 				})
 			}
 			const keyword = ref("")
@@ -52,8 +61,14 @@
 					latitude,
 					longitude
 				} = await wx.getLocation();
-				const res = await wx.choosePoi(2,latitude,longitude);
+				const res = await wx.choosePoi(2, latitude, longitude);
 				console.log(res)
+			}
+			
+			async function insertAdress(){
+				await uni.navigateTo({
+					url:"../ShippingAddress/ShippingAddress"
+				})
 			}
 			return {
 				list,
@@ -61,7 +76,8 @@
 				background,
 				rightClick,
 				keyword,
-				search
+				search,
+				insertAdress
 			}
 		}
 

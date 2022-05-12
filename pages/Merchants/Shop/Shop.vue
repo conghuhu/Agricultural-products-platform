@@ -1,6 +1,6 @@
 <template>
 	<view>
-		666
+		<Nav title="我的店铺" />
 		<u-tabbar v-model="current" :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
 	</view>
 </template>
