@@ -89,10 +89,16 @@
 			})
 
 			if (res.data.length === 1) {
-				uni.redirectTo({
-					url: res.data[0].status === 0 ? "../../pages/Merchants/Shop/Shop" :
-						"../../pages/Tourists/HomeBar/HomeBar"
-				})
+				const curStatus = res.data[0].status;
+				if (curStatus == 0) {
+					uni.redirectTo({
+						url: "../../pages/Merchants/Shop/Shop"
+					})
+				} else if (curStatus == 1) {
+					uni.switchTab({
+						url: "../../pages/Tourists/HomeBar/HomeBar"
+					})
+				}
 			}
 			this.loading = false
 			wx.hideLoading();
