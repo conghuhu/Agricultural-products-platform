@@ -15,14 +15,24 @@ exports.main = async (event, context) => {
 
 	const openId = wxContext.OPENID;
 
-	const isAbsent = await userDb.where({
+	const record = await userDb.where({
 		_openid: _.eq(openId)
 	}).get();
 
-	let res = false;
+	let res = {};
 
-	if (isAbsent.data.length != 0) {
-		res = true;
+	if (record.data.length != 0) {
+		res = {
+			sucess: true,
+			message: "",
+			data: record.data
+		};
+	}else{
+		res = {
+			success: true,
+			message: "数据为空",
+			data: []
+		}
 	}
 
 	return {

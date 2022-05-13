@@ -18,12 +18,14 @@ const list = [{
 	pagePath: "/pages/Merchants/LearnCenter/LearnCenter"
 },
 {
-	iconPath: "grid",
-	selectedIconPath: "grid-fill",
+	iconPath: "plus-circle",
+	selectedIconPath: "plus-circle-fill",
 	text: '上架',
 	midButton: true,
 	customIcon: false,
 	custom: true,
+	// 跳转此页面，是否是navigator跳转，前提必须custom为true
+	navigator: true,
 	pagePath: "/pages/Merchants/GoodsPutaway/GoodsPutaway"
 },
 {

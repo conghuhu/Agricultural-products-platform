@@ -3,6 +3,7 @@
     "copy-webpack-plugin": "^10.2.4"
   },
   "dependencies": {
+    "dayjs": "^1.11.2",
     "pinia": "^2.0.14"
   }
 }

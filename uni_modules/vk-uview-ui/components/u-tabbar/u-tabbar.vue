@@ -210,8 +210,12 @@
 					uni.switchTab({
 						url: this.list[index].pagePath
 					})
-				} else if (this.list[index].custom) {
+				} else if (this.list[index].custom && !this.list[index].navigator) {
 					uni.redirectTo({
+						url: this.list[index].pagePath
+					})
+				} else if (this.list[index].navigator) {
+					uni.navigateTo({
 						url: this.list[index].pagePath
 					})
 				} else {

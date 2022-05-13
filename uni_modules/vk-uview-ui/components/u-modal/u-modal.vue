@@ -1,7 +1,8 @@
 <template>
 	<view>
 		<u-popup :zoom="zoom" mode="center" :popup="false" :z-index="uZIndex" v-model="popupValue" :length="width"
-		 :mask-close-able="maskCloseAble" :border-radius="borderRadius" @close="popupClose" :negative-top="negativeTop">
+			:mask-close-able="maskCloseAble" :border-radius="borderRadius" @close="popupClose"
+			:negative-top="negativeTop">
 			<view class="u-model">
 				<view v-if="showTitle" class="u-model__title u-line-1" :style="[titleStyle]">{{ title }}</view>
 				<view class="u-model__content">
@@ -11,12 +12,13 @@
 					<view v-else class="u-model__content__message" :style="[contentStyle]">{{ content }}</view>
 				</view>
 				<view class="u-model__footer u-border-top" v-if="showCancelButton || showConfirmButton">
-					<view v-if="showCancelButton" :hover-stay-time="100" hover-class="u-model__btn--hover" class="u-model__footer__button"
-					 :style="[cancelBtnStyle]" @tap="cancel">
+					<view v-if="showCancelButton" :hover-stay-time="100" hover-class="u-model__btn--hover"
+						class="u-model__footer__button" :style="[cancelBtnStyle]" @tap="cancel">
 						{{cancelText}}
 					</view>
-					<view v-if="showConfirmButton || $slots['confirm-button']" :hover-stay-time="100" :hover-class="asyncClose ? 'none' : 'u-model__btn--hover'"
-					 class="u-model__footer__button hairline-left" :style="[confirmBtnStyle]" @tap="confirm">
+					<view v-if="showConfirmButton || $slots['confirm-button']" :hover-stay-time="100"
+						:hover-class="asyncClose ? 'none' : 'u-model__btn--hover'"
+						class="u-model__footer__button hairline-left" :style="[confirmBtnStyle]" @tap="confirm">
 						<slot v-if="$slots['confirm-button']" name="confirm-button"></slot>
 						<block v-else>
 							<u-loading mode="circle" :color="confirmColor" v-if="loading"></u-loading>
@@ -63,17 +65,17 @@
 	 */
 	export default {
 		name: 'u-modal',
-    emits: ["update:modelValue", "input", "confirm", "cancel"],
+		emits: ["update:modelValue", "input", "confirm", "cancel"],
 		props: {
 			// 是否显示Modal
 			value: {
 				type: Boolean,
 				default: false
 			},
-      modelValue: {
-        type: Boolean,
-        default: false
-      },
+			modelValue: {
+				type: Boolean,
+				default: false
+			},
 			// 层级z-index
 			zIndex: {
 				type: [Number, String],
@@ -186,7 +188,7 @@
 		data() {
 			return {
 				loading: false, // 确认按钮是否正在加载中
-        popupValue: false
+				popupValue: false
 			}
 		},
 		computed: {
@@ -209,37 +211,37 @@
 			// 避免下次打开的时候，状态混乱
 			value(n) {
 				if (n === true) this.loading = false;
-        this.popupValue = n;
+				this.popupValue = n;
 			},
-      modelValue(n) {
-      	if (n === true) this.loading = false;
-        this.popupValue = n;
-      }
+			modelValue(n) {
+				if (n === true) this.loading = false;
+				this.popupValue = n;
+			}
 		},
 		methods: {
-      getValue(){
-        // #ifndef VUE3
-        return this.value;
-        // #endif
-        
-        // #ifdef VUE3
-        return this.modelValue;
-        // #endif
-      },
+			getValue() {
+				// #ifndef VUE3
+				return this.value;
+				// #endif
+
+				// #ifdef VUE3
+				return this.modelValue;
+				// #endif
+			},
 			confirm() {
 				// 异步关闭
 				if (this.asyncClose) {
 					this.loading = true;
 				} else {
 					this.$emit('input', false);
-          this.$emit("update:modelValue", false);
+					// this.$emit("update:modelValue", false);
 				}
 				this.$emit('confirm');
 			},
 			cancel() {
 				this.$emit('cancel');
 				this.$emit('input', false);
-        this.$emit("update:modelValue", false);
+				this.$emit("update:modelValue", false);
 				// 目前popup弹窗关闭有一个延时操作，此处做一个延时
 				// 避免确认按钮文字变成了"确定"字样，modal还没消失，造成视觉不好的效果
 				setTimeout(() => {
@@ -249,7 +251,7 @@
 			// 点击遮罩关闭modal，设置v-model的值为false，否则无法第二次弹起modal
 			popupClose() {
 				this.$emit('input', false);
-        this.$emit("update:modelValue", false);
+				this.$emit("update:modelValue", false);
 			},
 			// 清除加载中的状态
 			clearLoading() {
