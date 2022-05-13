@@ -7,40 +7,30 @@
 			</u-navbar>
 		</view>
 		<view>
-			<u-form :model="form" ref="uForm">
-				<u-field v-model="form.adress" label="地址" placeholder="请输入地址" @focus="inputAdress()">
-				</u-field>
-				<u-field v-model="form.house" label="门牌号" placeholder="例:16栋3层501">
-				</u-field>
-				<u-field v-model="form.consignee" label="收货人" placeholder="请输入收货人姓名">
-				</u-field>
-				<view style="width: 200px; margin-left: 100px;">
-					<u-radio-group v-model="currentSex" @change="sexGroupChange">
-						<u-radio v-for="(item, index) in list" :key="index" :name="item.name" :disabled="item.disabled">
-							{{item.name}}
+			<u-form :model="form">
+				<u-form-item label="地址" labelWidth="80px">
+					<u-input v-model="form.adress" placeholder="请选择收货地址" disabled="true"  @click="inputAdress()"/>
+				</u-form-item>
+				<u-form-item label="门牌号" labelWidth="80px">
+					<u-input v-model="form.house" placeholder="例:16栋3层501室" />
+				</u-form-item>
+				<u-form-item label="收货人" labelWidth="80px">
+					<u-input v-model="form.consignee" placeholder="请输入收货人姓名"  />
+				</u-form-item>
+				<u-form-item label="        " labelWidth="80px">
+					<u-radio-group v-model="form.sex" @change="sexGroupChange">
+						<u-radio v-for="(item, index) in list" :key="index" :name="item.sex" :disabled="item.disabled">
+							{{item.sex}}
 						</u-radio>
 					</u-radio-group>
-				</view>
-				<u-field v-model="form.phone" label="手机号" placeholder="请输入收货人手机号">
-				</u-field>
-
-
+				</u-form-item>
+				<u-form-item label="手机号" labelWidth="80px">
+					<u-input v-model="form.phone"  placeholder="请输入收货人手机号"  />
+				</u-form-item>
 				
-
-				<view style="margin-left: 20px;">
-					<u-form-item label="标签">
-						<view style="display: flex;justify-content: space-around;align-items: center;">
-							<u-tag text="家" shape="circle" mode="plain" type="success" />
-							<u-tag text="学校" shape="circle" mode="plain" type="success" />
-							<u-tag text="公司" shape="circle" mode="plain" type="success" />
-						</view>
-					</u-form-item>
-				</view>
-
-
-
+			
 			</u-form>
-			<u-button @click="submit" type="success" shape="circle">提交</u-button>
+			<u-button @click="submit" type="success" shape="circle" >提交</u-button>
 		</view>
 	</view>
 </template>
@@ -50,41 +40,30 @@
 		ref,
 		reactive
 	} from 'vue'
+	import request from '@/api/request';
 	export default {
 		setup() {
 			const form = reactive({
-				adress: String,
-				house: String,
-				consignee: String,
-				sex: String,
-				phone: Number,
-
+				_id:"",
+				adress: "",
+				house: "",
+				consignee: "",
+				sex: "",
+				phone: "",
 			})
-			const rules = ref({
-				name: [{
-					required: true,
-					message: '请输入姓名',
-					// 可以单个或者同时写两个触发验证方式
-					trigger: 'blur,change'
-				}],
-				intro: [{
-					min: 5,
-					message: '简介不能少于5个字',
-					trigger: 'change'
-				}]
-			})
+			
 			const list = ref([{
-					name: "先生",
+					sex: "先生",
 					disabled: false
 
 				},
 				{
-					name: "女士",
+					sex: "女士",
 					disabled: false
 
 				},
 			])
-			
+
 			const currentSex = ref("");
 
 			const background = ref({
@@ -101,49 +80,69 @@
 			async function rightClick() {
 				console.log(11111)
 				wx.navigateBack()({
+
+				})
+			}
+
+			const sexGroupChange = (e) => {
+				
+			}
+
+			//微信获取位置
+			const res = reactive({
+				type: "",
+				city: "",
+				name: "",
+				adress: "",
+				latitude: "",
+				longitude: "",
+				location:""
+			})
+			async function inputAdress() {
+				await wx.startLocationUpdateBackground();
+				const {
+					latitude,
+					longitude
+				} = await wx.getLocation();
+				res.adress = form.adress;
+				res.latitude = latitude;
+				res.longitude = longitude;
+				const result = await wx.choosePoi(res)
+				form.adress = result.name
+				form.location=result.address
+			}
+			//提交地址信息
+			async function submit(){
+				console.log(form)
+				const result = await request("touristInfo",{
+					form:form,
+					type:"submitAdress"
+				})
+				console.log(result.res)
+				uni.navigateBack({
 					
 				})
 			}
-			
-			const sexGroupChange = (e)=>{
-				console.log(e)
-			}
-			
-			//微信获取位置
-			const res = reactive({
-				type:String,
-				city:String,
-				name:String,
-				adress:String,
-				latitude:Number,
-				longitude:Number
-			})
-			async function inputAdress(){
-				await wx.startLocationUpdateBackground();
-				const {latitude,longitude} = await wx.getLocation();
-				res.adress=form.adress;
-				res.latitude=latitude;
-				res.longitude=longitude;
-				const result = await wx.choosePoi(res)
-				console.log(result)
-				
-				
-			}
 			return {
 				form,
-				rules,
 				list,
 				currentSex,
 				sexGroupChange,
 				background,
 				rightClick,
 				inputAdress,
-				res
+				res,
+				submit
 			}
 		},
-		onReady() {
-			this.$refs.uForm.setRules(this.rules);
-		},
+		onLoad(val) {
+			console.log(val.addressInfo)
+			if(val.addressInfo!=null){
+				Object.assign(this.form,JSON.parse(val.addressInfo))
+			}
+			console.log(this.form)
+		}
+		
 
 
 
