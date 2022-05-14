@@ -67,7 +67,7 @@
 			// tabbar的高度，默认50px，单位任意，如果为数值，则为rpx单位
 			height: {
 				type: [String, Number],
-				default: '50px'
+				default: '106'
 			},
 			// 非凸起图标的大小，单位任意，数值默认rpx
 			iconSize: {

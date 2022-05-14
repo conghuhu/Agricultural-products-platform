@@ -7,15 +7,25 @@ const db = cloud.database();
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-	const wxContext = cloud.getWXContext()
+	const wxContext = cloud.getWXContext();
+
+	const {
+		shopId
+	} = event;
 	const goodDb = db.collection('goods');
 	const _ = db.command;
-	
+
+	const {
+		data
+	} = await goodDb.where({
+		shopId: _.eq(shopId)
+	}).get();
+
 	let res = {};
 	res = {
 		sucess: true,
 		message: "",
-		data: null
+		data: data
 	}
 
 	return res;

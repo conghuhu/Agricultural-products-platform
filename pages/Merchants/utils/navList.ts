@@ -1,7 +1,7 @@
 
 const list = [{
-	iconPath: "home",
-	selectedIconPath: "home-fill",
+	iconPath: "/static/images/shop.png",
+	selectedIconPath: "/static/images/shop_fill.png",
 	text: '店铺',
 	count: 2,
 	isDot: true,
@@ -10,16 +10,16 @@ const list = [{
 	pagePath: "/pages/Merchants/Shop/Shop",
 },
 {
-	iconPath: "photo",
-	selectedIconPath: "photo-fill",
-	text: '学习',
+	iconPath: "/static/images/learn.png",
+	selectedIconPath: "/static/images/learn_fill.png",
+	text: '助农',
 	customIcon: false,
 	custom: true,
 	pagePath: "/pages/Merchants/LearnCenter/LearnCenter"
 },
 {
-	iconPath: "plus-circle",
-	selectedIconPath: "plus-circle-fill",
+	iconPath: "/static/images/upload.png",
+	selectedIconPath: "/static/images/upload.png",
 	text: '上架',
 	midButton: true,
 	customIcon: false,
@@ -29,16 +29,16 @@ const list = [{
 	pagePath: "/pages/Merchants/GoodsPutaway/GoodsPutaway"
 },
 {
-	iconPath: "shopping-cart",
-	selectedIconPath: "shopping-cart-fill",
+	iconPath: "/static/images/order.png",
+	selectedIconPath: "/static/images/order_fill.png",
 	text: '订单',
 	customIcon: false,
 	custom: true,
 	pagePath: "/pages/Merchants/OrderCenter/OrderCenter"
 },
 {
-	iconPath: "account",
-	selectedIconPath: "account-fill",
+	iconPath: "/static/images/me.png",
+	selectedIconPath: "/static/images/me_fill.png",
 	text: '我的',
 	count: 23,
 	isDot: false,

@@ -67,6 +67,8 @@
 	} from 'vue';
 	import request from '@/api/request';
 
+	import getUUID from '@/utils/getUUID';
+
 	export default {
 		setup() {
 			const form = reactive({
@@ -212,7 +214,6 @@
 			const chooseComplete = async (tempFileLists: Array < {
 				url: string
 			} > ) => {
-				console.log(tempFileLists)
 				form.imageShowList.length = 0;
 				tempFileLists.forEach(item => {
 					form.imageShowList.push(item.url);
@@ -232,6 +233,17 @@
 				submitLoading.value = true;
 				await formRef.value.validate(async (valid) => {
 					if (valid) {
+						const fileList = await Promise.all(form.imageShowList.map(item => {
+							return wx.cloud.uploadFile({
+								cloudPath: 'goodShowImg/' + new Date().getTime() +
+									getUUID() + '.jpg',
+								filePath: item,
+							})
+						}));
+						form.imageShowList.length = 0;
+						fileList.forEach(item => {
+							form.imageShowList.push(item.fileID);
+						});
 						const res = await request('goods', {
 							type: 'addGood',
 							form,
@@ -282,6 +294,7 @@
 			}
 		},
 		async onReady() {
+			// 设置检查规则
 			this.formRef.setRules(this.rules);
 		}
 	}

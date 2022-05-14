@@ -1,6 +1,6 @@
 <template>
 	<view class="fullScreen">
-		<Nav title="我的店铺" />
+		<!-- <Nav title="我的店铺" /> -->
 		<view class="content" v-if="isNew">
 			<u-empty text="还没有个人商铺" mode="list">
 				<template #bottom>
@@ -33,27 +33,76 @@
 
 		</view>
 		<view class="content" v-else>
-			<view class="top_card">
-				<view class="card_head">
-					<u-avatar bg-color="#ffaa00" :text="shopInfo.shopName" mode="square"></u-avatar>
-					<view class="right">
-						<view class="shop_name">
-							{{shopInfo.shopName}}
+			<view class="shopBack" />
+			<view class="shopContent">
+				<view class="shopTitle">
+					<view class="shopAvatar" />
+					<view class="shop_name">
+						{{shopInfo.shopName}}
+					</view>
+					<u-rate disabled :count="5" v-model:value="star" active-color="#77D4A6"></u-rate>
+				</view>
+				<view class="shopData">
+					<view class="shopDataItem">
+						<view class="shopDataItem_data">
+							{{day || 0}}
 						</view>
-						<u-rate disabled :count="5" v-model:value="star" active-color="yellow"></u-rate>
+						<view class="shopDataItem_desc">
+							入驻天数
+						</view>
+					</view>
+					<view class="shopDataItem">
+						<view class="shopDataItem_data">
+							{{shopInfo.focus || 0}}
+						</view>
+						<view class="shopDataItem_desc">
+							粉丝数量
+						</view>
+					</view>
+					<view class="shopDataItem">
+						<view class="shopDataItem_data">
+							{{shopInfo.profile || 0}}
+						</view>
+						<view class="shopDataItem_desc">
+							收入金额
+						</view>
 					</view>
 				</view>
-				<view class="card_content">
-					<view class="item">
-						粉丝数：{{shopInfo.focus}}
+			</view>
+			<view class="goodList">
+				<view class="goodList_top">
+					<view class="goodList_top_title">
+						本店商品:
 					</view>
-					<view class="item">
-						总收入：{{shopInfo.profile || 0}} 元
-					</view>
-					<view class="item">
-						入驻天数：{{day || 0}} 天
+					<view class="search">
+						<u-search :show-action="false" placeholder="请输入商品关键字" v-model="searchVal"></u-search>
 					</view>
 				</view>
+
+				<MyLoading v-if="goodListLoading" />
+
+				<block v-else>
+					<view v-if="goodList.length == 0" style="padding-top: 100rpx;">
+						<u-empty text="本店还没有上架商品" mode="data">
+							<template #bottom>
+								<u-button :customStyle="buttonStyle" type="primary" @click="goToAddGood">去上架</u-button>
+							</template>
+						</u-empty>
+					</view>
+					<u-waterfall v-else v-model="goodList">
+						<template v-slot:left="{leftList}">
+							<view v-for="(item, index) in leftList" :key="item._id">
+								<GoodSimpleCard :item="item" />
+							</view>
+						</template>
+						<template v-slot:right="{rightList}">
+							<view v-for="(item, index) in rightList" :key="item._id">
+								<GoodSimpleCard :item="item" />
+							</view>
+						</template>
+					</u-waterfall>
+				</block>
+
 			</view>
 		</view>
 		<u-tabbar :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
@@ -76,6 +125,8 @@
 			const list = reactive(navList);
 			const isNew = ref(false);
 			const createShopShow = ref(false);
+
+			const searchVal = ref('');
 
 			const buttonStyle = reactive({
 				margin: '15px'
@@ -128,7 +179,12 @@
 			const star = computed(() => {
 				console.log(shopInfo)
 				return shopInfo.star;
-			})
+			});
+
+			/**
+			 * 商品列表
+			 */
+			const goodList = reactive([]);
 
 			/**
 			 * 计算店铺运营的天数
@@ -201,7 +257,36 @@
 					Object.assign(shopInfo, res.data[0]);
 				}
 				isNew.value = temp;
+
+				await getGoodList();
 			}
+
+			const goodListLoading = ref(true);
+			/**
+			 * 获取商品列表
+			 */
+			const getGoodList = async () => {
+				goodListLoading.value = true;
+				const res: {
+					data: Array < any >
+				} = await request('goods', {
+					type: 'getGoods',
+					shopId: shopInfo._id
+				})
+				console.log(res);
+				goodList.length = 0;
+				res.data.forEach(item => {
+					goodList.push(item);
+				});
+				goodListLoading.value = false;
+			}
+
+			const goToAddGood = async () => {
+				uni.navigateTo({
+					url: "/pages/Merchants/GoodsPutaway/GoodsPutaway"
+				})
+			}
+
 			return {
 				list,
 				isNew,
@@ -216,16 +301,23 @@
 				submitCreateShop,
 				getShopInfo,
 				day,
-				star
+				star,
+				searchVal,
+				getGoodList,
+				goodList,
+				goToAddGood,
+				goodListLoading
 			}
 		},
 		async onLoad() {
-			await this.getShopInfo();
 		},
 		async onReady() {
 			const res = await this.getUserInfoFromLocal();
 			this.createShopForm.username = res.nickName;
 			this.isNew && this.createShopFormRef.setRules(this.rules);
+		},
+		async onShow() {
+			await this.getShopInfo();
 		}
 	}
 </script>
@@ -233,51 +325,102 @@
 <style lang="scss" scoped>
 	.fullScreen {
 		height: 100vh;
+		font-size: 32rpx;
 
 		.content {
-			height: calc(100vh - 145px);
 			position: relative;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 
-			.top_card {
-				height: 150px;
-				width: 95%;
-				margin: 10px;
-				border-radius: 5px;
-				background-color: #59ff88;
-				padding: 10px;
+			.shopBack {
+				width: 100%;
+				height: 30vh;
+				background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/shopback.webp?sign=24c799b2e77b1d3078a11768789e879c&t=1652499708');
+				background-size: cover;
+				background-repeat: no-repeat;
+				position: absolute;
+				top: 0;
+				z-index: 0;
+			}
 
-				.card_head {
-					width: 100%;
-					padding-left: 5px;
+			.shopContent {
+				width: 100%;
+				z-index: 99;
+				margin-top: 14vh;
+
+				.shopTitle {
 					display: flex;
+					flex-direction: column;
 					align-items: center;
 
-					.right {
+					.shopAvatar {
+						width: 45vw;
+						height: 45vw;
+						border-radius: 20rpx;
+						border: 15rpx solid white;
+						background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/shopAvatar.jpg?sign=86737ed47c27d68c83cba096cbd8aaaa&t=1652501346');
+						background-size: cover;
+						background-repeat: no-repeat;
+					}
+
+					.shop_name {
+						font-size: 50rpx;
+						font-weight: 600;
+						line-height: 80rpx;
+					}
+
+				}
+
+				.shopData {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					width: 100%;
+					margin-top: 15px;
+					margin-bottom: 15px;
+
+					.shopDataItem {
+						flex: 1;
 						display: flex;
 						flex-direction: column;
-						margin-left: 15px;
-
-						.shop_name {
-							font-size: 17px;
-							font-weight: 500;
-							color: white;
-							margin-bottom: 5px;
+						align-items: center;
+						justify-content: center;
+						text-align: center;
+						.shopDataItem_data{
+							font-weight: 550;
+							line-height: 50rpx;
+						}
+						.shopDataItem_desc{
+							color: #999999;
 						}
 					}
 				}
+			}
 
-				.card_content {
-					color: white;
-					margin: 10px;
-					margin-left: 6px;
+			.goodList {
+				width: 100%;
+				margin-top: 20rpx;
 
-					.item {
-						margin-bottom: 10px;
+				.goodList_top {
+					display: flex;
+					justify-content: space-around;
+					align-items: center;
+					padding-left: 50rpx;
+					padding-right: 50rpx;
+					margin-bottom: 20rpx;
+
+					.goodList_top_title {
+						font-size: 36rpx;
+						font-weight: 550;
+						min-width: 180rpx;
+					}
+
+					.search {
+						width: 100%;
 					}
 				}
+
 			}
 		}
 

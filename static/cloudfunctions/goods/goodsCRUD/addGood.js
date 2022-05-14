@@ -30,14 +30,13 @@ exports.main = async (event, context) => {
 		}
 	}
 
-	let res = {};
 	const temp = await goodDb.add({
 		data: {
 			shopId: shopData[0]._id,
 			...form
 		}
 	})
-	res = {
+	const res = {
 		sucess: true,
 		message: "",
 		data: temp

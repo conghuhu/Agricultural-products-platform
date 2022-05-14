@@ -51,9 +51,7 @@
 				const res = await wx.getUserProfile({
 					desc: '用于身份认证', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
 				});
-				wx.showLoading({
-					title: '加载中',
-				})
+				wx.showLoading()
 				const result = await request("login", {
 					userInfo: res.userInfo,
 					status: 1, // 游客
@@ -78,11 +76,9 @@
 		},
 		async onLoad() {
 			wx.showLoading({
-				title: '',
+				title:'初始化'
 			})
-			const res: {
-				data: any[]
-			} = await request("login", {
+			const res = await request("login", {
 				type: 'checkLogin'
 			})
 
