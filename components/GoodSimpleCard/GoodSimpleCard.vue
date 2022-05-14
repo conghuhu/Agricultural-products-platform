@@ -1,7 +1,7 @@
 <template>
-	<view class="goodCard">
+	<view class="goodCard" @click="goToDetail(item)">
 		<block v-if="item.imageShowList != null && item.imageShowList.length > 0">
-			<u-lazy-load threshold="-100" imgMode="widthFix" border-radius="20" :image="item.imageShowList[0]"
+			<u-lazy-load threshold="-100" imgMode="widthFix" border-radius="16" :image="item.imageShowList[0]"
 				:index="item._id" />
 			<view class="goodCard_bottom">
 				<view class="goodTitle">
@@ -35,7 +35,14 @@
 			},
 		},
 		setup() {
-
+			const goToDetail = async (item) => {
+				uni.navigateTo({
+					url: `/pages/Merchants/GoodDetail/GoodDetail?goodId=${item._id}`
+				})
+			}
+			return {
+				goToDetail
+			}
 		}
 	}
 </script>
@@ -60,6 +67,7 @@
 				font-weight: 600;
 				width: 100%;
 				margin-bottom: 20rpx;
+				text-shadow: 0px 3px 6px #382B2B;
 			}
 
 			.goodDetail {

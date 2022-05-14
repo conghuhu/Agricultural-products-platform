@@ -110,6 +110,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/Merchants/GoodDetail/GoodDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

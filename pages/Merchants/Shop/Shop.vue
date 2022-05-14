@@ -1,6 +1,5 @@
 <template>
 	<view class="fullScreen">
-		<!-- <Nav title="我的店铺" /> -->
 		<view class="content" v-if="isNew">
 			<u-empty text="还没有个人商铺" mode="list">
 				<template #bottom>
