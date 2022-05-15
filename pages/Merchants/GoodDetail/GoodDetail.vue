@@ -14,9 +14,11 @@
 							</view>
 							元/{{goodInfo.unit}}
 						</view>
-						<view style="margin-left: 26rpx;margin-right: 20rpx;">
+						<view style="margin-left: 26rpx;margin-right: 20rpx;" @click="actionSheetShow = true">
 							<u-icon name="more-dot-fill"></u-icon>
 						</view>
+						<u-action-sheet @click="clickAction" :list="actionList" v-model="actionSheetShow">
+						</u-action-sheet>
 					</view>
 				</view>
 				<view class="good_card_content">
@@ -37,7 +39,9 @@
 					</view>
 				</view>
 				<view class="good_card_Img">
-
+					<u-upload :fileList="goodInfo.imageShowList.map(item=>{return{
+						url:item
+					} })" :maxCount="goodInfo.imageShowList.length" :deletable="false"></u-upload>
 				</view>
 			</view>
 			<view class="last_week_card">
@@ -61,6 +65,7 @@
 	import request from '@/api/request';
 	export default {
 		setup() {
+			const userId = ref('');
 			const goodInfo = reactive({
 				expirationDate: "",
 				firstCategoryName: "",
@@ -75,8 +80,61 @@
 				unit: "",
 				_id: ""
 			});
+			const actionSheetShow = ref(false);
+			const actionList = reactive([{
+				text: '编辑商品',
+			}, {
+				text: '下架',
+				color: 'red',
+			}])
+			/**
+			 * 操作分发
+			 */
+			const clickAction = (index) => {
+				console.log(index)
+				if (index == 0) {
+
+				} else {
+					uni.showModal({
+						title: "确定要下架该商品吗？",
+						success: async function(res) {
+							if (res.confirm) {
+								console.log('用户点击确定');
+								const db = wx.cloud.database();
+								const _ = db.command;
+
+								console.log(goodInfo._id);
+								console.log(userId.value);
+								const res = await db.collection('goods').where({
+									_id: _.eq(goodInfo._id),
+									_openid: _.eq(userId.value)
+								}).update({
+									data: {
+										status: false,
+										unit: '两'
+									}
+								})
+								console.log(res);
+
+								console.log(await db.collection('goods').doc(goodInfo._id).get());
+								uni.showToast({
+									title: '下架成功'
+								})
+								setTimeout(() => {
+									uni.navigateBack();
+								}, 1000);
+							}
+						}
+					})
+				}
+			}
+
 			return {
-				goodInfo
+				goodInfo,
+				actionSheetShow,
+				actionList,
+				clickAction,
+				userId
 			}
 		},
 		async onLoad(option) {
@@ -85,7 +143,14 @@
 				goodId: option.goodId
 			});
 			Object.assign(this.goodInfo, res.data);
-			console.log(res);
+
+		},
+		async onReady() {
+			const res = await wx.getStorage({
+				key: 'userInfo',
+				encrypt: true,
+			});
+			this.userId = res.data.openid;
 		}
 	}
 </script>
@@ -116,26 +181,29 @@
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
+
 					.right {
 						display: flex;
 						align-items: center;
 						min-width: 100rpx;
 					}
 				}
-				.good_card_content{
+
+				.good_card_content {
 					display: flex;
 					justify-content: flex-start;
 					align-items: center;
 					flex-wrap: wrap;
 					margin-top: 16rpx;
-					.item{
+
+					.item {
 						margin-right: 20rpx;
 						margin-bottom: 10rpx;
 						color: #999999;
 						font-size: 30rpx;
 					}
 				}
-				
+
 			}
 
 			.last_week_card {
