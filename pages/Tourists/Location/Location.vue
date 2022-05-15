@@ -52,7 +52,7 @@
 			//页面nav信息配置
 			const current = ref(0);
 			const background = ref({
-				backgroundColor: '#001f3f',
+				backgroundColor: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))',
 
 				// 导航栏背景图
 				background: 'url(https://cdn.uviewui.com/uview/swiper/1.jpg) no-repeat',
@@ -60,7 +60,7 @@
 				backgroundSize: 'cover',
 
 				// 渐变色
-				backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
+				backgroundImage: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))'
 			})
 			async function rightClick() {
 				console.log(11111)
