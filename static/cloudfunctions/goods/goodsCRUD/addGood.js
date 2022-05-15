@@ -33,6 +33,10 @@ exports.main = async (event, context) => {
 	const temp = await goodDb.add({
 		data: {
 			shopId: shopData[0]._id,
+			createTime: new Date(),
+			updateTime: new Date(),
+			status: true,
+			_openid: wxContext.OPENID,
 			...form
 		}
 	})

@@ -18,8 +18,10 @@ exports.main = async (event, context) => {
 	const {
 		data
 	} = await goodDb.where({
-		shopId: _.eq(shopId)
-	}).get();
+			shopId: _.eq(shopId),
+			status: true
+		}).orderBy('createTime', 'desc')
+		.get();
 
 	let res = {};
 	res = {

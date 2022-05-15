@@ -91,7 +91,6 @@
 			 * 操作分发
 			 */
 			const clickAction = (index) => {
-				console.log(index)
 				if (index == 0) {
 
 				} else {
@@ -103,8 +102,6 @@
 								const db = wx.cloud.database();
 								const _ = db.command;
 
-								console.log(goodInfo._id);
-								console.log(userId.value);
 								const res = await db.collection('goods').where({
 									_id: _.eq(goodInfo._id),
 									_openid: _.eq(userId.value)
@@ -115,8 +112,6 @@
 									}
 								})
 								console.log(res);
-
-								console.log(await db.collection('goods').doc(goodInfo._id).get());
 								uni.showToast({
 									title: '下架成功'
 								})
