@@ -8,7 +8,7 @@ const list = [{
 					pagePath: "/pages/Tourists/HomeBar/HomeBar",
 				},
 				{
-					iconPath: "photo",
+					iconPath: "./images",
 					selectedIconPath: "photo-fill",
 					text: '分类',
 					customIcon: false,

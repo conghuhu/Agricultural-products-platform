@@ -8,7 +8,7 @@
 			</u-navbar>
 		</view>
 		<view>
-			<u-search :show-action="true" action-text="搜索" :animation="true"></u-search>
+			<u-search :show-action="true"  :animation="true"></u-search>
 		</view>
 		<view class="wrap" >
 			<u-swiper :list="viewList" :effect3d="true"></u-swiper>
@@ -94,7 +94,7 @@
 			const list = reactive(navList)
 			const current = ref(0);
 			const background = ref({
-				backgroundColor: '#001f3f',
+				backgroundColor: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))',
 
 				// 导航栏背景图
 				background: 'url(https://cdn.uviewui.com/uview/swiper/1.jpg) no-repeat',
@@ -102,9 +102,9 @@
 				backgroundSize: 'cover',
 
 				// 渐变色
-				backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
+				backgroundImage: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))'
 			})
-			const viewList = ref([{						image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
+			const viewList = ref([{						image: 'cloud://cloud1-7giqepei42865a68.636c-cloud1-7giqepei42865a68-1311829757/touristImagee/2.png',
 						title: '昨夜星辰昨夜风，画楼西畔桂堂东'					},
 					{
 						image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
