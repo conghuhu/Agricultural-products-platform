@@ -6,6 +6,7 @@ const list = [{
 					pagePath: "/pages/Tourists/HomeBar/HomeBar",
 				},
 				{
+
 					iconPath: "/static/images/fenlei.png",
 					selectedIconPath: "/static/images/fenlei_fill.png",
 					text: '分类',
