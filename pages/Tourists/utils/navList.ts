@@ -6,13 +6,8 @@ const list = [{
 					pagePath: "/pages/Tourists/HomeBar/HomeBar",
 				},
 				{
-<<<<<<< HEAD
-					iconPath: "./images",
-					selectedIconPath: "photo-fill",
-=======
 					iconPath: "/static/images/fenlei.png",
 					selectedIconPath: "/static/images/fenlei_fill.png",
->>>>>>> wys
 					text: '分类',
 					customIcon: false,
 					pagePath: "/pages/Tourists/ClassificationBar/ClassificationBar"
