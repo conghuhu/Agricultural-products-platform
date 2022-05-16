@@ -14,7 +14,7 @@
 							</view>
 							元/{{goodInfo.unit}}
 						</view>
-						<view style="margin-left: 26rpx;margin-right: 20rpx;" @click="actionSheetShow = true">
+						<view style="padding-left: 26rpx;padding-right: 20rpx;" @click="actionSheetShow = true">
 							<u-icon name="more-dot-fill"></u-icon>
 						</view>
 						<u-action-sheet @click="clickAction" :list="actionList" v-model="actionSheetShow">
@@ -36,6 +36,9 @@
 					</view>
 					<view class="item">
 						类别:{{goodInfo.firstCategoryName}} - {{goodInfo.secondCategoryName}}
+					</view>
+					<view class="item">
+						上架日期:{{goodInfo.createTime}}
 					</view>
 				</view>
 				<view class="good_card_Img">
@@ -60,9 +63,11 @@
 <script lang="ts">
 	import {
 		ref,
-		reactive
+		reactive,
+		computed
 	} from 'vue';
 	import request from '@/api/request';
+	import dayjs from 'dayjs';
 	export default {
 		setup() {
 			const userId = ref('');
@@ -78,7 +83,9 @@
 				shopId: "",
 				specification: "",
 				unit: "",
-				_id: ""
+				_id: "",
+				createTime: null,
+				updateTime: null
 			});
 			const actionSheetShow = ref(false);
 			const actionList = reactive([{
@@ -86,13 +93,35 @@
 			}, {
 				text: '下架',
 				color: 'red',
-			}])
+			}]);
+			/**
+			 * 刷新数据
+			 */
+			const refreshData = async (goodId) => {
+				const res = await request('goods', {
+					type: 'getGoodById',
+					goodId: goodId
+				});
+				Object.assign(goodInfo, res.data);
+				goodInfo.createTime = dayjs(res.data.createTime).format(
+					'YYYY-MM-DD HH:mm:ss');
+				goodInfo.updateTime = dayjs(res.data.updateTime).format(
+					'YYYY-MM-DD HH:mm:ss');
+			}
+
 			/**
 			 * 操作分发
 			 */
 			const clickAction = (index) => {
 				if (index == 0) {
-
+					uni.navigateTo({
+						url: `/pages/Merchants/EditGoodDetail/EditGoodDetail?goodId=${goodInfo._id}`,
+						events: {
+							refresh: async function(e) {
+								refreshData(goodInfo._id);
+							}
+						}
+					})
 				} else {
 					uni.showModal({
 						title: "确定要下架该商品吗？",
@@ -111,7 +140,6 @@
 										unit: '两'
 									}
 								})
-								console.log(res);
 								uni.showToast({
 									title: '下架成功'
 								})
@@ -129,24 +157,21 @@
 				actionSheetShow,
 				actionList,
 				clickAction,
-				userId
+				userId,
+				refreshData
 			}
 		},
 		async onLoad(option) {
-			const res = await request('goods', {
-				type: 'getGoodById',
-				goodId: option.goodId
-			});
-			Object.assign(this.goodInfo, res.data);
-
-		},
-		async onReady() {
-			const res = await wx.getStorage({
+			await this.refreshData(option.goodId);
+			const ans = await wx.getStorage({
 				key: 'userInfo',
 				encrypt: true,
 			});
-			this.userId = res.data.openid;
-		}
+			this.userId = ans.data.openid;
+		},
+		async onReady() {
+
+		},
 	}
 </script>
 

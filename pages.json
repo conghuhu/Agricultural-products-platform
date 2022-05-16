@@ -120,6 +120,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/Merchants/EditGoodDetail/EditGoodDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -1,6 +1,6 @@
 <template>
-	<view>
-		<Nav title="商品上架" :isBack="true" />
+	<view class="fullScreen">
+		<Nav title="编辑商品" isBack="true" />
 		<view class="content">
 			<u-form :model="form" ref="formRef" :label-width="150">
 				<u-form-item label="商品名称" prop="goodName">
@@ -13,7 +13,9 @@
 					<u-input v-model="form.unit" />
 				</u-form-item>
 				<u-form-item label="展示图片" prop="imageShowList">
-					<u-upload @on-choose-complete="chooseComplete" @on-remove="removeImg" :auto-upload="false"
+					<u-upload :fileList="form.imageShowList.map(item=>{return{
+							url:item
+						} })" @on-choose-complete="chooseComplete" @on-remove="removeImg" :auto-upload="false"
 						:max-size="5 * 1024 * 1024" max-count="6"></u-upload>
 				</u-form-item>
 				<u-form-item label="描述" prop="description">
@@ -44,9 +46,6 @@
 						</u-select>
 					</view>
 				</u-form-item>
-				<u-form-item label="位置" prop="location">
-					<u-input v-model="locationVal" placeholder="请选择位置" type="select" @click="chooseLocation" />
-				</u-form-item>
 				<u-form-item label="产地" prop="originPlace">
 					<u-input v-model="form.originPlace" />
 				</u-form-item>
@@ -58,7 +57,7 @@
 				</u-form-item>
 			</u-form>
 			<view class="top_action">
-				<u-button type="primary" :loading="submitLoading" @click="submitGood">发布</u-button>
+				<u-button type="primary" :loading="submitLoading" @click="submitGood">更改</u-button>
 			</view>
 		</view>
 	</view>
@@ -73,6 +72,7 @@
 	} from 'vue';
 	import request from '@/api/request';
 
+	import isCloudImg from '@/utils/isCloudImg';
 	import getUUID from '@/utils/getUUID';
 
 	export default {
@@ -88,11 +88,12 @@
 				mode: 1,
 				firstCategoryId: '',
 				secondCategoryId: '',
-				location: [],
-				adcode: '',
+				_id: '',
 				description: ''
 			});
 			let formRef = ref(null);
+
+			const eventChannel = reactive({});
 
 			const firstCategoryList = reactive([]);
 			const secondCategoryList = reactive([]);
@@ -143,37 +144,19 @@
 					required: true,
 					message: '请输入商品的类别',
 					trigger: ['blur', 'change'],
-				}],
-				location: [{
-					validator: (rule, value, callback) => {
-						return value && value.length != 0;
-					},
-					message: '请选择商品的位置',
-					trigger: ['blur', 'change'],
-				}],
+				}]
 			})
 
 			/**
 			 * 选中第一个类别
 			 */
-			const selectFirstCategory = async (e: Array < {
+			const selectFirstCategory = async (e: {
 				value: string;
 				label: string;
-			} > ) => {
+			} []) => {
 				if (e.length > 0) {
 					form.firstCategoryId = e[0].value;
-					const res = await request('goods', {
-						type: 'getSeondCategory',
-						parentId: e[0].value
-					});
-					// 更新第二类别列表
-					secondCategoryList.length = 0;
-					res.data.forEach(item => {
-						secondCategoryList.push({
-							value: item['_id'],
-							label: item.name
-						})
-					});
+					await refreshSecondCategory(e[0].value);
 				}
 			}
 			/**
@@ -186,6 +169,23 @@
 				}
 				return firstCategoryList[index].label || "";
 			})
+
+			/**
+			 * 更新第二类别列表
+			 */
+			const refreshSecondCategory = async (parentId: string) => {
+				const res = await request('goods', {
+					type: 'getSeondCategory',
+					parentId: parentId
+				});
+				secondCategoryList.length = 0;
+				res.data.forEach(item => {
+					secondCategoryList.push({
+						value: item['_id'],
+						label: item.name
+					})
+				});
+			};
 
 			/**
 			 * 第二个类别
@@ -229,74 +229,64 @@
 			const chooseComplete = async (tempFileLists: Array < {
 				url: string
 			} > ) => {
+				console.log(tempFileLists);
 				form.imageShowList.length = 0;
 				tempFileLists.forEach(item => {
 					form.imageShowList.push(item.url);
-				})
+				});
 			}
+
 			/**
 			 * 移出图片
 			 */
 			const removeImg = async (index, lists) => {
+				const url = form.imageShowList[index];
+				const isCloud = isCloudImg(url);
 				form.imageShowList.splice(index, 1);
-			}
-
-			const locationVal = ref('');
-
-			/**
-			 * 选择位置
-			 */
-			const chooseLocation = async () => {
-				const {
-					latitude,
-					longitude
-				} = await wx.getLocation({
-					type: 'gcj02'
-				});
-				const res = await wx.chooseLocation({
-					latitude: latitude,
-					longitude: longitude,
-				})
-				form.location.length = 0;
-				form.location.push(res.longitude);
-				form.location.push(res.latitude);
-				locationVal.value = res.name;
-				const ans = await wx.serviceMarket.invokeService({
-					service: 'wxc1c68623b7bdea7b',
-					api: 'rgeoc',
-					data: {
-						"location": res.latitude + "," + res.longitude
-					},
-				})
-				form.adcode = ans.data.result.ad_info.adcode;
+				if (isCloud) {
+					await wx.cloud.deleteFile({
+						fileList: [url]
+					});
+				}
 			}
 
 			/**
-			 * 发布商品
+			 * 更改商品
 			 */
 			const submitGood = async () => {
 				submitLoading.value = true;
 				await formRef.value.validate(async (valid) => {
 					if (valid) {
 						const fileList = await Promise.all(form.imageShowList.map(item => {
-							return wx.cloud.uploadFile({
-								cloudPath: 'goodShowImg/' + new Date().getTime() +
-									getUUID() + '.jpg',
-								filePath: item,
-							})
+							if (!isCloudImg(item)) {
+								return wx.cloud.uploadFile({
+									cloudPath: 'goodShowImg/' + new Date()
+										.getTime() +
+										getUUID() + '.jpg',
+									filePath: item,
+								})
+							} else {
+								return {
+									fileID: item
+								}
+							}
 						}));
 						form.imageShowList.length = 0;
 						fileList.forEach(item => {
 							form.imageShowList.push(item.fileID);
 						});
 						const res = await request('goods', {
-							type: 'addGood',
+							type: 'updateGoodById',
 							form,
 						});
 						submitLoading.value = false;
 						await wx.showToast({
-							title: '上架成功',
+							title: '更改成功',
 							duration: 1000
+						});
+						// 触发上级刷新
+						eventChannel.emit('refresh', {
+							data: form._id
 						});
 						setTimeout(() => {
 							uni.navigateBack();
@@ -335,9 +325,19 @@
 				selectSecondCategoryVal,
 				rules,
 				submitLoading,
-				chooseLocation,
-				locationVal
+				refreshSecondCategory,
+				eventChannel
 			}
+		},
+		async onLoad(option) {
+			Object.assign(this.eventChannel, this.getOpenerEventChannel());
+			const res = await request('goods', {
+				type: 'getGoodById',
+				goodId: option.goodId
+			})
+			console.log(res);
+			Object.assign(this.form, res.data);
+			await this.refreshSecondCategory(res.data.firstCategoryId);
 		},
 		async onReady() {
 			// 设置检查规则
@@ -347,10 +347,16 @@
 </script>
 
 <style lang="scss" scoped>
-	.content {
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		padding: 15px;
+	.fullScreen {
+		height: 100vh;
+		font-size: 32rpx;
+		color: #333333;
+
+		.content {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			padding: 15px;
+		}
 	}
 </style>
