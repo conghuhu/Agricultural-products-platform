@@ -1,7 +1,7 @@
 <template>
-	<Nav title="菜单"></Nav>
+	<Nav title="种草"></Nav>
 	<view>
-		<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
+		<u-tabbar :list="list" :mid-button="true"></u-tabbar>
 	</view>
 </template>
 
@@ -14,10 +14,8 @@
 	export default {
 		setup() {
 			const list = reactive(navList)
-			const current = ref(0);
 			return {
 				list,
-				current
 			}
 		}
 

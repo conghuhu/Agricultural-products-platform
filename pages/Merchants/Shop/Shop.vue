@@ -354,9 +354,9 @@
 					align-items: center;
 
 					.shopAvatar {
-						width: 45vw;
-						height: 45vw;
-						border-radius: 20rpx;
+						width: 42vw;
+						height: 42vw;
+						border-radius: 24rpx;
 						border: 15rpx solid white;
 						background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/shopAvatar.jpg?sign=86737ed47c27d68c83cba096cbd8aaaa&t=1652501346');
 						background-size: cover;
@@ -364,9 +364,9 @@
 					}
 
 					.shop_name {
-						font-size: 50rpx;
+						font-size: 56rpx;
 						font-weight: 600;
-						line-height: 80rpx;
+						line-height: 90rpx;
 					}
 
 				}

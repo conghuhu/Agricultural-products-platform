@@ -1,119 +1,3 @@
-<<<<<<< HEAD
-<template>
-	<view>
-		<view>
-			<u-navbar title="当前位置" :is-back="true" :background="background">
-				<view class="slot-wrap" @click="rightClick()">
-					获取当前位置
-				</view>
-			</u-navbar>
-		</view>
-		<view>
-			<u-search :show-action="true"  :animation="true"></u-search>
-		</view>
-		<view class="wrap" >
-			<u-swiper :list="viewList" :effect3d="true"></u-swiper>
-		</view>
-		<view>
-			<u-grid :col="4">
-				<u-grid-item>
-					<u-badge count="9" :offset="[20, 20]"></u-badge>
-					<u-icon name="photo" :size="46"></u-icon>
-					<view class="grid-text">图片</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/images/小油菜.jpg" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<u-icon name="hourglass" :size="46"></u-icon>
-					<view class="grid-text">沙漏</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				
-			</u-grid>
-		</view>
-		<view>
-			<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
-		</view>
-	</view>
-</template>
-
-<script lang="ts">
-	import {
-		ref,
-		reactive
-	} from 'vue'
-	import navList from '@/pages/Tourists/utils/navList';
-	export default {
-		setup() {
-			const list = reactive(navList)
-			const current = ref(0);
-			const background = ref({
-				backgroundColor: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))',
-
-				// 导航栏背景图
-				background: 'url(https://cdn.uviewui.com/uview/swiper/1.jpg) no-repeat',
-				// 还可以设置背景图size属性
-				backgroundSize: 'cover',
-
-				// 渐变色
-				backgroundImage: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))'
-			})
-			const viewList = ref([{						image: 'cloud://cloud1-7giqepei42865a68.636c-cloud1-7giqepei42865a68-1311829757/touristImagee/2.png',
-						title: '昨夜星辰昨夜风，画楼西畔桂堂东'					},
-					{
-						image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-						title: '身无彩凤双飞翼，心有灵犀一点通'					},
-			{
-						image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
-						title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
-=======
 <template>
 	<view class="fullScreen">
 		<view>
@@ -121,12 +5,19 @@
 				<view class="myLocation" @click="rightClick"> 当前位置</view>
 			</u-navbar>
 		</view>
-		<view>
-			<u-search placeholder="点击查找商品" placeholder-color="#333333" :show-action="true" action-text="搜索"
-				:animation="true" shape="square" bg-color="#F9FAFB" input-align="center"></u-search>
+		<view class="search_contain">
+			<view class="search">
+				<view class="text">
+					点击查找商品
+				</view>
+				<view class="icon">
+					<u-image height="40rpx" width="40rpx" mode="aspectFill"
+						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/%E6%90%9C%E7%B4%A2.png?sign=abd2bc7f5c541794394684b2a582ac8b&t=1652688817" />
+				</view>
+			</view>
 		</view>
 		<view class="today">
-			<text class="today_text">今日精选活动</text>
+			<text class="today_text">今日精选商品</text>
 		</view>
 		<scroll-view class="scroll_view_card" scroll-x="true" scroll-y="false">
 			<view class="inline_card_contain" v-for="(item,index) in viewList" :key="index">
@@ -152,8 +43,8 @@
 			<text class="today_text">商品分类展示</text>
 		</view>
 		<view class="grid_full">
-			<u-grid :col="4" >
-				<u-grid-item class="grid_item" v-for="(item,index) in categoryList" :key="index">
+			<u-grid :col="4">
+				<u-grid-item class="grid_item" bgColor="#F2F4F7" v-for="(item,index) in categoryList" :key="index">
 					<view>
 						<u-image borderRadius="8rpx" height="60rpx" width="60rpx" mode="aspectFill"
 							src="/static/images/2562.png"></u-image>
@@ -245,12 +136,14 @@
 				categoryList
 			}
 		},
-	    async onLoad(){
-			const temp:{res:Array<any>} = await request("goods",{
-				type:"getFirstCategory"
+		async onLoad() {
+			const temp: {
+				res: Array < any >
+			} = await request("goods", {
+				type: "getFirstCategory"
 			})
 			console.log(temp)
-			temp.data.forEach(item=>{
+			temp.data.forEach(item => {
 				this.categoryList.push(item);
 			})
 		}
@@ -263,6 +156,40 @@
 <style lang="scss" scoped>
 	.fullScreen {
 		width: 100%;
+		background-color: #F2F4F7;
+		position: relative;
+
+		.search_contain {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding-top: 20rpx;
+			padding-bottom: 20rpx;
+
+			.search {
+				width: 80vw;
+				height: 13vw;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 10rpx;
+				border-radius: 4px;
+				background: #F9FAFB;
+				box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.03);
+				padding-left: 20rpx;
+				padding-right: 20rpx;
+
+				.text {
+					font-family: SourceHanSansCN-ExtraLight;
+					font-size: 26rpx;
+					font-weight: 250;
+					line-height: 26rpx;
+					letter-spacing: 0px;
+					color: #333333;
+				}
+			}
+		}
 
 		.myLocation {
 			margin-left: 10rpx;
@@ -279,17 +206,17 @@
 		}
 
 		.today {
-			margin-left: 20rpx;
-			margin-top: 10rpx;
-			width: 132px;
-			height: 22px;
+			padding: 32rpx;
+			padding-bottom: 20rpx;
+			padding-top: 20rpx;
+
 
 			.today_text {
 				font-family: SourceHanSansCN-Bold;
-				font-size: 22px;
+				font-size: 44rpx;
 				font-weight: bold;
-				line-height: 22px;
-				letter-spacing: 0px;
+				line-height: 44rpx;
+				letter-spacing: 0rpx;
 				color: rgba(0, 0, 0, 0.8);
 			}
 		}
@@ -300,6 +227,11 @@
 
 			.inline_card_contain {
 				display: inline-block;
+				padding-top: 20rpx;
+				padding-bottom: 30rpx;
+
+				margin-left: 20rpx;
+				margin-right: 20rpx;
 
 				.swiper_card {
 					width: 70vw;
@@ -312,11 +244,11 @@
 					flex-direction: column;
 					justify-content: space-around;
 					padding: 16rpx;
+					box-shadow: 0rpx 14rpx 14rpx 0rpx #cecece;
 
 					.card_top {
 						width: 100%;
 						flex: 2;
->>>>>>> wys
 					}
 
 					.card_bottom {
@@ -375,6 +307,7 @@
 		.grid_full {
 			width: 100%;
 			height: 50vw;
+			margin-bottom: 30rpx;
 
 			.grid_item {
 
