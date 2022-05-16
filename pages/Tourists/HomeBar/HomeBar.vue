@@ -21,7 +21,7 @@
 		</view>
 		<scroll-view class="scroll_view_card" scroll-x="true" scroll-y="false">
 			<view class="inline_card_contain" v-for="(item,index) in viewList" :key="index">
-				<view class="swiper_card">
+				<view class="swiper_card" @click="gotoGoodDetail(item)">
 					<view class="card_top">
 						<u-image borderRadius="16rpx" height="100%" width="100%" mode="aspectFill" :src="item.image">
 						</u-image>
@@ -79,9 +79,9 @@
 				backgroundSize: 'cover',
 
 				// 渐变色
-				backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
+				backgroundImage: 'linear-gradient(100deg, #4CC818 2%, #4CC818 2%, #b0d479 98%, #b0d479 98%)'
 			})
-			const viewList = ref([{
+			const viewList = reactive([{
 					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
 					title: '红富士苹果',
 					loacation: '山东烟台',
@@ -127,13 +127,23 @@
 					url: "../Location/Location"
 				})
 			}
+			/**
+			 * 跳转至该商品详情页
+			 */
+			const gotoGoodDetail = (item) => {
+				const goodId = "b69f67c06281bcfa02f3ffff249f0611";
+				uni.navigateTo({
+					url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodId}`
+				})
+			}
 			return {
 				list,
 				current,
 				background,
 				rightClick,
 				viewList,
-				categoryList
+				categoryList,
+				gotoGoodDetail
 			}
 		},
 		async onLoad() {

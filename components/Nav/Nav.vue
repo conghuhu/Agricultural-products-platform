@@ -1,8 +1,8 @@
 <template>
-	<view>
-		<u-navbar :title="title" :is-back="isBack" :background="background">
-		</u-navbar>
-	</view>
+
+	<u-navbar :title="title" :is-back="isBack" :background="background">
+	</u-navbar>
+
 </template>
 
 <script lang="ts">

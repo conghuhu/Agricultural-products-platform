@@ -9,7 +9,7 @@
 				"navigationStyle": "custom"
 			}
 
-		},  {
+		}, {
 
 			"path": "pages/Tourists/HomeBar/HomeBar",
 			"style": {
@@ -46,7 +46,7 @@
 			"path": "pages/Tourists/MenuBar/MenuBar",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		}, {
@@ -99,38 +99,48 @@
 
 			}
 
+		}, {
+			"path": "pages/Tourists/ShippingAddress/ShippingAddress",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/Merchants/GoodDetail/GoodDetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/Merchants/EditGoodDetail/EditGoodDetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/Tourists/Release/Release",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/Tourists/GoodDetail/GoodDetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
-	    ,{
-            "path" : "pages/Tourists/ShippingAddress/ShippingAddress",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-            }
-            
-        }
-        ,{
-            "path" : "pages/Merchants/GoodDetail/GoodDetail",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-            }
-            
-        }
-        ,{
-            "path" : "pages/Merchants/EditGoodDetail/EditGoodDetail",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
