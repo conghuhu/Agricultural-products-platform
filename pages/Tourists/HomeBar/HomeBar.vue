@@ -1,119 +1,3 @@
-<<<<<<< HEAD
-<template>
-	<view>
-		<view>
-			<u-navbar title="当前位置" :is-back="true" :background="background">
-				<view class="slot-wrap" @click="rightClick()">
-					获取当前位置
-				</view>
-			</u-navbar>
-		</view>
-		<view>
-			<u-search :show-action="true"  :animation="true"></u-search>
-		</view>
-		<view class="wrap" >
-			<u-swiper :list="viewList" :effect3d="true"></u-swiper>
-		</view>
-		<view>
-			<u-grid :col="4">
-				<u-grid-item>
-					<u-badge count="9" :offset="[20, 20]"></u-badge>
-					<u-icon name="photo" :size="46"></u-icon>
-					<view class="grid-text">图片</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/images/小油菜.jpg" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<u-icon name="hourglass" :size="46"></u-icon>
-					<view class="grid-text">沙漏</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/image/icon/hot5.png" class="badge-icon"></image>
-					<u-icon name="lock" :size="46"></u-icon>
-					<view class="grid-text">锁头</view>
-				</u-grid-item>
-				
-			</u-grid>
-		</view>
-		<view>
-			<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
-		</view>
-	</view>
-</template>
-
-<script lang="ts">
-	import {
-		ref,
-		reactive
-	} from 'vue'
-	import navList from '@/pages/Tourists/utils/navList';
-	export default {
-		setup() {
-			const list = reactive(navList)
-			const current = ref(0);
-			const background = ref({
-				backgroundColor: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))',
-
-				// 导航栏背景图
-				background: 'url(https://cdn.uviewui.com/uview/swiper/1.jpg) no-repeat',
-				// 还可以设置背景图size属性
-				backgroundSize: 'cover',
-
-				// 渐变色
-				backgroundImage: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))'
-			})
-			const viewList = ref([{						image: 'cloud://cloud1-7giqepei42865a68.636c-cloud1-7giqepei42865a68-1311829757/touristImagee/2.png',
-						title: '昨夜星辰昨夜风，画楼西畔桂堂东'					},
-					{
-						image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-						title: '身无彩凤双飞翼，心有灵犀一点通'					},
-			{
-						image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
-						title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
-=======
 <template>
 	<view class="fullScreen">
 		<view>
@@ -316,7 +200,6 @@
 					.card_top {
 						width: 100%;
 						flex: 2;
->>>>>>> wys
 					}
 
 					.card_bottom {

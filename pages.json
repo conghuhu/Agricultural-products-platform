@@ -130,6 +130,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/Tourists/ShowGoodsList/ShowGoodsList",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
