@@ -63,7 +63,6 @@
 				backgroundImage: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))'
 			})
 			async function rightClick() {
-				console.log(11111)
 				uni.navigateBack({})
 			}
 			const keyword = ref("")
