@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="fullScreen">
 		<u-navbar title="商品列表" :is-back="true" :background="background">
 			<view class="slot-wrap" @click="rightClick()">
 			</view>
@@ -40,6 +40,12 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
+	.fullScreen{
+		width: 100%;
+		height: 100vh;
+		background-color: #F2F4F7;
+		position: relative;
+	}
 
 </style>

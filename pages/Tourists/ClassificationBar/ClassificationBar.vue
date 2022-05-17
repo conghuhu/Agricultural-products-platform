@@ -166,7 +166,7 @@
 				setTimeout(() => { // 节流
 					timer.value = null;
 					// scrollHeight为右边菜单垂直中点位置
-					let scrollHeight = e.detail.scrollTop + menuHeight.value / 2;
+					let scrollHeight = e.detail.scrollTop + menuHeight.value / 3;
 					for (let i = 0; i < arr.length; i++) {
 						let height1 = arr[i];
 						let height2 = arr[i + 1];

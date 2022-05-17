@@ -46,12 +46,69 @@
 			<u-grid :col="4">
 				<u-grid-item class="grid_item" bgColor="#F2F4F7" v-for="(item,index) in categoryList" :key="index">
 					<view>
-						<u-image borderRadius="8rpx" height="60rpx" width="60rpx" mode="aspectFill"
-							src="/static/images/2562.png"></u-image>
+						<u-image borderRadius="8rpx" height="60rpx" width="60rpx" mode="aspectFill" :src="item.icon">
+						</u-image>
 					</view>
 					<view class="grid_text">{{item.name}}</view>
 				</u-grid-item>
 			</u-grid>
+		</view>
+
+		<view class="wrap">
+			<u-waterfall v-model="flowList" ref="uWaterfall">
+				<template v-slot:left="{leftList}">
+					<view class="demo-warter" v-for="(item, index) in leftList" :key="index">
+						<!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
+						<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index">
+						</u-lazy-load>
+						<view class="demo-title">
+							{{item.title}}
+						</view>
+						<view class="demo-price">
+							{{item.price}}元
+						</view>
+						<view class="demo-tag">
+							<view class="demo-tag-owner">
+								自营
+							</view>
+							<view class="demo-tag-text">
+								放心购
+							</view>
+						</view>
+						<view class="demo-shop">
+							{{item.shop}}
+						</view>
+						<u-icon name="close-circle-fill" color="#fa3534" size="34" class="u-close"
+							@click="remove(item.id)"></u-icon>
+					</view>
+				</template>
+				<template v-slot:right="{rightList}">
+					<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
+						<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index">
+						</u-lazy-load>
+						<view class="demo-title">
+							{{item.title}}
+						</view>
+						<view class="demo-price">
+							{{item.price}}元
+						</view>
+						<view class="demo-tag">
+							<view class="demo-tag-owner">
+								自营
+							</view>
+							<view class="demo-tag-text">
+								放心购
+							</view>
+						</view>
+						<view class="demo-shop">
+							{{item.shop}}
+						</view>
+						<u-icon name="close-circle-fill" color="#fa3534" size="34" class="u-close"
+							@click="remove(item.id)"></u-icon>
+					</view>
+				</template>
+			</u-waterfall>
+
 		</view>
 		<view>
 			<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
@@ -118,6 +175,98 @@
 				},
 
 
+
+			])
+			/**
+			 * 定义瀑布流信息
+			 */
+			const flowList = ref([{
+					price: 35,
+					title: '特惠大西瓜',
+					shop: '山东临沂大西瓜旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/7.png?sign=6445c6d38be5307e951001e407be784a&t=1652589176',
+				}, {
+					price: 75,
+					title: '特惠橘子',
+					shop: '山东烟台橘子旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/5.png?sign=31597cacca38c47a14a3986214b61362&t=1652589130',
+				},
+
+				{
+					price: 38,
+					title: '红富士苹果',
+					shop: '红富士苹果旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
+				},
+
+				{
+					price: 78,
+					title: '黄金帅苹果',
+					shop: '黄金帅苹果旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/4.png?sign=b3ad85d61434ba95a03bcd72677120de&t=1652589100',
+				}, {
+
+					price: 91,
+					title: '红富士苹果',
+					shop: '红富士苹果旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
+				}, {
+					price: 75,
+					title: '特惠橘子',
+					shop: '山东烟台橘子旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/5.png?sign=31597cacca38c47a14a3986214b61362&t=1652589130',
+				}, {
+
+					price: 91,
+					title: '红富士苹果',
+					shop: '红富士苹果旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
+				},
+
+				{
+					price: 75,
+					title: '特惠橘子',
+					shop: '山东烟台橘子旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/5.png?sign=31597cacca38c47a14a3986214b61362&t=1652589130',
+				},
+
+				{
+
+					price: 91,
+					title: '红富士苹果',
+					shop: '红富士苹果旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
+				},
+				{
+					price: 75,
+					title: '特惠橘子',
+					shop: '山东烟台橘子旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/5.png?sign=31597cacca38c47a14a3986214b61362&t=1652589130',
+				}, {
+
+					price: 91,
+					title: '红富士苹果',
+					shop: '红富士苹果旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
+				},
+				{
+					price: 75,
+					title: '特惠橘子',
+					shop: '山东烟台橘子旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/5.png?sign=31597cacca38c47a14a3986214b61362&t=1652589130',
+				},
+				{
+					price: 35,
+					title: '特惠大西瓜',
+					shop: '山东临沂大西瓜旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/7.png?sign=6445c6d38be5307e951001e407be784a&t=1652589176',
+				},
+				{
+					price: 35,
+					title: '特惠大西瓜',
+					shop: '山东临沂大西瓜旗舰店',
+					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/7.png?sign=6445c6d38be5307e951001e407be784a&t=1652589176',
+				},
 			])
 			//接受类别数组
 			const categoryList = reactive([]);
@@ -143,7 +292,8 @@
 				rightClick,
 				viewList,
 				categoryList,
-				gotoGoodDetail
+				gotoGoodDetail,
+				flowList
 			}
 		},
 		async onLoad() {
@@ -165,9 +315,81 @@
 
 <style lang="scss" scoped>
 	.fullScreen {
+		height: 100vh;
 		width: 100%;
 		background-color: #F2F4F7;
 		position: relative;
+
+		.wrap {
+			background-color: #F2F4F7;
+			width: 100%;
+		}
+
+		.demo-warter {
+			border-radius: 8px;
+			margin: 2px;
+			background-color: #F2F4F7;
+			padding: 8px;
+			position: relative;
+		}
+
+		.u-close {
+			position: absolute;
+			top: 32rpx;
+			right: 32rpx;
+		}
+
+		.demo-image {
+			width: 100%;
+			border-radius: 4px;
+		}
+
+		.demo-title {
+			font-size: 30rpx;
+			margin-top: 5px;
+			color: $u-main-color;
+		}
+
+		.demo-tag {
+			display: flex;
+			margin-top: 5px;
+		}
+
+		.demo-tag-owner {
+			background-color: $u-type-error;
+			color: #FFFFFF;
+			display: flex;
+			align-items: center;
+			padding: 4rpx 14rpx;
+			border-radius: 50rpx;
+			font-size: 20rpx;
+			line-height: 1;
+		}
+
+		.demo-tag-text {
+			border: 1px solid $u-type-primary;
+			color: $u-type-primary;
+			margin-left: 10px;
+			border-radius: 50rpx;
+			line-height: 1;
+			padding: 4rpx 14rpx;
+			display: flex;
+			align-items: center;
+			border-radius: 50rpx;
+			font-size: 20rpx;
+		}
+
+		.demo-price {
+			font-size: 30rpx;
+			color: $u-type-error;
+			margin-top: 5px;
+		}
+
+		.demo-shop {
+			font-size: 22rpx;
+			color: $u-tips-color;
+			margin-top: 5px;
+		}
 
 		.search_contain {
 			width: 100%;
