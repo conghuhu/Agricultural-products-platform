@@ -25,7 +25,7 @@
 							</view>
 							<view class="item-container">
 								<view class="thumb-box" v-for="(item1, index1) in item.foods" :key="index1">
-									<image class="item-menu-image" :src="item1.icon" mode=""></image>
+									<image class="item-menu-image" :src="item1.icon" mode="" @click="toPage(item1._id)"></image>
 									<view class="item-menu-name">{{item1.name}}</view>
 								</view>
 							</view>
@@ -49,6 +49,7 @@
 	} from 'vue'
 	import navList from '@/pages/Tourists/utils/navList';
 	import classifyList from '@/pages/Tourists/ClassificationBar/classify.data.js';
+	import request from '@/api/request';
 	export default {
 		setup() {
 			const list = reactive(navList)
@@ -59,7 +60,7 @@
 			const menuHeight = ref(0);
 			const menuItemHeight = ref(0);
 			const itemId = ref('');
-			const tabbar = reactive(classifyList);
+			const tabbar = reactive([]);
 			const menuItemPos = reactive([]);
 			const scrollRightTop = ref(0);
 			const timer = ref(null);
@@ -138,7 +139,6 @@
 					let selectorQuery = uni.createSelectorQuery().in(_this);
 					selectorQuery.selectAll('.class-item').boundingClientRect((rects) => {
 						// 如果节点尚未生成，rects值为[](因为用selectAll，所以返回的是数组)，循环调用执行
-						console.log(rects)
 						if (!rects.length) {
 							setTimeout(() => {
 								getMenuItemTop();
@@ -178,6 +178,22 @@
 					}
 				}, 10)
 			}
+			//获取分类信息
+			async function getAllGoods(){
+		       const res =await request("goods",{
+					type:"getAllCategory"
+				})
+				console.log(res)
+				res.data.forEach((item,index)=>{
+				     this.tabbar.push(item);
+				})
+			}
+			async function toPage(data){
+				console.log(data)
+				uni.navigateTo({
+					url:"../ShowGoodsList/ShowGoodsList?id=" + JSON.stringify(data)
+				})
+			}
 			return {
 				list,
 				scrollTop, //tab标题的滚动条位置
@@ -197,10 +213,13 @@
 				observer,
 				leftMenuStatus,
 				rightScroll,
-				obj
+				obj,
+				getAllGoods,
+				toPage
 			}
 		},
 		onReady() {
+			this.getAllGoods();
 			this.getMenuItemTop()
 		},
 

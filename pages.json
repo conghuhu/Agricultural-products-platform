@@ -46,7 +46,7 @@
 			"path": "pages/Tourists/MenuBar/MenuBar",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": true,
+				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 		}, {
@@ -124,15 +124,7 @@
 			}
 
 		}, {
-			"path": "pages/Tourists/Release/Release",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-			}
-
-		}, {
-			"path": "pages/Tourists/GoodDetail/GoodDetail",
+			"path": "pages/Tourists/ShowGoodsList/ShowGoodsList",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
