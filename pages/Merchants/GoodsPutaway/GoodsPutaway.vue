@@ -351,6 +351,6 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		padding: 15px;
+		padding: 30rpx;
 	}
 </style>

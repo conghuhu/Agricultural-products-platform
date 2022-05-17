@@ -325,6 +325,7 @@
 	.fullScreen {
 		height: 100vh;
 		font-size: 32rpx;
+		width: 100%;
 
 		.content {
 			position: relative;
