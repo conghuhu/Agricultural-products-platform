@@ -15,13 +15,16 @@ app.$mount()
 // #ifdef VUE3
 // 引入 uView UI
 import uView from './uni_modules/vk-uview-ui';
-import { createSSRApp } from 'vue'
+import { createSSRApp } from 'vue';
+import * as Pinia from 'pinia';
 
 export function createApp() {
 	const app = createSSRApp(App);
-	app.use(uView);
+	app.use(uView)
+		.use(Pinia.createPinia());
 	return {
 		app,
+		Pinia
 	}
 }
 // #endif

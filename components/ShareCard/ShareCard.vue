@@ -32,8 +32,13 @@
 <script lang="ts">
 	import {
 		ref,
-		reactive
+		reactive,
+		onMounted
 	} from 'vue';
+	import request from '@/api/request';
+	import {
+		userStore
+	} from '@/stores/user';
 	export default {
 		props: {
 			// 检测类型
@@ -43,24 +48,38 @@
 				required: true,
 			},
 		},
-		setup() {
+		setup(props) {
+			const user = userStore();
 			const isStar = ref(false);
 			const clickStar = async () => {
 				isStar.value = !isStar.value;
-				console.log(isStar.value);
 				if (isStar.value) {
+					props.item.star += 1;
 					// 点赞
-					
+					const res = await request('star_focus', {
+						type: 'addStar',
+						shareId: props.item._id
+					})
+					user.addToLikeShareSet(props.item._id);
 				} else {
+					props.item.star -= 1;
 					// 取消点赞
-					
+					const res = await request('star_focus', {
+						type: 'removeStar',
+						shareId: props.item._id
+					})
+					user.removeFromLikeShareSet(props.item._id);
 				}
-			}
+			};
+			onMounted(() => {
+				isStar.value = user.likeShareSet.has(props.item._id);
+			});
 			return {
 				isStar,
-				clickStar
+				clickStar,
+				user
 			}
-		}
+		},
 	}
 </script>
 

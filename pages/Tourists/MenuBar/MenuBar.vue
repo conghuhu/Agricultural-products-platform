@@ -20,12 +20,12 @@
 			<u-waterfall v-model="shareList">
 				<template v-slot:left="{leftList}">
 					<view v-for="(item, index) in leftList" :key="item._id">
-						<ShareCard :item="item"/>
+						<ShareCard :item="item" />
 					</view>
 				</template>
 				<template v-slot:right="{rightList}">
 					<view v-for="(item, index) in rightList" :key="item._id">
-						<ShareCard :item="item"/>
+						<ShareCard :item="item" />
 					</view>
 				</template>
 			</u-waterfall>
@@ -44,6 +44,7 @@
 	} from 'vue'
 	import navList from '@/pages/Tourists/utils/navList';
 	import request from '@/api/request';
+
 	export default {
 		setup() {
 			const list = reactive(navList);

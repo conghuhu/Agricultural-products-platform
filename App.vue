@@ -1,6 +1,16 @@
-<script>
+<script lang="ts">
+	import request from '@/api/request';
+	import {
+		userStore
+	} from '@/stores/user';
 	export default {
-		onLaunch: function() {
+		setup() {
+			const user = userStore();
+			return {
+				user
+			}
+		},
+		async onLaunch() {
 			wx.cloud.init({
 				// env 参数说明：
 				//   env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会默认请求到哪个云环境的资源
@@ -12,11 +22,18 @@
 			})
 			console.log('App Launch')
 		},
-		onShow: function() {
-			console.log('App Show')
+		async onShow() {
+			const res = await request('star_focus', {
+				type: 'getOneStarList'
+			})
+			res.data.forEach(item => {
+				this.user.addToLikeShareSet(item);
+			});
+			console.log('App Show');
 		},
-		onHide: function() {
-			console.log('App Hide')
+		async onHide() {
+			console.log('App Hide');
+
 		}
 	}
 </script>

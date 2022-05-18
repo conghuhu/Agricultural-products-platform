@@ -9,10 +9,6 @@ const db = cloud.database();
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
 
-	const {
-		shareId
-	} = event;
-
 	const openid = wxContext.OPENID;
 
 	let res = {};
@@ -21,23 +17,15 @@ exports.main = async (event, context) => {
 
 	try {
 		const starDb = db.collection('star');
-		const shareDb = db.collection('share');
-		const temp = await Promise.all([starDb.add({
-			data: {
-				_openid: openid,
-				shareId: shareId,
-				type: 1, // 1是点赞，0是取消点赞
-				createTime: new Date()
-			}
-		}), shareDb.doc(shareId).update({
-			data: {
-				star: _.inc(1)
-			}
-		})]);
+		const {
+			data
+		} = await starDb.where({
+			_openid: openid
+		}).get();
 		res = {
 			sucess: true,
 			message: "",
-			data: temp,
+			data: data.map(item => item.shareId),
 		}
 	} catch (e) {
 		console.trace(e);
