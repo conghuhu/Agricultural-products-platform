@@ -50,8 +50,10 @@
 				console.log(isStar.value);
 				if (isStar.value) {
 					// 点赞
+					
 				} else {
 					// 取消点赞
+					
 				}
 			}
 			return {
