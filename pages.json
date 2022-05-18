@@ -46,7 +46,7 @@
 			"path": "pages/Tourists/MenuBar/MenuBar",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			}
 		}, {

@@ -13,9 +13,9 @@ const list = [{
 	pagePath: "/pages/Tourists/ClassificationBar/ClassificationBar"
 },
 {
-	iconPath: "/static/images/menu.png",
-	selectedIconPath: "/static/images/menu.png",
-	text: '菜单',
+	iconPath: "/static/images/upload.png",
+	selectedIconPath: "/static/images/upload.png",
+	text: '种草',
 	midButton: true,
 	customIcon: false,
 	pagePath: "/pages/Tourists/MenuBar/MenuBar"

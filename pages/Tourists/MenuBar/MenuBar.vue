@@ -12,10 +12,23 @@
 						@search="searchContent"></u-search>
 				</view>
 				<view class="search_btn">
-					<u-button type="primary" size="mini" @click="searchContent">搜索</u-button>
+					<u-button :custom-style="search_btn_style" type="primary" @click="searchContent">搜索</u-button>
 				</view>
-
 			</view>
+		</view>
+		<view class="content">
+			<u-waterfall v-model="shareList">
+				<template v-slot:left="{leftList}">
+					<view v-for="(item, index) in leftList" :key="item._id">
+						<ShareCard :item="item"/>
+					</view>
+				</template>
+				<template v-slot:right="{rightList}">
+					<view v-for="(item, index) in rightList" :key="item._id">
+						<ShareCard :item="item"/>
+					</view>
+				</template>
+			</u-waterfall>
 		</view>
 		<view>
 			<u-tabbar :list="list" :mid-button="true"></u-tabbar>
@@ -30,14 +43,19 @@
 		reactive
 	} from 'vue'
 	import navList from '@/pages/Tourists/utils/navList';
+	import request from '@/api/request';
 	export default {
 		setup() {
 			const list = reactive(navList);
 			const keyword = ref('');
-			
-			const gotoRelease = ()=>{
+			const shareList = reactive([]);
+			const search_btn_style = ref({
+				height: '60rpx'
+			});
+
+			const gotoRelease = () => {
 				uni.navigateTo({
-					url:"/pages/Tourists/Release/Release"
+					url: "/pages/Tourists/Release/Release"
 				})
 			}
 			/**
@@ -50,8 +68,20 @@
 				list,
 				keyword,
 				searchContent,
-				gotoRelease
+				gotoRelease,
+				shareList,
+				search_btn_style
 			}
+		},
+		async onShow() {
+			const res = await request('share', {
+				type: 'getShareList'
+			});
+			console.log(res);
+			this.shareList.length = 0;
+			res.data.forEach(item => {
+				this.shareList.push(item);
+			});
 		}
 
 	}
@@ -61,6 +91,8 @@
 	.fullScreen {
 		height: 100vh;
 		font-size: 32rpx;
+		background-color: #F2F4F7;
+		width: 100%;
 
 		.top_tool {
 			width: 100%;
@@ -91,6 +123,12 @@
 					flex: 1;
 				}
 			}
+		}
+
+		.content {
+			padding: 20rpx;
+
+
 		}
 	}
 </style>

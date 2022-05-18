@@ -45,6 +45,8 @@
 		ref,
 		reactive
 	} from 'vue'
+	import getUUID from '@/utils/getUUID';
+	import request from '@/api/request';
 
 	export default {
 		setup() {
@@ -58,6 +60,8 @@
 			});
 
 			let formRef = ref(null);
+
+			const submitLoading = ref(false);
 
 			/**
 			 * 当选择的图片发生改变时
@@ -110,6 +114,30 @@
 			 */
 			const submit = async () => {
 				console.log(form);
+				submitLoading.value = true;
+				const fileList = await Promise.all(form.imageList.map(item => {
+					return wx.cloud.uploadFile({
+						cloudPath: 'shareImg/' + new Date().getTime() +
+							getUUID()+'img.jpg',
+						filePath: item,
+					})
+				}));
+				form.imageList.length = 0;
+				fileList.forEach(item => {
+					form.imageList.push(item.fileID);
+				});
+				const res = await request('share', {
+					type: 'addShare',
+					form,
+				});
+				submitLoading.value = false;
+				await wx.showToast({
+					title: '发布成功',
+					duration: 1000
+				});
+				setTimeout(() => {
+					uni.navigateBack();
+				}, 1000);
 			}
 
 			return {
@@ -118,7 +146,8 @@
 				chooseComplete,
 				removeImg,
 				chooseLocation,
-				submit
+				submit,
+				submitLoading
 			}
 		}
 	}
@@ -138,10 +167,12 @@
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				.location_group{
+
+				.location_group {
 					display: flex;
 					justify-content: center;
 					align-items: center;
+
 					.locationVal {
 						font-size: 28rpx;
 						color: #b6bac0;
