@@ -79,6 +79,7 @@
 					await getMenuItemTop();
 				}
 				if (index == current.value) return;
+				console.log(arr)
 				scrollRightTop.value = oldScrollTop.value;
 				nextTick(() => {
 					scrollRightTop.value = arr[index];
@@ -136,7 +137,7 @@
 			}
 			// 获取右边菜单每个item到顶部的距离
 			async function getMenuItemTop() {
-				new Promise(resolve => {
+				return new Promise(resolve => {
 					let selectorQuery = uni.createSelectorQuery().in(_this);
 					selectorQuery.selectAll('.class-item').boundingClientRect((rects) => {
 						// 如果节点尚未生成，rects值为[](因为用selectAll，所以返回的是数组)，循环调用执行
@@ -186,7 +187,7 @@
 				})
 				console.log(res)
 				res.data.forEach((item, index) => {
-					this.tabbar.push(item);
+					tabbar.push(item);
 				})
 			}
 			async function toPage(data) {
@@ -219,11 +220,15 @@
 				toPage
 			}
 		},
+
 		async onLoad(val) {
 			await this.getAllGoods();
-			await this.getMenuItemTop()
+			await this.getMenuItemTop();
 			this.swichMenu(val.id);
 		},
+		async onReady() {
+
+		}
 
 	}
 </script>
