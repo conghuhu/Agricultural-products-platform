@@ -18,8 +18,12 @@
 	import {
 		ref
 	} from 'vue';
+	import {
+		userStore
+	} from '@/stores/user';
 	export default {
 		setup() {
+			const user = userStore();
 			const title = ref("hello");
 			const loading = ref(true);
 			async function merChantLogin() {
@@ -68,6 +72,7 @@
 				})
 			}
 			return {
+				user,
 				title,
 				loading,
 				merChantLogin,
@@ -76,14 +81,15 @@
 		},
 		async onLoad() {
 			wx.showLoading({
-				title:'初始化'
+				title: '初始化'
 			})
 			const res = await request("login", {
 				type: 'checkLogin'
-			})
+			});
 
 			if (res.data.length === 1) {
 				const curStatus = res.data[0].status;
+				this.user.updateUserInfo(res.data[0]);
 				if (curStatus == 0) {
 					uni.redirectTo({
 						url: "../../pages/Merchants/Shop/Shop"

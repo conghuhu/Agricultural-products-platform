@@ -16,8 +16,6 @@ exports.main = async (event, context) => {
 	try {
 		const shareDb = db.collection('share');
 
-		// const shareList = await shareDb.get();
-
 		const shareList = await shareDb
 			.aggregate()
 			.lookup({
@@ -27,9 +25,6 @@ exports.main = async (event, context) => {
 				as: 'author',
 			})
 			.end();
-			
-			console.log(shareList)
-
 
 		res = {
 			sucess: true,

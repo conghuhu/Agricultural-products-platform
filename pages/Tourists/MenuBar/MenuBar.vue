@@ -127,7 +127,7 @@
 		}
 
 		.content {
-			padding: 20rpx;
+			padding: 10rpx;
 
 
 		}

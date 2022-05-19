@@ -1,41 +1,39 @@
 <template>
-	<view class="shareCard">
-		<view class="top_img">
-			<u-lazy-load threshold="-100" imgMode="widthFix" :image="item.imageList[0]" :index="item._id" />
-		</view>
-		<view class="title">
-			{{item.title}}
-		</view>
-		<view class="bottom">
-			<view class="left">
-				<u-avatar style="display: flex;align-items: center;" :size="40" :src="item.author[0].avatarUrl">
-				</u-avatar>
-				<view class="nickname">
-					{{item.author[0].nickName}}
-				</view>
+	<view class="card_container">
+		<view class="shareCard" @click="gotoDetail">
+			<view class="top_img">
+				<u-lazy-load threshold="-100" imgMode="widthFix" :image="shareInfo.imageList[0]"
+					:index="shareInfo._id" />
 			</view>
-			<view class="right">
-
-				<image v-if="isStar" style="width: 42rpx;height: 42rpx;" src="/static/images/star.png" mode="aspectFit"
-					@click="clickStar" />
-				<image v-else style="width: 42rpx;height: 42rpx;" src="/static/images/star_none.png" mode="aspectFit"
-					@click="clickStar" />
-
-				<view class="star_count">
-					{{item.star}}
+			<view class="title">
+				{{shareInfo.title}}
+			</view>
+			<view class="bottom">
+				<view class="left">
+					<u-avatar style="display: flex;align-items: center;" :size="40"
+						:src="shareInfo.author[0].avatarUrl">
+					</u-avatar>
+					<view class="nickname">
+						{{shareInfo.author[0].nickName}}
+					</view>
 				</view>
+				<MyStar :shareId="shareInfo._id" :star="shareInfo.star" @increment="shareInfo.star++"
+					@decrement="shareInfo.star--" />
 			</view>
 		</view>
 	</view>
+
 </template>
 
 <script lang="ts">
 	import {
 		ref,
 		reactive,
-		onMounted
+		onMounted,
+		toRefs
 	} from 'vue';
 	import request from '@/api/request';
+
 	import {
 		userStore
 	} from '@/stores/user';
@@ -49,41 +47,36 @@
 			},
 		},
 		setup(props) {
+			const {
+				item: shareInfo
+			} = toRefs(props);
 			const user = userStore();
-			const isStar = ref(false);
-			const clickStar = async () => {
-				isStar.value = !isStar.value;
-				if (isStar.value) {
-					props.item.star += 1;
-					// 点赞
-					const res = await request('star_focus', {
-						type: 'addStar',
-						shareId: props.item._id
-					})
-					user.addToLikeShareSet(props.item._id);
-				} else {
-					props.item.star -= 1;
-					// 取消点赞
-					const res = await request('star_focus', {
-						type: 'removeStar',
-						shareId: props.item._id
-					})
-					user.removeFromLikeShareSet(props.item._id);
-				}
-			};
-			onMounted(() => {
-				isStar.value = user.likeShareSet.has(props.item._id);
-			});
+			const gotoDetail = () => {
+				uni.navigateTo({
+					url: `/pages/Tourists/ShareDetail/ShareDetail?shareId=${shareInfo.value._id}`,
+					events: {
+						updateStarCount: function(data) {
+							console.log(data);
+							shareInfo.value.star = data;
+						}
+					}
+				});
+			}
+
 			return {
-				isStar,
-				clickStar,
-				user
+				user,
+				gotoDetail,
+				shareInfo
 			}
 		},
 	}
 </script>
 
 <style lang="scss" scoped>
+	.card_container {
+		padding: 10rpx;
+	}
+
 	.shareCard {
 		width: 100%;
 		background-color: white;
@@ -120,17 +113,6 @@
 				}
 			}
 
-			.right {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-
-				.star_count {
-					font-size: 28rpx;
-					margin-left: 6rpx;
-					color: #949397;
-				}
-			}
 		}
 	}
 </style>

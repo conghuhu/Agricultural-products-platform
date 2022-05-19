@@ -20,7 +20,8 @@
 				env: 'cloud1-7giqepei42865a68',
 				traceUser: true,
 			})
-			console.log('App Launch')
+			console.log('App Launch');
+
 		},
 		async onShow() {
 			const res = await request('star_focus', {
