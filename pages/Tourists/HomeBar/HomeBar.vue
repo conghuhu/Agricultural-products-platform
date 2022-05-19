@@ -45,7 +45,7 @@
 		<view class="grid_full">
 			<u-grid :col="4">
 				<u-grid-item class="grid_item" bgColor="#F2F4F7" v-for="(item,index) in categoryList" :key="index">
-					<view>
+					<view @click="toClassification(index)">
 						<u-image borderRadius="8rpx" height="60rpx" width="60rpx" mode="aspectFill" :src="item.icon">
 						</u-image>
 					</view>
@@ -59,13 +59,13 @@
 				<template v-slot:left="{leftList}">
 					<view class="demo-warter" v-for="(item, index) in leftList" :key="index">
 						<!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
-						<u-lazy-load threshold="10" border-radius="10" :image="item.image" :index="index">
+						<u-lazy-load threshold="10" border-radius="10" :image="item.imageShowList[0]" :index="index">
 						</u-lazy-load>
 						<view class="demo-title">
-							{{item.title}}
+							{{item.goodName}}
 						</view>
 						<view class="demo-price">
-							{{item.price}}元
+							{{item.goodPrice}}元
 						</view>
 						<view class="demo-tag">
 							<view class="demo-tag-owner">
@@ -76,21 +76,19 @@
 							</view>
 						</view>
 						<view class="demo-shop">
-							{{item.shop}}
+							{{item.originPlace}}
 						</view>
-						<u-icon name="close-circle-fill" color="#fa3534" size="34" class="u-close"
-							@click="remove(item.id)"></u-icon>
 					</view>
 				</template>
 				<template v-slot:right="{rightList}">
 					<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
-						<u-lazy-load threshold="-450" border-radius="10" :image="item.image" :index="index">
+						<u-lazy-load threshold="-450" border-radius="10" :image="item.imageShowList[0]" :index="index">
 						</u-lazy-load>
 						<view class="demo-title">
-							{{item.title}}
+							{{item.goodName}}
 						</view>
 						<view class="demo-price">
-							{{item.price}}元
+							{{item.goodPrice}}元
 						</view>
 						<view class="demo-tag">
 							<view class="demo-tag-owner">
@@ -101,10 +99,8 @@
 							</view>
 						</view>
 						<view class="demo-shop">
-							{{item.shop}}
+							{{item.originPlace}}
 						</view>
-						<u-icon name="close-circle-fill" color="#fa3534" size="34" class="u-close"
-							@click="remove(item.id)"></u-icon>
 					</view>
 				</template>
 			</u-waterfall>
@@ -180,98 +176,28 @@
 			/**
 			 * 定义瀑布流信息
 			 */
-			const flowList = ref([{
-					price: 35,
-					title: '特惠大西瓜',
-					shop: '山东临沂大西瓜旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/7.png?sign=6445c6d38be5307e951001e407be784a&t=1652589176',
-				}, {
-					price: 75,
-					title: '特惠橘子',
-					shop: '山东烟台橘子旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/5.png?sign=31597cacca38c47a14a3986214b61362&t=1652589130',
-				},
-
-				{
-					price: 38,
-					title: '红富士苹果',
-					shop: '红富士苹果旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
-				},
-
-				{
-					price: 78,
-					title: '黄金帅苹果',
-					shop: '黄金帅苹果旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/4.png?sign=b3ad85d61434ba95a03bcd72677120de&t=1652589100',
-				}, {
-
-					price: 91,
-					title: '红富士苹果',
-					shop: '红富士苹果旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
-				}, {
-					price: 75,
-					title: '特惠橘子',
-					shop: '山东烟台橘子旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/5.png?sign=31597cacca38c47a14a3986214b61362&t=1652589130',
-				}, {
-
-					price: 91,
-					title: '红富士苹果',
-					shop: '红富士苹果旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
-				},
-
-				{
-					price: 75,
-					title: '特惠橘子',
-					shop: '山东烟台橘子旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/5.png?sign=31597cacca38c47a14a3986214b61362&t=1652589130',
-				},
-
-				{
-
-					price: 91,
-					title: '红富士苹果',
-					shop: '红富士苹果旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
-				},
-				{
-					price: 75,
-					title: '特惠橘子',
-					shop: '山东烟台橘子旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/5.png?sign=31597cacca38c47a14a3986214b61362&t=1652589130',
-				}, {
-
-					price: 91,
-					title: '红富士苹果',
-					shop: '红富士苹果旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
-				},
-				{
-					price: 75,
-					title: '特惠橘子',
-					shop: '山东烟台橘子旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/5.png?sign=31597cacca38c47a14a3986214b61362&t=1652589130',
-				},
-				{
-					price: 35,
-					title: '特惠大西瓜',
-					shop: '山东临沂大西瓜旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/7.png?sign=6445c6d38be5307e951001e407be784a&t=1652589176',
-				},
-				{
-					price: 35,
-					title: '特惠大西瓜',
-					shop: '山东临沂大西瓜旗舰店',
-					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/7.png?sign=6445c6d38be5307e951001e407be784a&t=1652589176',
-				},
-			])
+			const flowList = reactive([]);
+			/**
+			 * 获取商品信息
+			 */
+			async function getGoodsList() {
+				const {
+					latitude,
+					longitude
+				} = await wx.getLocation()
+				const temp: Array < any > = await request("goods", {
+					type: "getGoodsByLocation",
+					latitude: latitude,
+					longitude: longitude,
+				})
+				temp.data.forEach((item, index) => {
+					flowList.push(item);
+				})
+				console.log(flowList)
+			}
 			//接受类别数组
 			const categoryList = reactive([]);
 			async function rightClick() {
-				console.log(11111)
 				uni.navigateTo({
 					url: "../Location/Location"
 				})
@@ -285,6 +211,13 @@
 					url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodId}`
 				})
 			}
+
+			const toClassification = async function(index) {
+				console.log(index)
+				uni.redirectTo({
+					url:"../ClassificationBar/ClassificationBar?id="+JSON.stringify(index)
+				})
+			}
 			return {
 				list,
 				current,
@@ -293,16 +226,18 @@
 				viewList,
 				categoryList,
 				gotoGoodDetail,
-				flowList
+				flowList,
+				getGoodsList,
+				toClassification
 			}
 		},
 		async onLoad() {
+			this.getGoodsList()
 			const temp: {
 				res: Array < any >
 			} = await request("goods", {
 				type: "getFirstCategory"
 			})
-			console.log(temp)
 			temp.data.forEach(item => {
 				this.categoryList.push(item);
 			})

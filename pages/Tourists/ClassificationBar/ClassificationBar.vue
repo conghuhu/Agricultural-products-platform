@@ -25,7 +25,8 @@
 							</view>
 							<view class="item-container">
 								<view class="thumb-box" v-for="(item1, index1) in item.foods" :key="index1">
-									<image class="item-menu-image" :src="item1.icon" mode="" @click="toPage(item1._id)"></image>
+									<image class="item-menu-image" :src="item1.icon" mode="" @click="toPage(item1._id)">
+									</image>
 									<view class="item-menu-name">{{item1.name}}</view>
 								</view>
 							</view>
@@ -78,6 +79,7 @@
 					await getMenuItemTop();
 				}
 				if (index == current.value) return;
+				console.log(arr)
 				scrollRightTop.value = oldScrollTop.value;
 				nextTick(() => {
 					scrollRightTop.value = arr[index];
@@ -135,7 +137,7 @@
 			}
 			// 获取右边菜单每个item到顶部的距离
 			async function getMenuItemTop() {
-				new Promise(resolve => {
+				return new Promise(resolve => {
 					let selectorQuery = uni.createSelectorQuery().in(_this);
 					selectorQuery.selectAll('.class-item').boundingClientRect((rects) => {
 						// 如果节点尚未生成，rects值为[](因为用selectAll，所以返回的是数组)，循环调用执行
@@ -179,19 +181,19 @@
 				}, 10)
 			}
 			//获取分类信息
-			async function getAllGoods(){
-		       const res =await request("goods",{
-					type:"getAllCategory"
+			async function getAllGoods() {
+				const res = await request("goods", {
+					type: "getAllCategory"
 				})
 				console.log(res)
-				res.data.forEach((item,index)=>{
-				     this.tabbar.push(item);
+				res.data.forEach((item, index) => {
+					tabbar.push(item);
 				})
 			}
-			async function toPage(data){
+			async function toPage(data) {
 				console.log(data)
 				uni.navigateTo({
-					url:"../ShowGoodsList/ShowGoodsList?id=" + JSON.stringify(data)
+					url: "../ShowGoodsList/ShowGoodsList?id=" + JSON.stringify(data)
 				})
 			}
 			return {
@@ -218,10 +220,15 @@
 				toPage
 			}
 		},
-		onReady() {
-			this.getAllGoods();
-			this.getMenuItemTop()
+
+		async onLoad(val) {
+			await this.getAllGoods();
+			await this.getMenuItemTop();
+			this.swichMenu(val.id);
 		},
+		async onReady() {
+
+		}
 
 	}
 </script>

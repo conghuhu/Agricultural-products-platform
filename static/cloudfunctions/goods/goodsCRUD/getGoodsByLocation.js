@@ -5,7 +5,7 @@ cloud.init();
 
 const db = cloud.database();
 /**
- * 获取某个商铺商品信息
+ * 根据地理位置获取商品信息
  * @param {*} event 
  * @param {*} context 
  */
@@ -14,7 +14,8 @@ exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
 
 	const {
-		shopId
+		latitude,
+		longitude
 	} = event;
 	const goodDb = db.collection('goods');
 	const _ = db.command;
@@ -22,10 +23,10 @@ exports.main = async (event, context) => {
 	const {
 		data
 	} = await goodDb.where({
-			shopId: _.eq(shopId),
-			status: true
-		}).orderBy('createTime', 'desc')
-		.get();
+			location:_.geoNear({
+				geometry:db.Geo.Point(longitude,latitude)
+			})
+		}).get();
 
 	let res = {};
 	res = {

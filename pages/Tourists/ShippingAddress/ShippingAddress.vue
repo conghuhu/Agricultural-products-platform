@@ -99,7 +99,6 @@
 				location:""
 			})
 			async function inputAdress() {
-				await wx.startLocationUpdateBackground();
 				const {
 					latitude,
 					longitude
@@ -107,7 +106,7 @@
 				res.adress = form.adress;
 				res.latitude = latitude;
 				res.longitude = longitude;
-				const result = await wx.choosePoi(res)
+				const result = await wx.chooseLocation(res)
 				form.adress = result.name
 				form.location=result.address
 			}
