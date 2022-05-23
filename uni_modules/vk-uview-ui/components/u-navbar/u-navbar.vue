@@ -114,7 +114,7 @@
 			// 标题的颜色
 			titleColor: {
 				type: String,
-				default: '#606266'
+				default: '#2c2d2f'
 			},
 			// 标题字体是否加粗
 			titleBold: {

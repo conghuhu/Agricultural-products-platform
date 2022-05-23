@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="fullScreen">
 		<Nav title="分类"></Nav>
 		<view class="u-wrap">
 			<view class="u-search-box">
@@ -51,8 +51,18 @@
 	import navList from '@/pages/Tourists/utils/navList';
 	import classifyList from '@/pages/Tourists/ClassificationBar/classify.data.js';
 	import request from '@/api/request';
+	import {
+		commonStore
+	} from '@/stores/store';
+	import {
+		storeToRefs
+	} from 'pinia';
 	export default {
 		setup() {
+			const store = commonStore();
+			const {
+				currentCategory
+			} = storeToRefs(store);
 			const list = reactive(navList)
 			const current = ref(0)
 			const arr = reactive([]);
@@ -73,9 +83,7 @@
 
 			// 点击左边的栏目切换
 			async function swichMenu(index) {
-
 				if (arr.length == 0) {
-					console.log(11111111)
 					await getMenuItemTop();
 				}
 				if (index == current.value) return;
@@ -185,16 +193,14 @@
 				const res = await request("goods", {
 					type: "getAllCategory"
 				})
-				console.log(res)
 				res.data.forEach((item, index) => {
 					tabbar.push(item);
 				})
 			}
 			async function toPage(data) {
-				console.log(data)
 				uni.navigateTo({
-					url: "../ShowGoodsList/ShowGoodsList?id=" + JSON.stringify(data)
-				})
+					url: `/pages/Tourists/ShowGoodsList/ShowGoodsList?id=${data}`
+				});
 			}
 			return {
 				list,
@@ -217,23 +223,35 @@
 				rightScroll,
 				obj,
 				getAllGoods,
-				toPage
+				toPage,
+				currentCategory
 			}
 		},
 
-		async onLoad(val) {
+		async onLoad() {
 			await this.getAllGoods();
 			await this.getMenuItemTop();
-			this.swichMenu(val.id);
+			this.swichMenu(this.currentCategory);
 		},
 		async onReady() {
 
+		},
+		async onShow() {
+			this.swichMenu(this.currentCategory);
 		}
 
 	}
 </script>
 
 <style lang="scss" scoped>
+	.fullScreen {
+		height: 100vh;
+		width: 100%;
+		background-color: #F2F4F7;
+		position: relative;
+		font-size: 32rpx;
+	}
+
 	.u-wrap {
 		height: calc(100vh);
 		/* #ifdef H5 */
@@ -241,6 +259,7 @@
 		/* #endif */
 		display: flex;
 		flex-direction: column;
+		padding-left: 10rpx;
 	}
 
 	.u-search-box {
@@ -262,7 +281,7 @@
 	}
 
 	.u-search-text {
-		font-size: 26rpx;
+		font-size: 30rpx;
 		color: $u-tips-color;
 		margin-left: 10rpx;
 	}
@@ -270,16 +289,17 @@
 	.u-tab-view {
 		width: 200rpx;
 		height: 100%;
+		background-color: #F2F4F7;
 	}
 
 	.u-tab-item {
 		height: 110rpx;
-		background: #f6f6f6;
+		background: #F2F4F7;
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 26rpx;
+		font-size: 29rpx;
 		color: #444;
 		font-weight: 400;
 		line-height: 1;
@@ -288,7 +308,7 @@
 	.u-tab-item-active {
 		position: relative;
 		color: #000;
-		font-size: 30rpx;
+		font-size: 32rpx;
 		font-weight: 600;
 		background: #fff;
 	}
@@ -302,12 +322,8 @@
 		top: 39rpx;
 	}
 
-	.u-tab-view {
-		height: 100%;
-	}
-
 	.right-box {
-		background-color: rgb(250, 250, 250);
+		background-color: #F2F4F7;
 	}
 
 	.page-view {
@@ -322,18 +338,18 @@
 	}
 
 	.class-item:last-child {
-		min-height: 100vh;
+		min-height: 80vh;
 	}
 
 	.item-title {
-		font-size: 26rpx;
+		font-size: 32rpx;
 		color: $u-main-color;
 		font-weight: bold;
 	}
 
 	.item-menu-name {
 		font-weight: normal;
-		font-size: 24rpx;
+		font-size: 29rpx;
 		color: $u-main-color;
 	}
 

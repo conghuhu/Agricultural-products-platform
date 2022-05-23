@@ -88,6 +88,7 @@
 			});
 
 			if (res.data.length === 1) {
+				console.log(res.data);
 				const curStatus = res.data[0].status;
 				this.user.updateUserInfo(res.data[0]);
 				if (curStatus == 0) {

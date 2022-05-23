@@ -7,7 +7,8 @@ const getGoodById = require('./goodsCRUD/getGoodById');
 const updateGoodById = require('./goodsCRUD/updateGoodById');
 const deleteGoodById = require('./goodsCRUD/deleteGoodById');
 const getAllCategory = require('./category/getAllCategory')
-const getGoodsByLocation = require('./goodsCRUD/getGoodsByLocation')
+const getGoodsByLocation = require('./goodsCRUD/getGoodsByLocation');
+const getGoodsByScdCategoryId = require('./goodsCRUD/getGoodsByScdCategoryId');
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -29,7 +30,9 @@ exports.main = async (event, context) => {
 		case 'getAllCategory':
 			return await getAllCategory.main(event, context);
 		case 'getGoodsByLocation':
-		    return await getGoodsByLocation.main(event,context);
+			return await getGoodsByLocation.main(event, context);
+		case 'getGoodsByScdCategoryId':
+			return await getGoodsByScdCategoryId.main(event, context);
 		default:
 			return {};
 	}

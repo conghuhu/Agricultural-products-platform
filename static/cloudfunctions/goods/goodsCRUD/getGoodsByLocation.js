@@ -23,10 +23,10 @@ exports.main = async (event, context) => {
 	const {
 		data
 	} = await goodDb.where({
-			location:_.geoNear({
-				geometry:db.Geo.Point(longitude,latitude)
-			})
-		}).get();
+		location: _.geoNear({
+			geometry: db.Geo.Point(longitude, latitude)
+		})
+	}).get();
 
 	let res = {};
 	res = {

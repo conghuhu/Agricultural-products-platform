@@ -17,22 +17,29 @@
 			</view>
 		</view>
 		<view class="content">
-			<view class="item" v-for="(res, index) in infoAddress" :key="res._id">
-				<view class="top">
-					<view class="name">{{ res.consignee }}</view>
-					<view class="phone">{{ res.phone }}</view>
-				</view>
-				<view class="bottom">
-					<view>
-						{{res.location}}
+			<view v-for="(res, index) in infoAddress" :key="res._id">
+				<view class="item" @click="goToHome(res)">
+					<view class="top">
+						<view class="name">{{ res.consignee }}</view>
+						<view class="phone">{{ res.phone }}</view>
 					</view>
-					<view class="right">
-						<u-icon style="margin-right: 20rpx;" name="edit-pen" :size="40" color="#999999"
-							@click="updateAdress(index)"></u-icon>
-						<u-icon name="trash" :size="40" color="#999999" @click="deleteAdress(index)"></u-icon>
+					<view class="bottom">
+						<view>
+							{{res.location}}
+						</view>
+						<view class="right">
+							<view style="padding: 10rpx;" @click.stop="updateAdress(index)">
+								<u-icon style="margin-right: 20rpx;" name="edit-pen" :size="40" color="#999999">
+								</u-icon>
+							</view>
+							<view style="padding: 10rpx;" @click.stop="deleteAdress(index)">
+								<u-icon name="trash" :size="40" color="#999999"></u-icon>
+							</view>
+						</view>
 					</view>
 				</view>
 			</view>
+
 			<view>
 				<u-action-sheet :list="sheetList" v-model="listShow" @click="confirmDel"></u-action-sheet>
 			</view>
@@ -50,8 +57,12 @@
 	} from 'vue'
 	import navList from '@/pages/Tourists/utils/navList';
 	import request from '@/api/request';
+	import {
+		userStore
+	} from '@/stores/user';
 	export default {
 		setup() {
+			const user = userStore();
 			//tabbar
 			const list = reactive(navList)
 			//页面nav信息配置
@@ -102,7 +113,7 @@
 				height: '50rpx',
 				marginRight: '10rpx',
 				marginLeft: '10rpx',
-				width:'160rpx'
+				width: '160rpx'
 			});
 
 
@@ -115,7 +126,6 @@
 			const listShow = ref(false)
 			const temp = ref("")
 			async function deleteAdress(index) {
-				console.log(222222)
 				listShow.value = true
 				temp.value = infoAddress[index]._id
 				console.log(temp.value)
@@ -125,7 +135,6 @@
 				console.log(temp.value)
 
 				if (index === 0) {
-					console.log(11111)
 					request("touristInfo", {
 						type: "delAddress",
 						ID: temp.value
@@ -134,6 +143,12 @@
 				uni.redirectTo({
 					url: "../Location/Location"
 				})
+			}
+
+			const goToHome = (item) => {
+				user.updateLocationInfo(item.adress, item.locationArr.coordinates[1], item.locationArr.coordinates[
+				0]);
+				uni.navigateBack();
 			}
 
 			return {
@@ -150,7 +165,8 @@
 				sheetList,
 				listShow,
 				confirmDel,
-				btnStyle
+				btnStyle,
+				goToHome
 			}
 		},
 		async onShow() {
@@ -237,6 +253,7 @@
 			font-size: 28rpx;
 			justify-content: space-between;
 			color: #999999;
+			align-items: center;
 
 			.right {
 				display: flex;

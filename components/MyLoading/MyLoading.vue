@@ -1,5 +1,4 @@
 <template>
-
 	<view class="spinner">
 		<view class="spinner-container container1">
 			<view class="circle1"></view>

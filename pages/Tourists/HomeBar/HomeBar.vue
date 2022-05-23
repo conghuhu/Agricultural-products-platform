@@ -51,68 +51,78 @@
 			<text class="today_text">商品分类展示</text>
 		</view>
 		<view class="grid_full">
-			<u-grid :col="4">
-				<u-grid-item class="grid_item" bgColor="#F2F4F7" v-for="(item,index) in categoryList" :key="index">
-					<view @click="toClassification(index)">
+			<MyLoading v-if="categoryLoading" />
+			<view v-else>
+				<u-grid :col="4">
+					<u-grid-item @click="toClassification(index)" class="grid_item" bgColor="#F2F4F7"
+						v-for="(item,index) in categoryList" :key="index">
 						<u-image borderRadius="8rpx" height="60rpx" width="60rpx" mode="aspectFill" :src="item.icon">
 						</u-image>
-					</view>
-					<view class="grid_text">{{item.name}}</view>
-				</u-grid-item>
-			</u-grid>
+						<view class="grid_text">{{item.name}}</view>
+					</u-grid-item>
+				</u-grid>
+			</view>
+
 		</view>
 
+		<view class="today">
+			<text class="today_text">附近商品</text>
+		</view>
 		<view class="wrap">
-			<u-waterfall v-model="flowList" ref="uWaterfall">
-				<template v-slot:left="{leftList}">
-					<view class="demo-warter" v-for="(item, index) in leftList" :key="index">
-						<!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
-						<u-lazy-load threshold="10" border-radius="10" :image="item.imageShowList[0]" :index="index">
-						</u-lazy-load>
-						<view class="demo-title">
-							{{item.goodName}}
-						</view>
-						<view class="demo-price">
-							{{item.goodPrice}}元
-						</view>
-						<view class="demo-tag">
-							<view class="demo-tag-owner">
-								自营
+			<MyLoading v-if="goodListLoading" />
+			<view style="width: 100%;" v-else>
+				<u-waterfall v-model="flowList" ref="uWaterfall">
+					<template v-slot:left="{leftList}">
+						<view class="demo-warter" v-for="(item, index) in leftList" :key="index">
+							<!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
+							<u-lazy-load threshold="10" border-radius="10" :image="item.imageShowList[0]"
+								:index="index">
+							</u-lazy-load>
+							<view class="demo-title">
+								{{item.goodName}}
 							</view>
-							<view class="demo-tag-text">
-								放心购
+							<view class="demo-price">
+								{{item.goodPrice}}元
 							</view>
-						</view>
-						<view class="demo-shop">
-							{{item.originPlace}}
-						</view>
-					</view>
-				</template>
-				<template v-slot:right="{rightList}">
-					<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
-						<u-lazy-load threshold="-450" border-radius="10" :image="item.imageShowList[0]" :index="index">
-						</u-lazy-load>
-						<view class="demo-title">
-							{{item.goodName}}
-						</view>
-						<view class="demo-price">
-							{{item.goodPrice}}元
-						</view>
-						<view class="demo-tag">
-							<view class="demo-tag-owner">
-								自营
+							<view class="demo-tag">
+								<view class="demo-tag-owner">
+									自营
+								</view>
+								<view class="demo-tag-text">
+									放心购
+								</view>
 							</view>
-							<view class="demo-tag-text">
-								放心购
+							<view class="demo-shop">
+								{{item.originPlace}}
 							</view>
 						</view>
-						<view class="demo-shop">
-							{{item.originPlace}}
+					</template>
+					<template v-slot:right="{rightList}">
+						<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
+							<u-lazy-load threshold="-450" border-radius="10" :image="item.imageShowList[0]"
+								:index="index">
+							</u-lazy-load>
+							<view class="demo-title">
+								{{item.goodName}}
+							</view>
+							<view class="demo-price">
+								{{item.goodPrice}}元
+							</view>
+							<view class="demo-tag">
+								<view class="demo-tag-owner">
+									自营
+								</view>
+								<view class="demo-tag-text">
+									放心购
+								</view>
+							</view>
+							<view class="demo-shop">
+								{{item.originPlace}}
+							</view>
 						</view>
-					</view>
-				</template>
-			</u-waterfall>
-
+					</template>
+				</u-waterfall>
+			</view>
 		</view>
 		<view>
 			<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
@@ -123,7 +133,8 @@
 <script lang="ts">
 	import {
 		ref,
-		reactive
+		reactive,
+		watch
 	} from 'vue'
 	import navList from '@/pages/Tourists/utils/navList';
 	import request from '@/api/request';
@@ -131,11 +142,16 @@
 		userStore
 	} from '@/stores/user';
 	import {
+		commonStore
+	} from '@/stores/store';
+	import {
 		storeToRefs
 	} from 'pinia';
 	export default {
 		setup() {
 			const list = reactive(navList);
+			const goodListLoading = ref(true);
+			const categoryLoading = ref(true);
 			const current = ref(0);
 			const background = ref({
 				// 渐变色
@@ -143,8 +159,20 @@
 			});
 			const user = userStore();
 			const {
-				currentLocationVal
+				currentLocationVal,
+				location
 			} = storeToRefs(user);
+
+			const store = commonStore();
+
+			watch(currentLocationVal, (currentLocationVal, preLocationVal) => {
+				console.log(currentLocationVal);
+				console.log(preLocationVal);
+				if (preLocationVal != "请选择收货位置") {
+					getGoodsList([location.value.longitude, location.value.latitude]);
+				}
+			});
+
 			const viewList = reactive([{
 					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
 					title: '红富士苹果',
@@ -185,30 +213,50 @@
 			 * 定义瀑布流信息
 			 */
 			const flowList = reactive([]);
+
 			/**
 			 * 获取商品信息
 			 */
-			async function getGoodsList() {
-				const {
-					latitude,
-					longitude
-				} = await wx.getLocation();
-				const ans = await Promise.all([request("goods", {
-					type: "getGoodsByLocation",
-					latitude: latitude,
-					longitude: longitude,
-				}), wx.serviceMarket.invokeService({
-					service: 'wxc1c68623b7bdea7b',
-					api: 'rgeoc',
-					data: {
-						"location": latitude + "," + longitude
-					},
-				})]);
-				// 更新store中的位置信息
-				user.updateLocationInfo(ans[1].data.result.formatted_addresses.recommend, latitude, longitude);
-				ans[0].data.forEach((item, index) => {
-					flowList.push(item);
-				});
+			async function getGoodsList(location ? : number[]) {
+				console.log("获取位置");
+				goodListLoading.value = true;
+				if (location) {
+					const longitude = location[0];
+					const latitude = location[1];
+					const res = await request("goods", {
+						type: "getGoodsByLocation",
+						latitude: latitude,
+						longitude: longitude,
+					});
+					flowList.length = 0;
+					res.data.forEach((item, index) => {
+						flowList.push(item);
+					});
+				} else {
+					// 初始没选择位置，自动获取当前地址
+					const {
+						latitude,
+						longitude
+					} = await wx.getLocation();
+					const ans = await Promise.all([request("goods", {
+						type: "getGoodsByLocation",
+						latitude: latitude,
+						longitude: longitude,
+					}), wx.serviceMarket.invokeService({
+						service: 'wxc1c68623b7bdea7b',
+						api: 'rgeoc',
+						data: {
+							"location": latitude + "," + longitude
+						},
+					})]);
+					// 更新store中的位置信息
+					user.updateLocationInfo(ans[1].data.result.formatted_addresses.recommend, latitude, longitude);
+					flowList.length = 0;
+					ans[0].data.forEach((item, index) => {
+						flowList.push(item);
+					});
+				}
+				goodListLoading.value = false;
 				console.log(flowList)
 			};
 			//接受类别数组
@@ -232,8 +280,9 @@
 			}
 
 			const toClassification = async function(index) {
-				uni.redirectTo({
-					url: "../ClassificationBar/ClassificationBar?id=" + JSON.stringify(index)
+				store.updateCurCategory(index);
+				uni.switchTab({
+					url: "/pages/Tourists/ClassificationBar/ClassificationBar"
 				})
 			}
 			return {
@@ -247,19 +296,23 @@
 				flowList,
 				getGoodsList,
 				toClassification,
-				currentLocationVal
+				currentLocationVal,
+				goodListLoading,
+				categoryLoading
 			}
 		},
 		async onLoad() {
+			this.categoryLoading = true;
 			this.getGoodsList();
 			const temp: {
 				res: Array < any >
 			} = await request("goods", {
 				type: "getFirstCategory"
-			})
+			});
 			temp.data.forEach(item => {
 				this.categoryList.push(item);
-			})
+			});
+			this.categoryLoading = false;
 		}
 	}
 </script>
@@ -270,6 +323,7 @@
 		width: 100%;
 		background-color: #F2F4F7;
 		position: relative;
+		font-size: 32rpx;
 
 		.location_group {
 			display: flex;
@@ -285,10 +339,41 @@
 
 		.demo-warter {
 			border-radius: 8px;
-			margin: 2px;
-			background-color: #F2F4F7;
-			padding: 8px;
+			margin: 8rpx;
+			margin-bottom: 20rpx;
 			position: relative;
+			background: #F9FAFB;
+			box-shadow: 0px 6rpx 6rpx 0px rgba(0, 0, 0, 0.03);
+
+			.demo-image {
+				width: 100%;
+				border-radius: 4px;
+			}
+
+			.demo-title {
+				font-size: 34rpx;
+				margin-top: 10rpx;
+				color: $u-main-color;
+				font-weight: 520;
+				padding: 6rpx 12rpx 6rpx 12rpx;
+			}
+
+			.demo-tag {
+				display: flex;
+				padding: 6rpx 12rpx 6rpx 12rpx;
+			}
+
+			.demo-price {
+				font-size: 32rpx;
+				color: $u-type-error;
+				padding: 6rpx 12rpx 6rpx 12rpx;
+			}
+
+			.demo-shop {
+				font-size: 28rpx;
+				color: $u-tips-color;
+				padding: 6rpx 12rpx 12rpx 12rpx;
+			}
 		}
 
 		.u-close {
@@ -297,21 +382,7 @@
 			right: 32rpx;
 		}
 
-		.demo-image {
-			width: 100%;
-			border-radius: 4px;
-		}
 
-		.demo-title {
-			font-size: 30rpx;
-			margin-top: 5px;
-			color: $u-main-color;
-		}
-
-		.demo-tag {
-			display: flex;
-			margin-top: 5px;
-		}
 
 		.demo-tag-owner {
 			background-color: $u-type-error;
@@ -337,18 +408,6 @@
 			font-size: 20rpx;
 		}
 
-		.demo-price {
-			font-size: 30rpx;
-			color: $u-type-error;
-			margin-top: 5px;
-		}
-
-		.demo-shop {
-			font-size: 22rpx;
-			color: $u-tips-color;
-			margin-top: 5px;
-		}
-
 		.search_contain {
 			width: 100%;
 			display: flex;
@@ -359,7 +418,7 @@
 
 			.search {
 				width: 80vw;
-				height: 13vw;
+				height: 12vw;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
@@ -372,11 +431,11 @@
 
 				.text {
 					font-family: SourceHanSansCN-ExtraLight;
-					font-size: 26rpx;
-					font-weight: 250;
-					line-height: 26rpx;
+					font-size: 32rpx;
+					font-weight: 500;
+					line-height: 32rpx;
 					letter-spacing: 0px;
-					color: #333333;
+					color: #5c5c5c;
 				}
 			}
 		}
@@ -385,9 +444,8 @@
 			margin-left: 10rpx;
 			font-size: 32rpx;
 			font-family: SourceHanSansCN-ExtraLight;
-			color: rgba(0, 0, 0, 0.8);
+			color: #606266;
 			font-weight: 500;
-			text-align: center;
 			line-height: 35rpx;
 		}
 
@@ -398,15 +456,15 @@
 
 		.today {
 			padding: 32rpx;
-			padding-bottom: 20rpx;
-			padding-top: 20rpx;
+			padding-bottom: 16rpx;
+			padding-top: 16rpx;
 
 
 			.today_text {
 				font-family: SourceHanSansCN-Bold;
-				font-size: 44rpx;
+				font-size: 40rpx;
 				font-weight: bold;
-				line-height: 44rpx;
+				line-height: 42rpx;
 				letter-spacing: 0rpx;
 				color: rgba(0, 0, 0, 0.8);
 			}
@@ -435,7 +493,7 @@
 					flex-direction: column;
 					justify-content: space-around;
 					padding: 16rpx;
-					box-shadow: 0rpx 14rpx 14rpx 0rpx #cecece;
+					box-shadow: 0rpx 10rpx 10rpx 0rpx #cecece;
 
 					.card_top {
 						width: 100%;
@@ -456,9 +514,9 @@
 							flex: 2;
 
 							.left_title {
-								font-size: 15px;
+								font-size: 32rpx;
 								color: black;
-								font-weight: 250;
+								font-weight: 520;
 								margin-bottom: 10rpx;
 								font-family: SourceHanSansCN-ExtraLight;
 								color: rgba(0, 0, 0, 0.8);
@@ -466,9 +524,9 @@
 
 							.left_location {
 								font-size: 28rpx;
-								font-weight: 250;
+								font-weight: 500;
 								font-family: SourceHanSansCN-ExtraLight;
-								line-height: 11px;
+								line-height: 30rpx;
 
 							}
 						}
@@ -497,8 +555,7 @@
 
 		.grid_full {
 			width: 100%;
-			height: 50vw;
-			margin-bottom: 30rpx;
+			margin-bottom: 10rpx;
 
 			.grid_item {
 
@@ -508,7 +565,11 @@
 					// right: 40rpx;
 					// width: 100rpx;
 					// height: 100rpx;
+				}
 
+				.grid_text {
+					font-size: 30rpx;
+					margin-top: 8rpx;
 				}
 
 			}
@@ -519,7 +580,11 @@
 		}
 
 		.wrap {
-			padding: 40rpx;
+			padding: 20rpx;
+			padding-top: 0rpx;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 
 		.badge-icon {

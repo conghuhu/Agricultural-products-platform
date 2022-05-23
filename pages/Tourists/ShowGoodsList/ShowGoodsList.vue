@@ -5,21 +5,20 @@
 			</view>
 		</u-navbar>
 		<view class="show_list">
-			<view class="card">
+			<view class="card" v-for="(item,index) in goodList" :key="item._id">
 				<view class="list_left">
-					<u-image height="100%" width="100%" mode="aspectFit他"
-						src="https://cdn.uviewui.com/uview/common/classify/2/13.jpg"></u-image>
+					<u-image height="100%" width="100%" mode="aspectFit" :src="item.imageShowList[0]"></u-image>
 				</view>
 				<view class="list_right">
 					<view class="right_top">
-						油菜350g
+						{{item.goodName}}
 					</view>
 					<view class="right_mid">
-						清脆鲜嫩|口感柔嫩|餐桌必备
+						{{item.description}}
 					</view>
 					<view class="right_bottom">
 						<view class="bottom_left">
-							￥1
+							{{item.goodPrice}}元/{{item.unit}}
 						</view>
 						<view class="bottom_right">
 							<u-image height="100%" width="100%" mode="aspectFit"
@@ -29,7 +28,7 @@
 					</view>
 				</view>
 			</view>
-			
+
 			<u-line color="#55ff00" class="u-line"></u-line>
 
 		</view>
@@ -41,30 +40,34 @@
 	import {
 		ref,
 		reactive
-	} from 'vue'
+	} from 'vue';
+	import request from '@/api/request';
 
 	export default {
 		setup() {
 			const background = ref({
-				backgroundColor: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))',
-
-				// 导航栏背景图
-				background: 'url(https://cdn.uviewui.com/uview/swiper/1.jpg) no-repeat',
-				// 还可以设置背景图size属性
-				backgroundSize: 'cover',
-
 				// 渐变色
 				backgroundImage: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))'
-			})
+			});
+			const goodList = reactive([]);
 			async function rightClick() {
 				await uni.navigateBack({})
 			}
 			return {
-				background
+				background,
+				goodList
 			}
 		},
-		onLoad(val) {
-			console.log(val)
+		async onLoad(val) {
+			const res = await request('goods', {
+				type: 'getGoodsByScdCategoryId',
+				secondCategoryId: val.id
+			});
+			this.goodList.length = 0;
+			res.data.forEach(item => {
+				this.goodList.push(item);
+			});
+			console.log(res);
 		}
 	}
 </script>
@@ -75,8 +78,10 @@
 		height: 100vh;
 		background-color: #F2F4F7;
 		position: relative;
-		.u-line{
-			color: #55ff00;
+		font-size: 32rpx;
+
+		.u-line {
+			color: #87888a;
 			width: 100%;
 		}
 
@@ -104,19 +109,23 @@
 
 				.list_right {
 					flex: 2;
-					height: 25vw;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
 
 					.right_top {
 						margin: 4rpx;
-						height: 8vw;
-						font-size: 32rpx;
-						font-weight: 600;
+						margin-bottom: 20rpx;
+						font-size: 36rpx;
+						font-weight: 550;
+						line-height: 1.25;
 					}
 
 					.right_mid {
 						margin: 4rpx;
-						height: 8vw;
-						font-weight: 300;
+						font-weight: 500;
+						font-size: 30rpx;
+						line-height: 1.25;
 					}
 
 					.right_bottom {
@@ -124,7 +133,6 @@
 						display: flex;
 						align-items: center;
 						justify-content: space-between;
-						height: 8vw;
 
 						.bottom_left {
 							margin: 2rpx;

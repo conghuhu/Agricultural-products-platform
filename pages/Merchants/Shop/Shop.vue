@@ -118,9 +118,13 @@
 	import navList from '@/pages/Merchants/utils/navList';
 	import request from '@/api/request';
 	import dayjs from "dayjs";
+	import {
+		userStore
+	} from '@/stores/user';
 
 	export default {
 		setup() {
+			const user = userStore();
 			const list = reactive(navList);
 			const isNew = ref(false);
 			const createShopShow = ref(false);
@@ -239,7 +243,8 @@
 					})
 					return res.data;
 				} catch (e) {
-					console.trace(e);
+					console.warn(e);
+					return user.userInfo;
 				}
 			}
 			/**
@@ -326,6 +331,7 @@
 		height: 100vh;
 		font-size: 32rpx;
 		width: 100%;
+		background-color: #F2F4F7;
 
 		.content {
 			position: relative;
