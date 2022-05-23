@@ -115,6 +115,7 @@
 					nickName: ''
 				}
 			});
+			
 
 			/**
 			 * 更新star的数量
@@ -126,7 +127,8 @@
 					shareDetail.star--;
 				}
 				eventChannel.emit('updateStarCount', shareDetail.star);
-			};
+			}
+			
 
 			return {
 				user,
@@ -135,7 +137,7 @@
 				commentVal,
 				sendBtnStyle,
 				eventChannel,
-				updateStarCount
+				updateStarCount,
 			}
 		},
 		async onLoad(option) {
@@ -250,6 +252,99 @@
 
 				.count {
 					margin-left: 10rpx;
+				}
+			}
+		}
+
+		.comment {
+			display: flex;
+			padding: 30rpx;
+
+			.left {
+				image {
+					width: 64rpx;
+					height: 64rpx;
+					border-radius: 50%;
+					background-color: #f2f2f2;
+				}
+			}
+
+			.right {
+				flex: 1;
+				padding-left: 20rpx;
+				font-size: 30rpx;
+
+				.top {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					margin-bottom: 10rpx;
+
+					.name {
+						color: #5677fc;
+					}
+
+					.like {
+						display: flex;
+						align-items: center;
+						color: #9a9a9a;
+						font-size: 26rpx;
+
+						.num {
+							margin-right: 4rpx;
+							color: #9a9a9a;
+						}
+					}
+
+					.highlight {
+						color: #5677fc;
+
+						.num {
+							color: #5677fc;
+						}
+					}
+				}
+
+				.content {
+					margin-bottom: 10rpx;
+				}
+
+				.reply-box {
+					background-color: rgb(242, 242, 242);
+					border-radius: 12rpx;
+
+					.item {
+						padding: 20rpx;
+						border-bottom: solid 2rpx $u-border-color;
+
+						.username {
+							font-size: 24rpx;
+							color: #999999;
+						}
+					}
+
+					.all-reply {
+						padding: 20rpx;
+						display: flex;
+						color: #5677fc;
+						align-items: center;
+
+						.more {
+							margin-left: 6rpx;
+						}
+					}
+				}
+
+				.bottom {
+					margin-top: 20rpx;
+					display: flex;
+					font-size: 24rpx;
+					color: #9a9a9a;
+
+					.reply {
+						color: #5677fc;
+						margin-left: 10rpx;
+					}
 				}
 			}
 		}
