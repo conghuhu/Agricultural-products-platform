@@ -1,21 +1,21 @@
 <template>
-	<view>
+	<view class="fullScreen">
 		<view>
 			<u-navbar title="新增收货地址" :is-back="true" :background="background">
 				<view class="slot-wrap" @click="rightClick()">
 				</view>
 			</u-navbar>
 		</view>
-		<view>
+		<view class="content">
 			<u-form :model="form">
 				<u-form-item label="地址" labelWidth="80px">
-					<u-input v-model="form.adress" placeholder="请选择收货地址" disabled="true"  @click="inputAdress()"/>
+					<u-input v-model="form.adress" placeholder="请选择收货地址" disabled="true" @click="inputAdress()" />
 				</u-form-item>
 				<u-form-item label="门牌号" labelWidth="80px">
 					<u-input v-model="form.house" placeholder="例:16栋3层501室" />
 				</u-form-item>
 				<u-form-item label="收货人" labelWidth="80px">
-					<u-input v-model="form.consignee" placeholder="请输入收货人姓名"  />
+					<u-input v-model="form.consignee" placeholder="请输入收货人姓名" />
 				</u-form-item>
 				<u-form-item label="        " labelWidth="80px">
 					<u-radio-group v-model="form.sex" @change="sexGroupChange">
@@ -25,12 +25,10 @@
 					</u-radio-group>
 				</u-form-item>
 				<u-form-item label="手机号" labelWidth="80px">
-					<u-input v-model="form.phone"  placeholder="请输入收货人手机号"  />
+					<u-input v-model="form.phone" placeholder="请输入收货人手机号" />
 				</u-form-item>
-				
-			
 			</u-form>
-			<u-button @click="submit" type="success" shape="circle" >提交</u-button>
+			<u-button @click="submit" type="success" shape="circle">提交</u-button>
 		</view>
 	</view>
 </template>
@@ -44,14 +42,14 @@
 	export default {
 		setup() {
 			const form = reactive({
-				_id:"",
+				_id: "",
 				adress: "",
 				house: "",
 				consignee: "",
 				sex: "",
 				phone: "",
 			})
-			
+
 			const list = ref([{
 					sex: "先生",
 					disabled: false
@@ -67,13 +65,6 @@
 			const currentSex = ref("");
 
 			const background = ref({
-				backgroundColor: '#001f3f',
-
-				// 导航栏背景图
-				background: 'url(https://cdn.uviewui.com/uview/swiper/1.jpg) no-repeat',
-				// 还可以设置背景图size属性
-				backgroundSize: 'cover',
-
 				// 渐变色
 				backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
 			})
@@ -85,7 +76,7 @@
 			}
 
 			const sexGroupChange = (e) => {
-				
+				console.log(e);
 			}
 
 			//微信获取位置
@@ -96,7 +87,7 @@
 				adress: "",
 				latitude: "",
 				longitude: "",
-				location:""
+				location: ""
 			})
 			async function inputAdress() {
 				const {
@@ -108,18 +99,18 @@
 				res.longitude = longitude;
 				const result = await wx.chooseLocation(res)
 				form.adress = result.name
-				form.location=result.address
+				form.location = result.address
 			}
 			//提交地址信息
-			async function submit(){
+			async function submit() {
 				console.log(form)
-				const result = await request("touristInfo",{
-					form:form,
-					type:"submitAdress"
+				const result = await request("touristInfo", {
+					form: form,
+					type: "submitAdress"
 				})
 				console.log(result.res)
 				uni.navigateBack({
-					
+
 				})
 			}
 			return {
@@ -136,18 +127,26 @@
 		},
 		onLoad(val) {
 			console.log(val.addressInfo)
-			if(val.addressInfo!=null){
-				Object.assign(this.form,JSON.parse(val.addressInfo))
+			if (val.addressInfo) {
+				Object.assign(this.form, JSON.parse(val.addressInfo))
 			}
 			console.log(this.form)
 		}
-		
+
 
 
 
 	}
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+	.fullScreen {
+		height: 100vh;
+		width: 100%;
+		background-color: #F2F4F7;
+		position: relative;
+		.content{
+			padding: 30rpx;
+		}
+	}
 </style>

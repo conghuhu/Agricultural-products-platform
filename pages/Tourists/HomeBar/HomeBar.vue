@@ -2,7 +2,15 @@
 	<view class="fullScreen">
 		<view>
 			<u-navbar title="主页" :is-back="false" :background="background">
-				<view class="myLocation" @click="rightClick"> 当前位置</view>
+				<view class="location_group">
+					<image style="width: 36rpx;height: 36rpx;"
+						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/location_dark.png?sign=2a3ccd9da9a8421970c36a1be72c67a6&t=1653268420"
+						mode="aspectFit"></image>
+					<view class="myLocation" @click="rightClick">
+						<Ellipsis :width="250" :content="currentLocationVal" />
+					</view>
+				</view>
+
 			</u-navbar>
 		</view>
 		<view class="search_contain">
@@ -119,21 +127,24 @@
 	} from 'vue'
 	import navList from '@/pages/Tourists/utils/navList';
 	import request from '@/api/request';
+	import {
+		userStore
+	} from '@/stores/user';
+	import {
+		storeToRefs
+	} from 'pinia';
 	export default {
 		setup() {
-			const list = reactive(navList)
+			const list = reactive(navList);
 			const current = ref(0);
 			const background = ref({
-				backgroundColor: '#001f3f',
-
-				// 导航栏背景图
-				background: 'url(https://cdn.uviewui.com/uview/swiper/1.jpg) no-repeat',
-				// 还可以设置背景图size属性
-				backgroundSize: 'cover',
-
 				// 渐变色
 				backgroundImage: 'linear-gradient(100deg, #4CC818 2%, #4CC818 2%, #b0d479 98%, #b0d479 98%)'
-			})
+			});
+			const user = userStore();
+			const {
+				currentLocationVal
+			} = storeToRefs(user);
 			const viewList = reactive([{
 					image: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964',
 					title: '红富士苹果',
@@ -169,10 +180,7 @@
 					leftMoney: '2.5',
 					rightMoney: '元/斤',
 				},
-
-
-
-			])
+			]);
 			/**
 			 * 定义瀑布流信息
 			 */
@@ -184,20 +192,31 @@
 				const {
 					latitude,
 					longitude
-				} = await wx.getLocation()
-				const temp: Array < any > = await request("goods", {
+				} = await wx.getLocation();
+				const ans = await Promise.all([request("goods", {
 					type: "getGoodsByLocation",
 					latitude: latitude,
 					longitude: longitude,
-				})
-				temp.data.forEach((item, index) => {
+				}), wx.serviceMarket.invokeService({
+					service: 'wxc1c68623b7bdea7b',
+					api: 'rgeoc',
+					data: {
+						"location": latitude + "," + longitude
+					},
+				})]);
+				// 更新store中的位置信息
+				user.updateLocationInfo(ans[1].data.result.formatted_addresses.recommend, latitude, longitude);
+				ans[0].data.forEach((item, index) => {
 					flowList.push(item);
-				})
+				});
 				console.log(flowList)
-			}
+			};
 			//接受类别数组
 			const categoryList = reactive([]);
-			async function rightClick() {
+			/**
+			 * 跳转至地址界面
+			 */
+			function rightClick() {
 				uni.navigateTo({
 					url: "../Location/Location"
 				})
@@ -213,9 +232,8 @@
 			}
 
 			const toClassification = async function(index) {
-				console.log(index)
 				uni.redirectTo({
-					url:"../ClassificationBar/ClassificationBar?id="+JSON.stringify(index)
+					url: "../ClassificationBar/ClassificationBar?id=" + JSON.stringify(index)
 				})
 			}
 			return {
@@ -228,11 +246,12 @@
 				gotoGoodDetail,
 				flowList,
 				getGoodsList,
-				toClassification
+				toClassification,
+				currentLocationVal
 			}
 		},
 		async onLoad() {
-			this.getGoodsList()
+			this.getGoodsList();
 			const temp: {
 				res: Array < any >
 			} = await request("goods", {
@@ -242,9 +261,6 @@
 				this.categoryList.push(item);
 			})
 		}
-
-
-
 	}
 </script>
 
@@ -254,6 +270,13 @@
 		width: 100%;
 		background-color: #F2F4F7;
 		position: relative;
+
+		.location_group {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-left: 26rpx;
+		}
 
 		.wrap {
 			background-color: #F2F4F7;
@@ -362,9 +385,10 @@
 			margin-left: 10rpx;
 			font-size: 32rpx;
 			font-family: SourceHanSansCN-ExtraLight;
-			line-height: 11rpx;
 			color: rgba(0, 0, 0, 0.8);
-			font-weight: 250;
+			font-weight: 500;
+			text-align: center;
+			line-height: 35rpx;
 		}
 
 		.serach_view {

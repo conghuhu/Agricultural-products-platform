@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="fullScreen">
 		<view>
 			<u-navbar title="选择地址" :is-back="true" :background="background">
 				<view class="slot-wrap" @click="rightClick()">
@@ -7,34 +7,39 @@
 			</u-navbar>
 		</view>
 
-
-		<view style="display: flex;justify-content: space-between;align-items: center; margin-top: 10px;">
-			<view style="flex: 5;">
-				<u-search bg-color="#f2f2f2" placeholder="请输入位置" v-model="keyword" @change="search()"></u-search>
+		<view class="top_tool">
+			<view style="flex: 6;">
+				<u-search bg-color="#f2f2f2" placeholder="请输入位置" v-model="keyword" @change="search"></u-search>
 			</view>
 			<view style="flex: 1;">
-				<u-button :hairLine="false" @click="insertAdress()" type="success" shape="circle">新增地址</u-button>
+				<u-button :customStyle="btnStyle" :hairLine="false" @click="insertAdress()" type="success"
+					shape="circle">新增地址</u-button>
+			</view>
+		</view>
+		<view class="content">
+			<view class="item" v-for="(res, index) in infoAddress" :key="res._id">
+				<view class="top">
+					<view class="name">{{ res.consignee }}</view>
+					<view class="phone">{{ res.phone }}</view>
+				</view>
+				<view class="bottom">
+					<view>
+						{{res.location}}
+					</view>
+					<view class="right">
+						<u-icon style="margin-right: 20rpx;" name="edit-pen" :size="40" color="#999999"
+							@click="updateAdress(index)"></u-icon>
+						<u-icon name="trash" :size="40" color="#999999" @click="deleteAdress(index)"></u-icon>
+					</view>
+				</view>
+			</view>
+			<view>
+				<u-action-sheet :list="sheetList" v-model="listShow" @click="confirmDel"></u-action-sheet>
 			</view>
 		</view>
 
-		<view class="item" v-for="(res, index) in infoAddress" :key="res._id">
-			<view class="top">
-				<view class="name">{{ res.consignee }}</view>
-				<view class="phone">{{ res.phone }}</view>
-			</view>
-			<view class="bottom">
-				{{res.location}}
-				<u-icon name="edit-pen" :size="40" color="#999999" @click="updateAdress(index)"></u-icon>
-				<u-icon name="trash" :size="40" color="#999999" @click="deleteAdress(index)"></u-icon>
-			</view>
-		</view>
-		<view>
-			<u-action-sheet :list="sheetList" v-model="listShow" @click="confirmDel"></u-action-sheet>
-		</view>
+		<u-tabbar :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
 
-		<view>
-			<u-tabbar :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
-		</view>
 	</view>
 </template>
 
@@ -93,6 +98,13 @@
 				})
 			}
 
+			const btnStyle = reactive({
+				height: '50rpx',
+				marginRight: '10rpx',
+				marginLeft: '10rpx',
+				width:'160rpx'
+			});
+
 
 			//删除用户地址信息
 			const sheetList = ref([{
@@ -107,11 +119,11 @@
 				listShow.value = true
 				temp.value = infoAddress[index]._id
 				console.log(temp.value)
-				
+
 			}
 			async function confirmDel(index) {
 				console.log(temp.value)
-				
+
 				if (index === 0) {
 					console.log(11111)
 					request("touristInfo", {
@@ -138,6 +150,7 @@
 				sheetList,
 				listShow,
 				confirmDel,
+				btnStyle
 			}
 		},
 		async onShow() {
@@ -149,7 +162,7 @@
 			this.infoAddress.length = 0;
 			temp.res.forEach(item => {
 				this.infoAddress.push(item);
-				
+
 			})
 		}
 
@@ -159,12 +172,31 @@
 </script>
 
 <style scoped lang="scss">
+	.fullScreen {
+		height: 100vh;
+		width: 100%;
+		background-color: #F2F4F7;
+		position: relative;
+
+		.top_tool {
+			padding: 20rpx;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.content {
+			background-color: #F2F4F7;
+		}
+	}
+
 	.u-status-bar.data-v-98bbdc6a {
 		height: 0;
 	}
 
 	.item {
 		padding: 40rpx 20rpx;
+		background-color: white;
 
 		.top {
 			display: flex;
@@ -205,6 +237,12 @@
 			font-size: 28rpx;
 			justify-content: space-between;
 			color: #999999;
+
+			.right {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
 		}
 	}
 </style>

@@ -105,7 +105,7 @@
 					data: {
 						"location": res.latitude + "," + res.longitude
 					},
-				})
+				});
 				form.adcode = ans.data.result.ad_info.adcode;
 			}
 
