@@ -257,6 +257,7 @@
 	}
 
 	.u-tabbar {
+		background-color: #F2F4F7;
 
 		&__content {
 			@include vue-flex;

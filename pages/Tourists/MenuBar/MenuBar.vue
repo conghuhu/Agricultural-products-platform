@@ -30,9 +30,7 @@
 				</template>
 			</u-waterfall>
 		</view>
-		<view>
-			<u-tabbar :list="list" :mid-button="true"></u-tabbar>
-		</view>
+		<u-tabbar :list="list" :mid-button="true"></u-tabbar>
 	</view>
 
 </template>
@@ -103,6 +101,9 @@
 			padding: 16rpx;
 			padding-left: 30rpx;
 			padding-right: 30rpx;
+			position: fixed;
+			z-index: 99;
+			background-color: #F2F4F7;
 
 			.release {
 				padding: 6rpx;
@@ -128,8 +129,9 @@
 
 		.content {
 			padding: 10rpx;
-
-
+			background-color: #F2F4F7;
+			padding-bottom: 50rpx;
+			margin-top: 100rpx;
 		}
 	}
 </style>
