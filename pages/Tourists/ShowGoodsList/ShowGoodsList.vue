@@ -7,7 +7,7 @@
 		<view class="show_list">
 			<view class="card">
 				<view class="list_left">
-					<u-image height="100%" width="100%" mode="aspectFit"
+					<u-image height="100%" width="100%" mode="aspectFit他"
 						src="https://cdn.uviewui.com/uview/common/classify/2/13.jpg"></u-image>
 				</view>
 				<view class="list_right">

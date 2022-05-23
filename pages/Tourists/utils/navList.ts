@@ -28,8 +28,8 @@ const list = [{
 	pagePath: "/pages/Tourists/ShoppingBar/ShoppingBar"
 },
 {
-	iconPath: "/static/images/me.png",
-	selectedIconPath: "/static/images/me_fill.png",
+	iconPath: "/static/images/MeBar.png",
+	selectedIconPath: "/static/images/MeBar_fill.png",
 	text: '我的',
 	isDot: false,
 	customIcon: false,
