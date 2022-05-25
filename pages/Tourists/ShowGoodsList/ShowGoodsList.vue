@@ -28,9 +28,7 @@
 					</view>
 				</view>
 			</view>
-
 			<u-line color="#55ff00" class="u-line"></u-line>
-
 		</view>
 	</view>
 

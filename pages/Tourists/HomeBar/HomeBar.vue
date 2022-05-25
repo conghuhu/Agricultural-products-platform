@@ -10,120 +10,138 @@
 						<Ellipsis :width="250" :content="currentLocationVal" />
 					</view>
 				</view>
-
 			</u-navbar>
 		</view>
-		<view class="search_contain">
-			<view class="search">
-				<view class="text">
-					点击查找商品
-				</view>
-				<view class="icon">
-					<u-image height="40rpx" width="40rpx" mode="aspectFill"
-						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/%E6%90%9C%E7%B4%A2.png?sign=abd2bc7f5c541794394684b2a582ac8b&t=1652688817" />
-				</view>
-			</view>
-		</view>
-		<view class="today">
-			<text class="today_text">今日精选商品</text>
-		</view>
-		<scroll-view class="scroll_view_card" scroll-x="true" scroll-y="false">
-			<view class="inline_card_contain" v-for="(item,index) in viewList" :key="index">
-				<view class="swiper_card" @click="gotoGoodDetail(item)">
-					<view class="card_top">
-						<u-image borderRadius="16rpx" height="100%" width="100%" mode="aspectFill" :src="item.image">
-						</u-image>
+		<view class="content">
+			<view class="search_contain">
+				<view class="search">
+					<view class="text">
+						点击查找商品
 					</view>
-					<view class="card_bottom">
-						<view class="bottom_left">
-							<view class="left_title">{{item.title}}</view>
-							<view class="left_location">{{item.loacation}}</view>
-						</view>
-						<view class="bottom_right">
-							<view class="right_left">{{item.leftMoney}}</view>
-							<view class="right_right">{{item.rightMoney}}</view>
-						</view>
+					<view class="icon">
+						<u-image height="40rpx" width="40rpx" mode="aspectFill"
+							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/%E6%90%9C%E7%B4%A2.png?sign=abd2bc7f5c541794394684b2a582ac8b&t=1652688817" />
 					</view>
 				</view>
 			</view>
-		</scroll-view>
-		<view class="today">
-			<text class="today_text">商品分类展示</text>
-		</view>
-		<view class="grid_full">
-			<MyLoading v-if="categoryLoading" />
-			<view v-else>
-				<u-grid :col="4">
-					<u-grid-item @click="toClassification(index)" class="grid_item" bgColor="#F2F4F7"
-						v-for="(item,index) in categoryList" :key="index">
-						<u-image borderRadius="8rpx" height="60rpx" width="60rpx" mode="aspectFill" :src="item.icon">
-						</u-image>
-						<view class="grid_text">{{item.name}}</view>
-					</u-grid-item>
-				</u-grid>
+			<view class="today">
+				<text class="today_text">今日精选商品</text>
 			</view>
-
-		</view>
-
-		<view class="today">
-			<text class="today_text">附近商品</text>
-		</view>
-		<view class="wrap">
-			<MyLoading v-if="goodListLoading" />
-			<view style="width: 100%;" v-else>
-				<u-waterfall v-model="flowList" ref="uWaterfall">
-					<template v-slot:left="{leftList}">
-						<view class="demo-warter" v-for="(item, index) in leftList" :key="index">
-							<!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
-							<u-lazy-load threshold="10" border-radius="10" :image="item.imageShowList[0]"
-								:index="index">
-							</u-lazy-load>
-							<view class="demo-title">
-								{{item.goodName}}
+			<scroll-view class="scroll_view_card" scroll-x="true" scroll-y="false">
+				<view class="inline_card_contain" v-for="(item,index) in viewList" :key="index">
+					<view class="swiper_card" @click="gotoGoodDetail(item)">
+						<view class="card_top">
+							<u-image borderRadius="16rpx" height="100%" width="100%" mode="aspectFill"
+								:src="item.image">
+							</u-image>
+						</view>
+						<view class="card_bottom">
+							<view class="bottom_left">
+								<view class="left_title">{{item.title}}</view>
+								<view class="left_location">{{item.loacation}}</view>
 							</view>
-							<view class="demo-price">
-								{{item.goodPrice}}元
-							</view>
-							<view class="demo-tag">
-								<view class="demo-tag-owner">
-									自营
-								</view>
-								<view class="demo-tag-text">
-									放心购
-								</view>
-							</view>
-							<view class="demo-shop">
-								{{item.originPlace}}
+							<view class="bottom_right">
+								<view class="right_left">{{item.leftMoney}}</view>
+								<view class="right_right">{{item.rightMoney}}</view>
 							</view>
 						</view>
-					</template>
-					<template v-slot:right="{rightList}">
-						<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
-							<u-lazy-load threshold="-450" border-radius="10" :image="item.imageShowList[0]"
-								:index="index">
-							</u-lazy-load>
-							<view class="demo-title">
-								{{item.goodName}}
-							</view>
-							<view class="demo-price">
-								{{item.goodPrice}}元
-							</view>
-							<view class="demo-tag">
-								<view class="demo-tag-owner">
-									自营
+					</view>
+				</view>
+			</scroll-view>
+			<view class="today">
+				<text class="today_text">商品分类展示</text>
+			</view>
+			<view class="grid_full">
+				<MyLoading v-if="categoryLoading" />
+				<view v-else>
+					<u-grid :border="false" :col="4">
+						<u-grid-item @click="toClassification(index)" class="grid_item" bgColor="#F3F3F3"
+							v-for="(item,index) in categoryList" :key="index">
+							<u-image borderRadius="20rpx" height="90rpx" width="90rpx" mode="aspectFill"
+								:src="item.icon">
+							</u-image>
+							<view class="grid_text">{{item.name}}</view>
+						</u-grid-item>
+					</u-grid>
+				</view>
+
+			</view>
+
+			<view class="today">
+				<text class="today_text">附近商品</text>
+			</view>
+			<view class="wrap">
+				<MyLoading v-if="goodListLoading" />
+				<view style="width: 100%;" v-else>
+					<u-waterfall v-model="flowList" ref="uWaterfall">
+						<template v-slot:left="{leftList}">
+							<view class="demo-warter" v-for="(item, index) in leftList" :key="index">
+								<!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
+								<u-lazy-load threshold="10" border-radius="10" :image="item.imageShowList[0]"
+									:index="index">
+								</u-lazy-load>
+								<view class="demo-title">
+									{{item.goodName}}
 								</view>
-								<view class="demo-tag-text">
-									放心购
+								<view class="demo-price">
+									{{item.goodPrice}}元
+								</view>
+								<view class="demo-tag">
+									<view class="demo-tag-owner">
+										自营
+									</view>
+									<view class="demo-tag-text">
+										放心购
+									</view>
+								</view>
+								<view class="demo-shop">
+									<view>
+										{{item.originPlace}}
+									</view>
+									<view class="bottom_right">
+										<u-image height="100%" width="100%" mode="aspectFit"
+											src="/static/images/add.png">
+										</u-image>
+									</view>
 								</view>
 							</view>
-							<view class="demo-shop">
-								{{item.originPlace}}
+						</template>
+						<template v-slot:right="{rightList}">
+							<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
+								<u-lazy-load threshold="-450" border-radius="10" :image="item.imageShowList[0]"
+									:index="index">
+								</u-lazy-load>
+								<view class="demo-title">
+									{{item.goodName}}
+								</view>
+								<view class="demo-price">
+									{{item.goodPrice}}元
+								</view>
+								<view class="demo-tag">
+									<view class="demo-tag-owner">
+										自营
+									</view>
+									<view class="demo-tag-text">
+										放心购
+									</view>
+								</view>
+								<view class="demo-shop">
+									<view>
+										{{item.originPlace}}
+									</view>
+									<view class="bottom_right">
+										<u-image height="100%" width="100%" mode="aspectFit"
+											src="/static/images/add.png">
+										</u-image>
+									</view>
+								</view>
 							</view>
-						</view>
-					</template>
-				</u-waterfall>
+						</template>
+					</u-waterfall>
+				</view>
 			</view>
 		</view>
+
 		<view>
 			<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
 		</view>
@@ -321,9 +339,13 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F2F4F7;
+		background-color: #F3F3F3;
 		position: relative;
 		font-size: 32rpx;
+
+		.content {
+			background-color: #F3F3F3;
+		}
 
 		.location_group {
 			display: flex;
@@ -333,7 +355,6 @@
 		}
 
 		.wrap {
-			background-color: #F2F4F7;
 			width: 100%;
 		}
 
@@ -373,6 +394,16 @@
 				font-size: 28rpx;
 				color: $u-tips-color;
 				padding: 6rpx 12rpx 12rpx 12rpx;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				.bottom_right {
+					width: 60rpx;
+					height: 60rpx;
+					padding: 6rpx;
+					transform: translate(-6rpx,-10rpx);
+				}
 			}
 		}
 
@@ -493,7 +524,7 @@
 					flex-direction: column;
 					justify-content: space-around;
 					padding: 16rpx;
-					box-shadow: 0rpx 10rpx 10rpx 0rpx #cecece;
+					box-shadow: 0px 10rpx 15rpx 0px rgba(27, 28, 32, 0.05);
 
 					.card_top {
 						width: 100%;
@@ -568,8 +599,11 @@
 				}
 
 				.grid_text {
-					font-size: 30rpx;
+					font-size: 28rpx;
 					margin-top: 8rpx;
+					letter-spacing: 0rpx;
+					font-family: SourceHanSansCN-ExtraLight;
+					color: #696969;
 				}
 
 			}
