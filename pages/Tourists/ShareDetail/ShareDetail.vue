@@ -36,10 +36,32 @@
 							<u-input v-model="commentVal" placeholder="留下你的精彩评论吧~" type="text" />
 						</view>
 						<view v-show="commentVal.length != 0" class="btn">
-							<u-button type="primary" :customStyle="sendBtnStyle">发送</u-button>
+							<u-button type="primary" :customStyle="sendBtnStyle" @click="sendComments">发送</u-button>
 						</view>
 					</view>
 				</view>
+			</view>
+		</view>
+		<view class="person_comment">
+			<view class="comment_show">
+				<view class="show_top">
+					<view class="show_left">
+						<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60" :src="avatarUrl">
+						</u-avatar>
+					</view>
+					<view class="show_right">
+						<view class="right_top">
+							{{shareDetail.createTime}}
+						</view>
+						<view class="right_content">
+							崂山啤酒真好喝呀!
+						</view>
+					</view>
+				</view>
+				<view class="show_bottom">
+					<u-line length="720rpx" color="#a5f479" />
+				</view>
+
 			</view>
 		</view>
 		<view class="bottom">
@@ -115,7 +137,11 @@
 					nickName: ''
 				}
 			});
-			
+			async function sendComments(){
+				
+			}
+
+
 
 			/**
 			 * 更新star的数量
@@ -128,7 +154,7 @@
 				}
 				eventChannel.emit('updateStarCount', shareDetail.star);
 			}
-			
+
 
 			return {
 				user,
@@ -160,6 +186,66 @@
 		background-color: #F2F4F7;
 		width: 100%;
 		font-size: 32rpx;
+
+		.person_comment {
+			padding-bottom: 200rpx;
+			background-color: #F2F4F7;
+
+			.comment_show {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				height: 15vw;
+
+				.show_top {
+					flex: 9;
+					display: flex;
+					align-items: center;
+					justify-content: space-around;
+					width: 100%;
+
+					.show_left {
+						margin-left: 20rpx;
+						flex: 1;
+						height: 100%;
+					}
+
+					.show_right {
+						height: 100%;
+						margin-right: 20rpx;
+						flex: 7;
+						display: flex;
+						align-items: center;
+						flex-direction: column;
+
+						.right_top {
+							width: 100%;
+							font-size: 26rpx;
+							color: #949397;
+							flex: 2;
+						}
+
+						.right_content {
+
+							white-space: normal;
+							word-break: break-all;
+							word-wrap: break-word;
+							width: 100%;
+							font-size: 32rpx;
+							font-weight: 500rpx;
+							flex: 8;
+						}
+					}
+				}
+
+				.show_bottom {
+					flex: 1;
+					height: 1vw;
+				}
+
+			}
+		}
 
 		.content {
 			padding: 20rpx;
