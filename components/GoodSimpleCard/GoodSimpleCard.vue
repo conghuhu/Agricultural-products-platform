@@ -20,7 +20,6 @@
 				</view>
 			</view>
 		</block>
-
 	</view>
 </template>
 
@@ -30,7 +29,7 @@
 			// 检测类型
 			item: {
 				type: Object,
-				default: {},
+				default: () => ({}),
 				required: true,
 			},
 		},

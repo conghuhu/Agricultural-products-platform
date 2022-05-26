@@ -23,7 +23,7 @@ const list = [{
 {
 	iconPath: "/static/images/gouwuche.png",
 	selectedIconPath: "/static/images/gouwuche_fill.png",
-	text: '购物车',
+	text: '菜篮子',
 	customIcon: false,
 	pagePath: "/pages/Tourists/ShoppingBar/ShoppingBar"
 },

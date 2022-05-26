@@ -21,14 +21,15 @@
 							{{item.goodPrice}}元/{{item.unit}}
 						</view>
 						<view class="bottom_right">
-							<u-image height="100%" width="100%" mode="aspectFit"
+							<u-image height="70rpx" width="70rpx" mode="aspectFit"
 								src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/%E5%8A%A0%E5%8F%B7.png?sign=d51880931e044fe85c79ff3e20ee31b7&t=1652775486">
 							</u-image>
 						</view>
 					</view>
+					<u-line color="#adadad" class="u-line"></u-line>
 				</view>
 			</view>
-			<u-line color="#55ff00" class="u-line"></u-line>
+			
 		</view>
 	</view>
 
@@ -94,10 +95,11 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-around;
-				padding: 5rpx;
-				height: 20vh;
+				padding: 10rpx;
 				background-color: #F2F4F7;
 				width: 100%;
+				margin-top: 10rpx;
+				margin-bottom: 10rpx;
 
 				.list_left {
 					height: 25vw;
@@ -128,22 +130,21 @@
 
 					.right_bottom {
 						margin-top: 10rpx;
+						margin-bottom: 10rpx;
 						display: flex;
 						align-items: center;
 						justify-content: space-between;
 
 						.bottom_left {
 							margin: 2rpx;
-							flex: 1;
 							font-size: 30rpx;
 							font-weight: 550;
 							color: #ff0000;
 						}
 
 						.bottom_right {
-							margin: 2rpx;
-							height: 7vw;
-							flex: 1;
+							margin-right: 30rpx;
+							width: 50rpx;
 						}
 					}
 				}

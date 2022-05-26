@@ -75,67 +75,10 @@
 				<view style="width: 100%;" v-else>
 					<u-waterfall v-model="flowList" ref="uWaterfall">
 						<template v-slot:left="{leftList}">
-							<view class="demo-warter" v-for="(item, index) in leftList" :key="index">
-								<!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
-								<u-lazy-load threshold="10" border-radius="10" :image="item.imageShowList[0]"
-									:index="index">
-								</u-lazy-load>
-								<view class="demo-title">
-									{{item.goodName}}
-								</view>
-								<view class="demo-price">
-									{{item.goodPrice}}元
-								</view>
-								<view class="demo-tag">
-									<view class="demo-tag-owner">
-										自营
-									</view>
-									<view class="demo-tag-text">
-										放心购
-									</view>
-								</view>
-								<view class="demo-shop">
-									<view>
-										{{item.originPlace}}
-									</view>
-									<view class="bottom_right">
-										<u-image height="100%" width="100%" mode="aspectFit"
-											src="/static/images/add.png">
-										</u-image>
-									</view>
-								</view>
-							</view>
+							<GoodShowCard v-for="item in leftList" :key="item._id" :item="item" />
 						</template>
 						<template v-slot:right="{rightList}">
-							<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
-								<u-lazy-load threshold="-450" border-radius="10" :image="item.imageShowList[0]"
-									:index="index">
-								</u-lazy-load>
-								<view class="demo-title">
-									{{item.goodName}}
-								</view>
-								<view class="demo-price">
-									{{item.goodPrice}}元
-								</view>
-								<view class="demo-tag">
-									<view class="demo-tag-owner">
-										自营
-									</view>
-									<view class="demo-tag-text">
-										放心购
-									</view>
-								</view>
-								<view class="demo-shop">
-									<view>
-										{{item.originPlace}}
-									</view>
-									<view class="bottom_right">
-										<u-image height="100%" width="100%" mode="aspectFit"
-											src="/static/images/add.png">
-										</u-image>
-									</view>
-								</view>
-							</view>
+							<GoodShowCard v-for="item in rightList" :key="item._id" :item="item" />
 						</template>
 					</u-waterfall>
 				</view>
@@ -358,55 +301,6 @@
 			width: 100%;
 		}
 
-		.demo-warter {
-			border-radius: 8px;
-			margin: 8rpx;
-			margin-bottom: 20rpx;
-			position: relative;
-			background: #F9FAFB;
-			box-shadow: 0px 6rpx 6rpx 0px rgba(0, 0, 0, 0.03);
-
-			.demo-image {
-				width: 100%;
-				border-radius: 4px;
-			}
-
-			.demo-title {
-				font-size: 34rpx;
-				margin-top: 10rpx;
-				color: $u-main-color;
-				font-weight: 520;
-				padding: 6rpx 12rpx 6rpx 12rpx;
-			}
-
-			.demo-tag {
-				display: flex;
-				padding: 6rpx 12rpx 6rpx 12rpx;
-			}
-
-			.demo-price {
-				font-size: 32rpx;
-				color: $u-type-error;
-				padding: 6rpx 12rpx 6rpx 12rpx;
-			}
-
-			.demo-shop {
-				font-size: 28rpx;
-				color: $u-tips-color;
-				padding: 6rpx 12rpx 12rpx 12rpx;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-
-				.bottom_right {
-					width: 60rpx;
-					height: 60rpx;
-					padding: 6rpx;
-					transform: translate(-6rpx,-10rpx);
-				}
-			}
-		}
-
 		.u-close {
 			position: absolute;
 			top: 32rpx;
@@ -460,13 +354,14 @@
 				padding-left: 20rpx;
 				padding-right: 20rpx;
 
+
 				.text {
 					font-family: SourceHanSansCN-ExtraLight;
 					font-size: 32rpx;
 					font-weight: 500;
 					line-height: 32rpx;
 					letter-spacing: 0px;
-					color: #5c5c5c;
+					color: #8c8c8c;
 				}
 			}
 		}

@@ -34,6 +34,10 @@ exports.main = async (event, context) => {
 		case 'getGoodsByScdCategoryId':
 			return await getGoodsByScdCategoryId.main(event, context);
 		default:
-			return {};
+			return {
+				success: false,
+					message: '未找到指定的函数，请检查type',
+					data: null,
+			};
 	}
 }

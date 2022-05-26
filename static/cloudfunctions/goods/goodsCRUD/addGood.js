@@ -50,6 +50,7 @@ exports.main = async (event, context) => {
 			data: temp
 		}
 	} catch (e) {
+		console.trace(e);
 		res = {
 			sucess: false,
 			message: "未知异常",

@@ -11,5 +11,11 @@ exports.main = async (event, context) => {
 			return await submitAdress.main(event, context);
 		case'delAddress':
 		    return await delAddress.main(event, context);
+		default:
+			return {
+				success: false,
+					message: '未找到指定的函数，请检查type',
+					data: null,
+			};
 	}
 }
