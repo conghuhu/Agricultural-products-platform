@@ -42,11 +42,12 @@
 				</view>
 			</view>
 		</view>
-		<view class="person_comment" >
+		<view class="person_comment">
 			<view class="comment_show" v-for="item in commentList">
 				<view class="show_top">
 					<view class="show_left">
-						<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60" :src="item.author_avatarUrl">
+						<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60"
+							:src="item.author.avatarUrl">
 						</u-avatar>
 					</view>
 					<view class="show_right">
@@ -142,24 +143,25 @@
 				adcode: "",
 				content: "",
 				comment_id: "",
-				author: {
-				}
+				author: {}
 			})
 			async function sendComments() {
 				comment.adcode = shareDetail.adcode,
 					comment.content = commentVal.value,
 					comment.comment_id = shareDetail._id,
-					Object.assign(comment.author, shareDetail.author),
+					console.log(user.userInfo)
+					Object.assign(comment.author, user.userInfo),
 					console.log(comment)
-					const result = await request("comments", {
-						type: "addComments",
-						comment: comment
-					})
+				const result = await request("comments", {
+					type: "addComments",
+					comment: comment
+				})
+				commentVal.value=""
+				await getComments();
 			}
 
 			const commentList = reactive([])
 			async function getComments() {
-				console.log(shareDetail._id)
 				const result: {
 					data: Array < any >
 				} = await request("comments", {
@@ -167,10 +169,12 @@
 					id: shareDetail._id
 				})
 				console.log(result)
+				commentList.length=0;
 				result.data.forEach(item => {
+					const time = dayjs(item.createTime).format('YYYY-MM-DD HH:mm');
+					item.createTime = time;
 					commentList.push(item);
 				})
-				console.log(commentList)
 			}
 
 
@@ -201,7 +205,7 @@
 				sendComments
 			}
 		},
-		
+
 		async onLoad(option) {
 			Object.assign(this.eventChannel, this.getOpenerEventChannel());
 			const res = await request('share', {
@@ -212,14 +216,14 @@
 			this.shareDetail.createTime = dayjs(res.data.createTime).format('YYYY-MM-DD HH:mm');
 			console.log(res);
 			await this.getComments();
-			
+
 		},
 	}
 </script>
 
 <style lang="scss" scoped>
 	.fullScreen {
-		height: 100vh;
+		height: 100%;
 		font-size: 32rpx;
 		background-color: #F2F4F7;
 		width: 100%;
@@ -230,6 +234,7 @@
 			background-color: #F2F4F7;
 
 			.comment_show {
+				margin-top: 24rpx;
 				width: 100%;
 				display: flex;
 				align-items: center;
@@ -279,6 +284,7 @@
 				}
 
 				.show_bottom {
+					padding-top: 24rpx;
 					flex: 1;
 					height: 1vw;
 				}

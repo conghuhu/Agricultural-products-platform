@@ -22,8 +22,7 @@ exports.main = async (event, context) => {
 			createTime: new Date(),
 			content: comment.content,
 			comment_id: comment.comment_id,
-			author: comment.author._openid,
-			author_avatarUrl:comment.author.avatarUrl
+			author: comment.author,
 		}
 	})
 

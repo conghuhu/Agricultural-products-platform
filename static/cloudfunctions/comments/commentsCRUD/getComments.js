@@ -18,7 +18,7 @@ exports.main = async (event, context) => {
 
 	const result = await commentDb.where({
 		comment_id: _.eq(id) 
-	}).get()
+	}).orderBy("createTime","desc").get()
 
 	let res = {};
 
