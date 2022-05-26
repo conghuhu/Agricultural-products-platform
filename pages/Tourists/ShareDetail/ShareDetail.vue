@@ -42,24 +42,24 @@
 				</view>
 			</view>
 		</view>
-		<view class="person_comment">
-			<view class="comment_show">
+		<view class="person_comment" >
+			<view class="comment_show" v-for="item in commentList">
 				<view class="show_top">
 					<view class="show_left">
-						<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60" :src="avatarUrl">
+						<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60" :src="item.author_avatarUrl">
 						</u-avatar>
 					</view>
 					<view class="show_right">
 						<view class="right_top">
-							{{shareDetail.createTime}}
+							{{item.createTime}}
 						</view>
 						<view class="right_content">
-							崂山啤酒真好喝呀!
+							{{item.content}}
 						</view>
 					</view>
 				</view>
 				<view class="show_bottom">
-					<u-line length="720rpx" color="#a5f479" />
+					<u-line length="720rpx" color="#b9b9b9" />
 				</view>
 
 			</view>
@@ -137,8 +137,40 @@
 					nickName: ''
 				}
 			});
-			async function sendComments(){
-				
+			//评论内容信息
+			const comment = reactive({
+				adcode: "",
+				content: "",
+				comment_id: "",
+				author: {
+				}
+			})
+			async function sendComments() {
+				comment.adcode = shareDetail.adcode,
+					comment.content = commentVal.value,
+					comment.comment_id = shareDetail._id,
+					Object.assign(comment.author, shareDetail.author),
+					console.log(comment)
+					const result = await request("comments", {
+						type: "addComments",
+						comment: comment
+					})
+			}
+
+			const commentList = reactive([])
+			async function getComments() {
+				console.log(shareDetail._id)
+				const result: {
+					data: Array < any >
+				} = await request("comments", {
+					type: "getComments",
+					id: shareDetail._id
+				})
+				console.log(result)
+				result.data.forEach(item => {
+					commentList.push(item);
+				})
+				console.log(commentList)
 			}
 
 
@@ -164,8 +196,12 @@
 				sendBtnStyle,
 				eventChannel,
 				updateStarCount,
+				getComments,
+				commentList,
+				sendComments
 			}
 		},
+		
 		async onLoad(option) {
 			Object.assign(this.eventChannel, this.getOpenerEventChannel());
 			const res = await request('share', {
@@ -175,7 +211,9 @@
 			Object.assign(this.shareDetail, res.data);
 			this.shareDetail.createTime = dayjs(res.data.createTime).format('YYYY-MM-DD HH:mm');
 			console.log(res);
-		}
+			await this.getComments();
+			
+		},
 	}
 </script>
 
@@ -196,6 +234,7 @@
 				display: flex;
 				align-items: center;
 				flex-direction: column;
+				padding-bottom: 50rpx;
 				height: 15vw;
 
 				.show_top {
@@ -249,7 +288,7 @@
 
 		.content {
 			padding: 20rpx;
-			padding-bottom: 120rpx;
+			padding-bottom: 50rpx;
 			background-color: #F2F4F7;
 
 			.title {
