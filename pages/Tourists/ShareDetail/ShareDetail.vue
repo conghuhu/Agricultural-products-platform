@@ -43,23 +43,24 @@
 			</view>
 		</view>
 		<view class="person_comment">
-			<view class="comment_show">
+			<view class="comment_show" v-for="item in commentList">
 				<view class="show_top">
 					<view class="show_left">
-						<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60" :src="avatarUrl">
+						<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60"
+							:src="item.author.avatarUrl">
 						</u-avatar>
 					</view>
 					<view class="show_right">
 						<view class="right_top">
-							{{shareDetail.createTime}}
+							{{item.createTime}}
 						</view>
 						<view class="right_content">
-							崂山啤酒真好喝呀!
+							{{item.content}}
 						</view>
 					</view>
 				</view>
 				<view class="show_bottom">
-					<u-line length="720rpx" color="#a5f479" />
+					<u-line length="720rpx" color="#b9b9b9" />
 				</view>
 
 			</view>
@@ -137,8 +138,43 @@
 					nickName: ''
 				}
 			});
-			async function sendComments(){
-				
+			//评论内容信息
+			const comment = reactive({
+				adcode: "",
+				content: "",
+				comment_id: "",
+				author: {}
+			})
+			async function sendComments() {
+				comment.adcode = shareDetail.adcode,
+					comment.content = commentVal.value,
+					comment.comment_id = shareDetail._id,
+					console.log(user.userInfo)
+					Object.assign(comment.author, user.userInfo),
+					console.log(comment)
+				const result = await request("comments", {
+					type: "addComments",
+					comment: comment
+				})
+				commentVal.value=""
+				await getComments();
+			}
+
+			const commentList = reactive([])
+			async function getComments() {
+				const result: {
+					data: Array < any >
+				} = await request("comments", {
+					type: "getComments",
+					id: shareDetail._id
+				})
+				console.log(result)
+				commentList.length=0;
+				result.data.forEach(item => {
+					const time = dayjs(item.createTime).format('YYYY-MM-DD HH:mm');
+					item.createTime = time;
+					commentList.push(item);
+				})
 			}
 
 
@@ -164,8 +200,12 @@
 				sendBtnStyle,
 				eventChannel,
 				updateStarCount,
+				getComments,
+				commentList,
+				sendComments
 			}
 		},
+
 		async onLoad(option) {
 			Object.assign(this.eventChannel, this.getOpenerEventChannel());
 			const res = await request('share', {
@@ -175,13 +215,15 @@
 			Object.assign(this.shareDetail, res.data);
 			this.shareDetail.createTime = dayjs(res.data.createTime).format('YYYY-MM-DD HH:mm');
 			console.log(res);
-		}
+			await this.getComments();
+
+		},
 	}
 </script>
 
 <style lang="scss" scoped>
 	.fullScreen {
-		height: 100vh;
+		height: 100%;
 		font-size: 32rpx;
 		background-color: #F2F4F7;
 		width: 100%;
@@ -192,10 +234,12 @@
 			background-color: #F2F4F7;
 
 			.comment_show {
+				margin-top: 24rpx;
 				width: 100%;
 				display: flex;
 				align-items: center;
 				flex-direction: column;
+				padding-bottom: 50rpx;
 				height: 15vw;
 
 				.show_top {
@@ -240,6 +284,7 @@
 				}
 
 				.show_bottom {
+					padding-top: 24rpx;
 					flex: 1;
 					height: 1vw;
 				}
@@ -249,7 +294,7 @@
 
 		.content {
 			padding: 20rpx;
-			padding-bottom: 120rpx;
+			padding-bottom: 50rpx;
 			background-color: #F2F4F7;
 
 			.title {
