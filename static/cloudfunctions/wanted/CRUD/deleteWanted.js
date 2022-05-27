@@ -30,7 +30,9 @@ exports.main = async (event, context) => {
 			// 自减
 			temp = await wantDb.doc(wantedId).update({
 				data: {
-					count: _.inc(-1)
+					count: _.inc(-1),
+					updateTime: new Date(),
+					checked: true,
 				}
 			})
 		}

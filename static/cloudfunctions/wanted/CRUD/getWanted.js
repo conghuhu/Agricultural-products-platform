@@ -32,7 +32,7 @@ exports.main = async (event, context) => {
 		res = {
 			sucess: true,
 			message: "",
-			data: temp
+			data: temp.list || []
 		}
 	} catch (e) {
 		console.trace(e);

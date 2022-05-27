@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, reactive } from 'vue';
+import navList from '@/pages/Tourists/utils/navList';
 
 export const userStore = defineStore('user', () => {
 	// 用户基本信息
@@ -15,8 +16,9 @@ export const userStore = defineStore('user', () => {
 	});
 	// 喜欢种草的集合
 	const likeShareSet: Set<string> = reactive(new Set());
-	// 加入购物车的商品
+	// 加入购物车的商品 k:goodId v:count
 	const wantingGoods: Map<string, number> = reactive(new Map());
+	const totalCount: number = ref(0);
 
 	// 用户当前所选的收货位置
 	const currentLocationVal = ref('请选择收货位置');
@@ -25,15 +27,22 @@ export const userStore = defineStore('user', () => {
 		longitude: 117.060097
 	});
 
+	function setTotalWantedGoods(count: number) {
+		navList[3].count = count;
+		totalCount.value = count;
+	}
+
 	/**
 	 * 想要的商品至菜篮子+1
 	 */
 	function incrementWantedGood(goodId: string) {
 		if (wantingGoods.has(goodId)) {
-			wantingGoods.set(goodId, wantingGoods.get(goodId)+1);
+			wantingGoods.set(goodId, wantingGoods.get(goodId) + 1);
 		} else {
 			wantingGoods.set(goodId, 1);
-		}
+		};
+		totalCount.value++;
+		navList[3].count = totalCount.value;
 	};
 	/**
 	 * 移除某个想要的商品
@@ -48,6 +57,8 @@ export const userStore = defineStore('user', () => {
 		} else {
 			wantingGoods.set(goodId, res - 1);
 		}
+		totalCount.value--;
+		navList[3].count = totalCount.value;
 	}
 	/**
 	 * 更新用户的地理信息
@@ -73,6 +84,7 @@ export const userStore = defineStore('user', () => {
 		userInfo, updateUserInfo, wantingGoods,
 		currentLocationVal, location, updateLocationInfo,
 		incrementWantedGood, decrementWantedGood,
-		likeShareSet, addToLikeShareSet, removeFromLikeShareSet
+		likeShareSet, addToLikeShareSet, removeFromLikeShareSet,
+		setTotalWantedGoods, totalCount
 	};
 });

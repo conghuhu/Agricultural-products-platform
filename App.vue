@@ -3,6 +3,7 @@
 	import {
 		userStore
 	} from '@/stores/user';
+	import navList from '@/pages/Tourists/utils/navList';
 	export default {
 		setup() {
 			const user = userStore();
@@ -24,12 +25,22 @@
 
 		},
 		async onShow() {
-			const res = await request('star_focus', {
+			const res = await Promise.all([request('wanted', {
+				type: 'getWanted'
+			}), request('star_focus', {
 				type: 'getOneStarList'
-			})
-			res.data.forEach(item => {
+			})]);
+			console.log(res);
+			let count = 0;
+			res[0].data.forEach(item => {
+				count += item.count;
+				this.user.wantingGoods.set(item.goodId, item.count);
+			});
+			res[1].data.forEach(item => {
 				this.user.addToLikeShareSet(item);
 			});
+			this.user.setTotalWantedGoods(count);
+			console.log(this.user.wantingGoods)
 			console.log('App Show');
 		},
 		async onHide() {

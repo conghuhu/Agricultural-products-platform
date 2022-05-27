@@ -27,7 +27,10 @@ exports.main = async (event, context) => {
 				data: {
 					_openid: openid,
 					goodId: goodId,
-					count: 1
+					count: 1,
+					checked: true,
+					createTime: new Date(),
+					updateTime: new Date()
 				}
 			});
 		} else {
@@ -37,7 +40,9 @@ exports.main = async (event, context) => {
 				goodId: _.eq(goodId)
 			}).update({
 				data: {
-					count: _.inc(1)
+					count: _.inc(1),
+					updateTime: new Date(),
+					checked: true,
 				}
 			});
 		}
