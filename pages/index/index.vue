@@ -1,22 +1,30 @@
 <template>
 	<view class="content">
 		<view v-show="!loading">
-			<image class="logo" src="/static/logo.png"></image>
-			<view class="text-area">
-				<text class="title">{{title}}</text>
+			<video class="video_back" objectFit="cover" :controls="false" :autoplay="true" :loop="true" :muted="true"
+				src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/back.mp4?sign=4d164a9b2c6a6b1d384eb48b89a8a212&t=1653992455"></video>
+			
+			<view class="logo">
+				<u-image width="600rpx" mode="aspectFit" height="600rpx"
+					src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E4%B9%A1%E6%9D%91%E6%8C%AF%E5%85%B4.png?sign=dec378640f98a169e7c8937bc31268aa&t=1653992588">
+				</u-image>
+			</view>
+			<view class="action">
+				<u-button :customStyle="touristStyle" type="primary" shape="circle" @click="touristLogin">我要游客
+				</u-button>
+				<u-button :customStyle="merChantStyle" :plain="true" type="primary" shape="circle"
+					@click="merChantLogin">我是商家</u-button>
 			</view>
 
-			<u-button type="primary" @click="merChantLogin">我是商家</u-button>
-			<u-button type="primary" @click="touristLogin">我要游客</u-button>
 		</view>
-
 	</view>
 </template>
 
 <script lang="ts">
 	import request from '@/api/request';
 	import {
-		ref
+		ref,
+		reactive
 	} from 'vue';
 	import {
 		userStore
@@ -24,15 +32,26 @@
 	export default {
 		setup() {
 			const user = userStore();
-			const title = ref("hello");
 			const loading = ref(true);
+			const touristStyle = reactive({
+				marginBottom: '40rpx',
+				backgroundColor: '#F5B05F',
+				fontWeight: 'bold'
+			});
+			const merChantStyle = reactive({
+				color: '#F5B05F !important',
+				backgroundColor: 'transparent !important',
+				fontWeight: 'bold'
+			});
 			async function merChantLogin() {
 				// 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
 				// 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
 				const res = await wx.getUserProfile({
 					desc: '用于身份认证', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
 				});
-				wx.showLoading();
+				wx.showLoading({
+					title:'加载中'
+				});
 				const result = await request("login", {
 					userInfo: res.userInfo,
 					status: 0, // 商家
@@ -73,10 +92,11 @@
 			}
 			return {
 				user,
-				title,
 				loading,
 				merChantLogin,
-				touristLogin
+				touristLogin,
+				touristStyle,
+				merChantStyle
 			}
 		},
 		async onLoad() {
@@ -101,36 +121,40 @@
 					})
 				}
 			}
-			this.loading = false
+			this.loading = false;
 			wx.hideLoading();
 		},
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.content {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-	}
+		position: relative;
 
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
+		.video_back {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			z-index: 0;
+		}
+		
+		.logo{
+			margin-top: 8vh;
+		}
 
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
+		.action {
+			position: absolute;
+			top: 70vh;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 50vw;
+			padding: 6rpx;
+		}
 	}
 </style>
