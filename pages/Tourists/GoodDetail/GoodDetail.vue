@@ -3,8 +3,8 @@
 		<Nav title="商品详情" :isBack="true"></Nav>
 		<view class="content">
 			<view class="wrap">
-					<u-swiper  height="450"  :list="warpList"></u-swiper>
-				</view>
+				<u-swiper height="450" :list="warpList"></u-swiper>
+			</view>
 			<view class="card">
 				<view class="card_top">
 					<view class="top_left">
@@ -12,19 +12,24 @@
 						<view class="left_mid">精选大苹果的描述内容</view>
 						<view class="left_bottom">
 							<view class="bottom_image">
-								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png"></u-image>
+								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png">
+								</u-image>
 							</view>
 							<view class="bottom_image">
-								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png"></u-image>
+								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png">
+								</u-image>
 							</view>
 							<view class="bottom_image">
-								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png"></u-image>
+								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png">
+								</u-image>
 							</view>
 							<view class="bottom_image">
-								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png"></u-image>
+								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png">
+								</u-image>
 							</view>
 							<view class="bottom_image">
-								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png"></u-image>
+								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png">
+								</u-image>
 							</view>
 						</view>
 					</view>
@@ -46,7 +51,8 @@
 				<view class="card_bottom">
 					<view class="bottom_left">
 						<view class="left_left">
-							<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/peisongTime.png"></u-image>
+							<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/peisongTime.png">
+							</u-image>
 						</view>
 						<view class="left_content">
 							<view class="content_top">2天</view>
@@ -55,7 +61,8 @@
 					</view>
 					<view class="bottom_left">
 						<view class="left_left">
-							<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/fahuoAddress.png"></u-image>
+							<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/fahuoAddress.png">
+							</u-image>
 						</view>
 						<view class="left_content">
 							<view class="content_top">山东烟台</view>
@@ -64,7 +71,8 @@
 					</view>
 					<view class="bottom_left">
 						<view class="left_left">
-							<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/peisongStyle.png"></u-image>
+							<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/peisongStyle.png">
+							</u-image>
 						</view>
 						<view class="left_content">
 							<view class="content_top">顺丰快递</view>
@@ -73,14 +81,117 @@
 					</view>
 				</view>
 			</view>
-		    <view class="tab">
+			<view class="tab">
 				<view class="tab_top">评价</view>
+				<view class="tab_mid">相关介绍</view>
+				<view class="tab_end">规格参数</view>
+			</view>
+			<view class="pingfen">
+				<view class="pingfen_content">
+					<view class="content_number">4.2</view>
+					<view class="content_xingxing">
+						<view class="xingxing_image">
+							<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
+							</u-image>
+						</view>
+						<view class="xingxing_image">
+							<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
+							</u-image>
+						</view>
+						<view class="xingxing_image">
+							<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
+							</u-image>
+						</view>
+						<view class="xingxing_image">
+							<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
+							</u-image>
+						</view>
+						<view class="xingxing_image">
+							<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
+							</u-image>
+
+						</view>
+					</view>
+				</view>
+				<view class="pingfen_card">
+					<view class="card_top">
+						<u-tag text="全部" mode="dark" size="mini" shape="circle" type="info" />
+						<u-tag text="最新" mode="dark" size="mini" shape="circle" type="info" />
+						<u-tag text="好评" mode="dark" size="mini" shape="circle" type="info" />
+						<u-tag text="差评" mode="dark" size="mini" shape="circle" type="info" />
+					</view>
+					<view class="card_bottom">
+						<u-tag text="非常新鲜" mode="dark" shape="circle" type="info" />
+						<u-tag text="物超所值" mode="dark" shape="circle" type="info" />
+					</view>
+				</view>
+			</view>
+			<view class="user_card">
+				<view class="user_touxiang">
+					<u-image width="100%" height="100rpx" mode="heightFix"
+						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/categoryItem/%E9%B8%A1%E9%B8%AD%E7%A6%BD.png?sign=bb359dfca20a987b356e2d4a4415573b&t=1653984717">
+					</u-image>
+				</view>
+				<view class="user_info">
+					<view class="user_name">小王同学</view>
+					<view class="user_time">2022.5.1</view>
+				</view>
+				<view class="user_pingfen">5.0</view>
+				<view class="user_xingxing">
+					<view class="xingxing">
+						<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
+						</u-image>
+					</view>
+					<view class="xingxing">
+						<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
+						</u-image>
+					</view>
+					<view class="xingxing">
+						<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
+						</u-image>
+					</view>
+					<view class="xingxing">
+						<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
+						</u-image>
+					</view>
+					<view class="xingxing">
+						<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
+						</u-image>
+					</view>
+				</view>
+			</view>
+			<view class="pinglun_content">
+				评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容
+			</view>
+			<view class="pinglun_image">
+				<view class="image_info">
+					<u-image width="100%" height="70px"
+						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
+					</u-image>
+				</view>
+				<view class="image_info">
+					<u-image width="100%" height="70px"
+						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
+					</u-image>
+				</view>
+				<view class="image_info">
+					<u-image width="100%" height="70px"
+						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
+					</u-image>
+				</view>
+			</view>
+		</view>
+		<view class="bottom_info">
+			<view class="info_left">
+				<u-image width="100%" mode="aspectFit" height="20px" src="./static/images/shoppingCart.png"></u-image>
+			</view>
+			<view class="info_right">
+				<u-button shape="circle" type="success">+加入购物车</u-button>
 			</view>
 		</view>
 	</view>
 
 </template>
-
 <script lang="ts">
 	import {
 		ref,
@@ -99,7 +210,10 @@
 				goodName: "",
 				goodPrice: "",
 				imageShowList: [],
-				location: {type: "", coordinates: []},
+				location: {
+					type: "",
+					coordinates: []
+				},
 				mode: 1,
 				originPlace: "",
 				secondCategoryId: "",
@@ -111,18 +225,18 @@
 				_id: ""
 			})
 			const warpList = reactive([{
-						image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-						title: '昨夜星辰昨夜风，画楼西畔桂堂东'
-					},
-					{
-						image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-						title: '身无彩凤双飞翼，心有灵犀一点通'
-					},
-					{
-						image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
-						title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
-					},
-				])
+					image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
+					title: '昨夜星辰昨夜风，画楼西畔桂堂东'
+				},
+				{
+					image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
+					title: '身无彩凤双飞翼，心有灵犀一点通'
+				},
+				{
+					image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
+					title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
+				},
+			])
 			return {
 				goodId,
 				goodInfo,
@@ -136,7 +250,7 @@
 				type: 'getGoodById',
 				goodId: goodIdRes
 			})
-			Object.assign(this.goodInfo,res.data);
+			Object.assign(this.goodInfo, res.data);
 			console.log(res);
 		}
 	}
@@ -154,14 +268,17 @@
 			position: relative;
 			display: flex;
 			flex-direction: column;
-			.wrap{
+			padding-bottom: 130rpx;
+
+			.wrap {
 				position: absolute;
 				top: 0;
 				left: 0;
 				height: 10vh;
 				width: 100%;
 			}
-			.card{
+
+			.card {
 				display: flex;
 				flex-direction: column;
 				z-index: 999;
@@ -172,17 +289,20 @@
 				border-radius: 4px;
 				background: #FFFFFF;
 				box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.03);
-				.card_top{
+
+				.card_top {
 					flex: 3;
 					display: flex;
 					justify-content: space-between;
-					.top_left{
+
+					.top_left {
 						flex: 1;
 						display: flex;
 						flex-direction: column;
 						margin-left: 30rpx;
 						margin-right: 30rpx;
-						.left_top{
+
+						.left_top {
 							flex: 1;
 							margin-top: 20rpx;
 							font-family: SourceHanSansCN-Ex;
@@ -192,7 +312,8 @@
 							letter-spacing: 0px;
 							color: #333333;
 						}
-						.left_mid{
+
+						.left_mid {
 							flex: 1;
 							margin-top: 20rpx;
 							font-size: 11px;
@@ -201,12 +322,14 @@
 							letter-spacing: 0px;
 							color: #949397;
 						}
-						.left_bottom{
+
+						.left_bottom {
 							margin-top: 0;
 							flex: 1;
 							display: flex;
 							align-items: center;
-							.bottom_image{
+
+							.bottom_image {
 								margin: 0;
 								padding: 0;
 								width: 3vw;
@@ -214,34 +337,40 @@
 							}
 						}
 					}
-					.top_right{
+
+					.top_right {
 						margin-top: 40rpx;
 						flex: 1;
 						display: flex;
 						flex-direction: column;
-						.right_top{
+
+						.right_top {
 							flex: 1;
 							display: flex;
 							align-items: center;
 							justify-content: center;
 							margin-left: 40rpx;
-							.top_number{
+
+							.top_number {
 								margin-left: 80rpx;
 								font-family: SourceHanSansCN-ExtraLight;
 								font-size: 16px;
 								font-weight: 250;
 								line-height: 11px;
+								font-weight: 550;
 							}
-							.top_content{
+
+							.top_content {
 								justify-content: flex-start;
 								font-family: SourceHanSansCN-ExtraLight;
 								font-size: 11px;
 								font-weight: 250;
 								line-height: 11px;
-								
+
 							}
 						}
-						.right_mid{
+
+						.right_mid {
 							flex: 1;
 							display: flex;
 							align-items: center;
@@ -250,7 +379,8 @@
 							background: #ffaa00;
 							box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.03);
 							margin-left: 40rpx;
-							.mid_tehu{
+
+							.mid_tehu {
 								font-family: SourceHanSansCN-ExtraLight;
 								font-size: 11px;
 								font-weight: 250;
@@ -259,13 +389,16 @@
 								color: #FFFFFF;
 								margin-right: 6rpx;
 							}
-							.mid_number{
+
+							.mid_number {
 								font-family: SourceHanSansCN-ExtraLight;
 								font-size: 16px;
 								font-weight: 250;
 								line-height: 11px;
+
 							}
-							.mid_content{
+
+							.mid_content {
 								justify-content: flex-start;
 								font-family: SourceHanSansCN-ExtraLight;
 								font-size: 11px;
@@ -274,66 +407,244 @@
 							}
 						}
 					}
-					
+
 				}
-				.card_mid{
+
+				.card_mid {
 					margin-top: 10rpx;
 				}
-				.card_bottom{
+
+				.card_bottom {
 					margin-left: 20rpx;
 					display: flex;
 					align-items: center;
 					justify-content: center;
 					flex: 2;
-					.bottom_left{
+
+					.bottom_left {
 						display: flex;
 						align-items: center;
 						justify-content: center;
 						margin-right: 50rpx;
-						.left_left{
-							
+
+						.left_left {
+
 							width: 5vw;
 							margin-right: 10rpx;
 						}
-						.left_content{
+
+						.left_content {
 							width: 100%;
 							display: flex;
 							align-items: center;
 							justify-content: center;
 							flex-direction: column;
 							margin-top: 20rpx;
-							.content_top{
+
+							.content_top {
 								font-family: SourceHanSansCN-ExtraLight;
 								font-size: 13px;
 								font-weight: 250;
 								line-height: 13px;
 								letter-spacing: 0px;
+								font-weight: bold;
 							}
-							.content_bottom{
+
+							.content_bottom {
+								margin-top: 14rpx;
 								font-family: SourceHanSansCN-ExtraLight;
 								font-size: 9px;
 								font-weight: 250;
 								line-height: 9px;
 								letter-spacing: 0px;
+								font-weight: bold;
 								color: #949397;
 							}
 						}
 					}
 				}
 			}
-		.tab{
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			.tab_top{
+
+			.tab {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+				margin-top: 40rpx;
+
+				.tab_top {
+					font-family: SourceHanSansCN-ExtraLight;
+					font-size: 16px;
+					font-weight: 250;
+					line-height: 16px;
+					letter-spacing: 0px;
+					font-weight: bold;
+					color: #F5B05F;
+				}
+
+				.tab_mid {
+					font-family: SourceHanSansCN-Bold;
+					font-size: 16px;
+					font-weight: bold;
+					line-height: 16px;
+					letter-spacing: 0px;
+					color: #999999;
+				}
+
+				.tab_end {
+					font-family: SourceHanSansCN-Bold;
+					font-size: 16px;
+					font-weight: bold;
+					line-height: 16px;
+					letter-spacing: 0px;
+					color: #999999;
+				}
+			}
+
+			.pingfen {
+				margin-top: 40rpx;
+				display: flex;
+				align-items: center;
+
+				.pingfen_content {
+					margin-left: 40rpx;
+					display: flex;
+					flex-direction: column;
+
+					.content_number {
+						padding-left: 30rpx;
+						width: 20vw;
+						font-family: SourceHanSansCN-ExtraLight;
+						font-size: 28px;
+						font-weight: 250;
+						line-height: 28px;
+						letter-spacing: 0px;
+						color: #F5B05F;
+					}
+
+					.content_xingxing {
+						display: flex;
+						width: 20vw;
+
+						.xingxing_image {
+							margin-left: 6rpx;
+							width: 100%;
+						}
+					}
+
+				}
+
+				.pingfen_card {
+					display: flex;
+					align-items: center;
+					flex-direction: column;
+					margin-left: 100rpx;
+
+					.card_top {}
+
+					.card_bottom {}
+				}
+			}
+
+			.user_card {
+				display: flex;
+				align-items: center;
+				margin-top: 30rpx;
+				margin-left: 40rpx;
+
+				.user_touxiang {}
+
+				.user_info {
+					margin-left: 20rpx;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+
+					.user_name {
+						font-family: SourceHanSansCN-ExtraLight;
+						font-size: 16px;
+						font-weight: 300;
+						line-height: 13px;
+						letter-spacing: 0px;
+						color: rgba(0, 0, 0, 0.8);
+					}
+
+					.user_time {
+						margin-top: 10rpx;
+						font-family: SourceHanSansCN-ExtraLight;
+						font-size: 11px;
+						font-weight: 250;
+						line-height: 11px;
+						letter-spacing: 0px;
+						color: rgba(0, 0, 0, 0.35);
+					}
+				}
+
+				.user_pingfen {
+					margin-left: 20rpx;
+					font-family: SourceHanSansCN-ExtraLight;
+					font-size: 13px;
+					font-weight: 250;
+					line-height: 11px;
+					letter-spacing: 0px;
+					color: rgba(0, 0, 0, 0.35);
+				}
+
+				.user_xingxing {
+					margin-left: 30rpx;
+					display: flex;
+					align-items: center;
+					width: 20vw;
+
+					.xingxing {
+						width: 100%;
+					}
+				}
+			}
+
+			.pinglun_content {
+				margin-left: 40rpx;
+				margin-right: 40rpx;
 				font-family: SourceHanSansCN-ExtraLight;
-				font-size: 16px;
+				font-size: 13px;
 				font-weight: 250;
-				line-height: 16px;
 				letter-spacing: 0px;
-				color: #F5B05F;
+				color: rgba(0, 0, 0, 0.8);
+			}
+
+			.pinglun_image {
+				display: flex;
+				align-items: center;
+				margin-left: 40rpx;
+				margin-right: 40rpx;
+
+				.image_info {
+					margin-left: 26rpx;
+					width: 25vw;
+				}
 			}
 		}
+
+        .bottom_info{
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 120rpx;
+			background-color: #F2F4F7;
+			display: flex;
+			.info_left{
+				flex: 3;
+				margin-top: 4rpx;
+				
+			}
+			.info_right{
+				flex: 7;
+				padding-right: 20rpx;
+				margin-top: 20rpx;
+			}
 		}
 	}
 </style>
