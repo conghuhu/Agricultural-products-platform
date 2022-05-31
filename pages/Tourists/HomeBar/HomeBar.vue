@@ -1,17 +1,15 @@
 <template>
 	<view class="fullScreen">
-		<view>
-			<u-navbar title="主页" :is-back="false" :background="background">
-				<view class="location_group">
-					<image style="width: 36rpx;height: 36rpx;"
-						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/location_dark.png?sign=2a3ccd9da9a8421970c36a1be72c67a6&t=1653268420"
-						mode="aspectFit"></image>
-					<view class="myLocation" @click="rightClick">
-						<Ellipsis :width="250" :content="currentLocationVal" />
-					</view>
+		<Nav title="主页" :isBack="false">
+			<view class="location_group">
+				<image style="width: 36rpx;height: 36rpx;"
+					src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/location_dark.png?sign=2a3ccd9da9a8421970c36a1be72c67a6&t=1653268420"
+					mode="aspectFit"></image>
+				<view class="myLocation" @click="rightClick">
+					<Ellipsis :width="250" :content="currentLocationVal" />
 				</view>
-			</u-navbar>
-		</view>
+			</view>
+		</Nav>
 		<view class="content">
 			<view class="search_contain">
 				<view class="search">
@@ -86,7 +84,7 @@
 		</view>
 
 		<view>
-			<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
+			<u-tabbar :list="list" :mid-button="true"></u-tabbar>
 		</view>
 	</view>
 </template>
@@ -113,11 +111,6 @@
 			const list = reactive(navList);
 			const goodListLoading = ref(true);
 			const categoryLoading = ref(true);
-			const current = ref(0);
-			const background = ref({
-				// 渐变色
-				backgroundImage: 'linear-gradient(100deg, #4CC818 2%, #4CC818 2%, #b0d479 98%, #b0d479 98%)'
-			});
 			const user = userStore();
 			const {
 				currentLocationVal,
@@ -248,8 +241,6 @@
 			}
 			return {
 				list,
-				current,
-				background,
 				rightClick,
 				viewList,
 				categoryList,

@@ -247,7 +247,7 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F2F4F7;
+		background-color: #F3F3F3;
 		position: relative;
 		font-size: 32rpx;
 	}
@@ -287,14 +287,14 @@
 	}
 
 	.u-tab-view {
-		width: 200rpx;
+		width: 250rpx;
 		height: 100%;
-		background-color: #F2F4F7;
+		background-color: #F3F3F3;
 	}
 
 	.u-tab-item {
 		height: 110rpx;
-		background: #F2F4F7;
+		background: #F3F3F3;
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
@@ -307,23 +307,23 @@
 
 	.u-tab-item-active {
 		position: relative;
-		color: #000;
+		color: $u-type-primary;
 		font-size: 32rpx;
 		font-weight: 600;
 		background: #fff;
 	}
 
-	.u-tab-item-active::before {
-		content: "";
-		position: absolute;
-		border-left: 4px solid $u-type-primary;
-		height: 32rpx;
-		left: 0;
-		top: 39rpx;
-	}
+	// .u-tab-item-active::before {
+	// 	content: "";
+	// 	position: absolute;
+	// 	border-left: 4px solid $u-type-primary;
+	// 	height: 32rpx;
+	// 	left: 0;
+	// 	top: 39rpx;
+	// }
 
 	.right-box {
-		background-color: #F2F4F7;
+		background-color: #F3F3F3;
 	}
 
 	.page-view {
@@ -345,6 +345,17 @@
 		font-size: 32rpx;
 		color: $u-main-color;
 		font-weight: bold;
+		position: relative;
+		padding-left: 16rpx;
+	}
+
+	.item-title::before {
+		content: "";
+		position: absolute;
+		border-left: 4px solid $u-type-primary;
+		height: 32rpx;
+		left: 0;
+		top: 8rpx;
 	}
 
 	.item-menu-name {

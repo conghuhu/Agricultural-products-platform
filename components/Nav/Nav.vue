@@ -1,8 +1,7 @@
 <template>
-
-	<u-navbar :title="title" :is-back="isBack" :background="background">
+	<u-navbar :title="title" :is-back="isBack" :background="background" :borderBottom="false" titleBold>
+		<slot></slot>
 	</u-navbar>
-
 </template>
 
 <script lang="ts">
@@ -28,7 +27,7 @@
 				// 还可以设置背景图size属性
 				backgroundSize: 'cover',
 				// 渐变色
-				backgroundImage: 'linear-gradient(100deg, #4CC818 2%, #4CC818 2%, #b0d479 98%, #b0d479 98%)'
+				backgroundImage: 'linear-gradient(#dff7e1 2%,#ecf7f1 30%,#f0f6f6 60%, #F3F3F3 98%, #F3F3F3 98%)'
 			})
 			return {
 				background

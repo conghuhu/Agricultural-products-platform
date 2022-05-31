@@ -1,5 +1,5 @@
 <template>
-	<view class="card_container">
+	<view v-if="shareInfo" class="card_container">
 		<view class="shareCard" @click="gotoDetail">
 			<view class="top_img">
 				<u-lazy-load threshold="-100" imgMode="widthFix" :image="shareInfo.imageList[0]"
@@ -42,8 +42,8 @@
 			// 检测类型
 			item: {
 				type: Object,
-				default: {},
-				required: true,
+				default: null,
+				required: false,
 			},
 		},
 		setup(props) {

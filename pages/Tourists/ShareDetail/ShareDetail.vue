@@ -43,7 +43,7 @@
 			</view>
 		</view>
 		<view class="person_comment">
-			<view class="comment_show" v-for="item in commentList">
+			<view class="comment_show" v-for="item in commentList" :key="item._id">
 				<view class="show_top">
 					<view class="show_left">
 						<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60"
@@ -150,13 +150,13 @@
 					comment.content = commentVal.value,
 					comment.comment_id = shareDetail._id,
 					console.log(user.userInfo)
-					Object.assign(comment.author, user.userInfo),
+				Object.assign(comment.author, user.userInfo),
 					console.log(comment)
 				const result = await request("comments", {
 					type: "addComments",
 					comment: comment
 				})
-				commentVal.value=""
+				commentVal.value = ""
 				await getComments();
 			}
 
@@ -169,7 +169,7 @@
 					id: shareDetail._id
 				})
 				console.log(result)
-				commentList.length=0;
+				commentList.length = 0;
 				result.data.forEach(item => {
 					const time = dayjs(item.createTime).format('YYYY-MM-DD HH:mm');
 					item.createTime = time;

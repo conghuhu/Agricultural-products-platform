@@ -1,6 +1,6 @@
 <template>
 	<view class="fullScreen">
-		<Nav title="我的信息"></Nav>
+		<!-- <Nav title="我的信息"></Nav> -->
 
 		<view class="content">
 			<view class="top_back">
@@ -18,7 +18,7 @@
 			<view class="cantainer">
 				<view class="item">
 					<view class="icon">
-						<u-image width="74rpx" mode="aspectFit" height="74rpx"
+						<u-image width="64rpx" mode="aspectFit" height="64rpx"
 							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E9%92%B1%E5%8C%85.png?sign=6c67c0e7ae28c504dbf7d9dab5a934ff&t=1653970375">
 						</u-image>
 					</view>
@@ -34,7 +34,7 @@
 
 				<view class="item">
 					<view class="icon">
-						<u-image width="74rpx" mode="aspectFit" height="74rpx"
+						<u-image width="64rpx" mode="aspectFit" height="64rpx"
 							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E8%AE%A2%E5%8D%95.png?sign=1322d50c5a637574e1e5f562d0107050&t=1653974604">
 						</u-image>
 					</view>
@@ -51,7 +51,7 @@
 
 				<view class="item">
 					<view class="icon">
-						<u-image width="74rpx" mode="aspectFit" height="74rpx"
+						<u-image width="64rpx" mode="aspectFit" height="64rpx"
 							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%B7%A5%E5%85%B7.png?sign=eeeac7ea99096dc449d42ac6471f18ec&t=1653974631">
 						</u-image>
 					</view>
@@ -157,7 +157,7 @@
 
 			.top_back {
 				width: 100%;
-				height: 22vh;
+				height: 30vh;
 				background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/Mask.png?sign=e8dfa044bfc47b36aa3ed2ae25f3899b&t=1653962723');
 				background-size: cover;
 				background-repeat: no-repeat;
