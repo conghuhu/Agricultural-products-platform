@@ -88,7 +88,6 @@
 					goodId: props.item._id,
 					count: count.value
 				});
-				console.log(res);
 			};
 
 

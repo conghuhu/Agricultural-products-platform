@@ -133,8 +133,12 @@
 				});
 				loading.value = false;
 			}
-			const checkboxChange = (e) => {
-				console.log(e)
+			const checkboxChange = async (e) => {
+				const res = await request('wanted', {
+					type: 'changeChecked',
+					wantId: e.name,
+					checked: e.value
+				});
 			}
 			return {
 				list,

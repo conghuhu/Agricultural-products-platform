@@ -135,19 +135,20 @@
 				console.log(temp.value)
 
 				if (index === 0) {
-					request("touristInfo", {
+					await request("touristInfo", {
 						type: "delAddress",
 						ID: temp.value
+					});
+					uni.redirectTo({
+						url: "../Location/Location"
 					})
 				}
-				uni.redirectTo({
-					url: "../Location/Location"
-				})
+
 			}
 
 			const goToHome = (item) => {
 				user.updateLocationInfo(item.adress, item.locationArr.coordinates[1], item.locationArr.coordinates[
-				0]);
+					0]);
 				uni.navigateBack();
 			}
 

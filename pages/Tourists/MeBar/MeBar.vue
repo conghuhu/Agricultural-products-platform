@@ -1,105 +1,77 @@
 <template>
 	<view class="fullScreen">
 		<Nav title="我的信息"></Nav>
-		<view class="head">
-			<view class="info">
-				<view class="info_image">
-					<u-avatar size="120" src="https://cdn.uviewui.com/uview/common/classify/2/13.jpg"></u-avatar>
-				</view>
-				<view class="info_name">xiaowangtongxue</view>
-			</view>
-			<view class="message">
-				<view class="message_left">
-					<u-image width="100%" height="100%" src="./static/images/message.png"></u-image>
-				</view>
-				<view class="message_right">
-					<u-image width="100%" height="100%" src="./static/images/setting.png"></u-image>
-				</view>
-			</view>
-		</view>
-		<view class="money">
-			<view class="money_left">钱包</view>
-			<view class="money_rigt">￥20.00</view>
-		</view>
-		<view class="order">
-			<view class="order_top">
-				<view class="top_left">我的订单</view>
-				<view class="top_right">全部></view>
-			</view>
-			<view class="order_contain">
-				<view class="contain_left">
-					<view class="left_images">
-						<u-image width="100%" height="100%" mode="heightFix" src="./static/images/pay.png"></u-image>
-					</view>
-					<view class="left_title">
-						待支付
-					</view>
-				</view>
-				<view class="contain_mid1">
-					<view class="mid1_images">
-						<u-image width="100%" height="100%" mode="heightFix" src="./static/images/goods.png"></u-image>
-					</view>
-					<view class="mid1_title">
-						进行中
-					</view>
 
+		<view class="content">
+			<view class="top_back">
+			</view>
+			<view class="head">
+				<view class="avatar_container">
+					<view class="avatar" />
 				</view>
-				<view class="contain_left">
-					<view class="left_images">
-						<u-image width="100%" height="100%" mode="heightFix" src="./static/images/evaluate.png">
+				<view class="content">
+					<view class="nickname">
+						{{userInfo.nickName}}
+					</view>
+				</view>
+			</view>
+			<view class="cantainer">
+				<view class="item">
+					<view class="icon">
+						<u-image width="74rpx" mode="aspectFit" height="74rpx"
+							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E9%92%B1%E5%8C%85.png?sign=6c67c0e7ae28c504dbf7d9dab5a934ff&t=1653970375">
 						</u-image>
 					</view>
-					<view class="left_title">
-						待评价
+					<view class="right">
+						<view class="consumer">
+							本月消费: ￥2230
+						</view>
+						<view class="total">
+							余额：￥{{money}}
+						</view>
 					</view>
 				</view>
-				<view class="contain_left">
-					<view class="left_images">
-						<u-image width="100%" height="100%" mode="heightFix" src="./static/images/refund.png"></u-image>
+
+				<view class="item">
+					<view class="icon">
+						<u-image width="74rpx" mode="aspectFit" height="74rpx"
+							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E8%AE%A2%E5%8D%95.png?sign=1322d50c5a637574e1e5f562d0107050&t=1653974604">
+						</u-image>
 					</view>
-					<view class="left_title">
-						退款/售后
+					<view class="right_item">
+						<view class="item_combine" v-for="(item,index) in orderList" :key="index">
+							<u-image width="50rpx" mode="aspectFit" height="50rpx" :src="item.icon">
+							</u-image>
+							<view class="text">
+								{{item.text}}
+							</view>
+						</view>
+					</view>
+				</view>
+
+				<view class="item">
+					<view class="icon">
+						<u-image width="74rpx" mode="aspectFit" height="74rpx"
+							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%B7%A5%E5%85%B7.png?sign=eeeac7ea99096dc449d42ac6471f18ec&t=1653974631">
+						</u-image>
+					</view>
+					<view class="right_item">
+						<view class="item_combine" v-for="(item,index) in toolList" :key="index">
+							<u-image @click="gotoPage(item)" width="50rpx" mode="aspectFit" height="50rpx"
+								:src="item.icon">
+							</u-image>
+							<view class="text">
+								{{item.text}}
+							</view>
+						</view>
 					</view>
 				</view>
 			</view>
+
 		</view>
-		<view class="setting">
-			<view class="setting_contain">
-				<view class="contain_images">
-					<u-image width="100%" height="100%"  mode="widthFix" src="./static/images/store.png"></u-image>
-				</view>
-				<view class="contain_title">
-					关注店铺
-				</view>
-			</view>
-			<view class="setting_contain">
-				<view class="contain_images">
-					<u-image width="100%" height="100%" mode="widthFix" src="./static/images/address.png"></u-image>
-				</view>
-				<view class="contain_title">
-					收集地址
-				</view>
-			</view>
-			<view class="setting_contain">
-				<view class="contain_images">
-					<u-image width="100%" height="100%" mode="widthFix" src="./static/images/service.png"></u-image>
-				</view>
-				<view class="contain_title">
-					官方客服
-				</view>
-			</view>
-			<view class="setting_contain">
-				<view class="contain_images">
-					<u-image width="100%" height="100%" mode="widthFix" src="./static/images/footprint.png"></u-image>
-				</view>
-				<view class="contain_title">
-					足迹
-				</view>
-			</view>
-		</view>
-		<view>
-			<u-tabbar v-model="current" :list="list" :mid-button="true"></u-tabbar>
-		</view>
+
+		<u-tabbar :list="list" :mid-button="true"></u-tabbar>
+
 	</view>
 </template>
 
@@ -107,213 +79,203 @@
 	import {
 		ref,
 		reactive
-	} from 'vue'
+	} from 'vue';
+	import request from '@/api/request';
 	import navList from '@/pages/Tourists/utils/navList';
+	import {
+		userStore
+	} from '@/stores/user';
+	import {
+		storeToRefs
+	} from 'pinia';
 	export default {
 		setup() {
-			const list = reactive(navList)
-			const current = ref(0);
+			const user = userStore();
+			const {
+				userInfo
+			} = storeToRefs(user);
+			const list = reactive(navList);
+			const money = ref(0);
+			// 订单菜单
+			const orderList = reactive([{
+				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%BE%85%E5%AE%8C%E6%88%90.png?sign=746d960471d02df9efbc111f2ce19e21&t=1653972109',
+				text: '待支付'
+			}, {
+				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E8%BF%9B%E8%A1%8C%E4%B8%AD.png?sign=a65bd977bb15616d00af63ac7571e698&t=1653974111',
+				text: '进行中'
+			}, {
+				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%B7%B2%E5%AE%8C%E6%88%90.png?sign=c2f487d81efb16d2d9144f6e18eefe96&t=1653974124',
+				text: '已完成'
+			}]);
+			// 工具菜单
+			const toolList = reactive([{
+				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%85%B3%E6%B3%A8.png?sign=823e5e8f340f6cf004b527befa4b0b86&t=1653974741',
+				text: '关注店铺'
+			}, {
+				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%9C%B0%E5%9D%80.png?sign=cec3bc5ea67c8dec43c79dabb404e261&t=1653982220',
+				text: '收获地址',
+				url: '/pages/Tourists/Location/Location'
+			}, {
+				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%AE%A2%E6%9C%8D.png?sign=e3c73806b4be9918334f5284c48ca9ae&t=1653982332',
+				text: '官方客服'
+			}]);
+
+			const gotoPage = async (item) => {
+				console.log(item);
+				uni.navigateTo({
+					url: item.url
+				})
+			};
 			return {
 				list,
-				current
+				userInfo,
+				orderList,
+				toolList,
+				money,
+				gotoPage
 			}
+		},
+		async onShow() {
+			const res = await request('user', {
+				type: 'getMoneyBalance'
+			});
+			this.money = res.data || 0;
 		}
-
-
-
 	}
 </script>
 
 <style lang="scss" scoped>
 	.fullScreen {
-		width: 100%;
 		height: 100vh;
-		background-color: #e5e7e8;
+		width: 100%;
+		background-color: #F3F3F3;
 		position: relative;
+		font-size: 32rpx;
 
-		.head {
-			width: 100%;
-			height: 10vh;
-			background-color: #F2F4F7;
-			display: flex;
-			align-items: center;
+		.content {
+			background-color: #F3F3F3;
 
-			.info {
-				flex: 7;
+			.top_back {
+				width: 100%;
+				height: 22vh;
+				background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/Mask.png?sign=e8dfa044bfc47b36aa3ed2ae25f3899b&t=1653962723');
+				background-size: cover;
+				background-repeat: no-repeat;
+				position: relative;
+				z-index: 0;
+			}
+
+			.head {
 				display: flex;
 				align-items: center;
 				justify-content: space-around;
+				height: 150rpx;
+				z-index: 99;
 
-				.info_image {
+				.avatar_container {
 					flex: 1;
-				}
-
-				.info_name {
-					flex: 2;
 					display: flex;
-					align-items: center;
-					justify-content: left;
-					font-size: 32rpx;
-					font-weight: 600;
-				}
-			}
+					justify-content: center;
+					z-index: 98;
 
-			.message {
-				flex: 3;
-				display: flex;
-				align-items: center;
-				justify-content: flex-end;
-
-				.message_left {
-					width: 50rpx;
-					height: 50rpx;
-					margin-right: 20rpx;
-
+					.avatar {
+						width: 36vw;
+						height: 36vw;
+						border-radius: 50%;
+						border: 15rpx solid white;
+						background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/shopAvatar.jpg?sign=86737ed47c27d68c83cba096cbd8aaaa&t=1652501346');
+						background-size: cover;
+						background-repeat: no-repeat;
+						overflow: visible;
+						z-index: 98;
+						transform: translateY(-75rpx);
+					}
 				}
 
-				.message_right {
-					width: 50rpx;
-					height: 50rpx;
-					margin-right: 26rpx;
-				}
-			}
-		}
 
-		.money {
-			height: 10vh;
-			margin-top: 20rpx;
-			display: flex;
-			align-items: center;
-			background-color: #F2F4F7;
-			justify-content: space-around;
-			border-radius: 10rpx;
-			box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.03);
-
-			.money_left {
-
-				align-items: center;
-				justify-content: center;
-				font-size: 32rpx;
-				font-weight: 600;
-			}
-
-			.money_rigt {
-				align-items: center;
-				justify-content: center;
-				font-size: 32rpx;
-				font-weight: 600;
-			}
-		}
-
-		.order {
-			height: 14vh;
-			margin-top: 20rpx;
-			display: flex;
-			align-items: center;
-			background-color: #F2F4F7;
-			flex-direction: column;
-			border-radius: 10rpx;
-			box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.03);
-
-			.order_top {
-				width: 100%;
-				flex: 2;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				background-color: #F2F4F7;
-
-				.top_left {
-					margin-left: 20rpx;
-					font-weight: 600;
-				}
-
-				.top_right {
-					margin-right: 20rpx;
-					font-size: 26rpx;
-					font-weight: 200;
-				}
-			}
-
-			.order_contain {
-				width: 100%;
-				flex: 7;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-
-				.contain_left {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					height: 8vh;
+				.content {
+					font-family: SourceHanSansCN-Bold;
+					letter-spacing: 0px;
+					color: #4A4A4A;
+					font-weight: bold;
 					flex: 1;
+					font-size: 40rpx;
+					line-height: 40rpx;
+					height: 150rpx;
 
-					.left_images {
-						margin-top: 5rpx;
-						flex: 1;
-						margin-bottom: 5rpx;
-					}
-
-					.left_title {
-						font-size: 26rpx;
-						font-weight: 550;
-						flex: 1;
-					}
-				}
-
-				.contain_mid1 {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					height: 8vh;
-					flex: 1;
-
-					.mid1_images {
-						margin-top: 5rpx;
-						flex: 1;
-						margin-bottom: 5rpx;
-					}
-
-					.mid1_title {
-						font-size: 26rpx;
-						font-weight: 550;
-						flex: 1;
+					.nickname {
+						margin-top: 20rpx;
 					}
 				}
 			}
-		}
 
-		.setting {
-			margin-top: 20rpx;
-			width: 100%;
-			height: 12vh;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			background-color: #F2F4F7;
-			border-radius: 10rpx;
-			box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.03);
 
-			.setting_contain {
+			.cantainer {
 				display: flex;
 				flex-direction: column;
 				align-items: center;
-				height: 8vh;
-				flex: 1;
-				.contain_images{
-					width: 30%;
-					margin-top: 5rpx;
-					flex: 1;
-					margin-bottom: 5rpx;
-					
-				}
+				padding-top: 30rpx;
 
-				.contain_title {
-					font-size: 26rpx;
-					font-weight: 550;
-					flex: 1;
+				.item {
+					width: 100%;
+					height: 140rpx;
+					border-radius: 30rpx;
+					background: #EEEEEE;
+					box-shadow: 0px 20rpx 30rpx 0px rgba(10, 31, 68, 0.12);
+					transform: translateX(120rpx);
+					margin-bottom: 60rpx;
 
+					.icon {
+						box-sizing: border-box;
+						border: 1px solid #77D4A6;
+						background: #FFFFFF;
+						width: 140rpx;
+						height: 140rpx;
+						border-radius: 50%;
+						float: left;
+						transform: translateX(-66rpx);
+
+						display: flex;
+						justify-content: center;
+						align-items: center;
+					}
+
+					.right {
+						display: flex;
+						justify-content: flex-start;
+						align-items: center;
+						transform: translateX(-42rpx);
+						height: 100%;
+
+						.consumer {
+							margin-right: 40rpx;
+						}
+					}
+
+					.right_item {
+						display: flex;
+						justify-content: flex-start;
+						align-items: center;
+						height: 100%;
+						transform: translateX(-16rpx);
+
+						.item_combine {
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							flex-direction: column;
+							margin-right: 36rpx;
+							width: 120rpx;
+
+							.text {
+								margin-top: 10rpx;
+								font-family: SourceHanSansCN-ExtraLight;
+								font-size: 30rpx;
+								letter-spacing: 0rpx;
+								color: #000000;
+							}
+						}
+					}
 				}
 			}
 		}
