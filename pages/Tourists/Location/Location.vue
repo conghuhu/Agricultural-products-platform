@@ -147,6 +147,7 @@
 			}
 
 			const goToHome = (item) => {
+				console.log(item)
 				user.updateLocationInfo(item.adress, item.locationArr.coordinates[1], item.locationArr.coordinates[
 					0]);
 				uni.navigateBack();
