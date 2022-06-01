@@ -17,18 +17,22 @@
 			</view>
 		</view>
 		<view class="content">
-			<u-waterfall v-model="shareList">
-				<template v-slot:left="{leftList}">
-					<view v-for="(item, index) in leftList" :key="item._id">
-						<ShareCard :item="item" />
-					</view>
-				</template>
-				<template v-slot:right="{rightList}">
-					<view v-for="(item, index) in rightList" :key="item._id">
-						<ShareCard :item="item" />
-					</view>
-				</template>
-			</u-waterfall>
+			<MyLoading v-if="loading" />
+			<block v-else>
+				<u-waterfall v-model="shareList">
+					<template v-slot:left="{leftList}">
+						<view v-for="(item, index) in leftList" :key="item._id">
+							<ShareCard :item="item" />
+						</view>
+					</template>
+					<template v-slot:right="{rightList}">
+						<view v-for="(item, index) in rightList" :key="item._id">
+							<ShareCard :item="item" />
+						</view>
+					</template>
+				</u-waterfall>
+			</block>
+
 		</view>
 		<u-tabbar :list="list" :mid-button="true"></u-tabbar>
 	</view>
@@ -51,6 +55,7 @@
 			const search_btn_style = ref({
 				height: '60rpx'
 			});
+			const loading = ref(true);
 
 			const gotoRelease = () => {
 				uni.navigateTo({
@@ -60,27 +65,45 @@
 			/**
 			 * 搜索页面内容
 			 */
-			const searchContent = () => {
-				console.log(keyword.value)
-			}
+			const searchContent = async () => {
+				console.log(keyword.value);
+				await init(keyword.value);
+			};
+
+			const init = async (value: string) => {
+				loading.value = true;
+				let res;
+				if (value != null) {
+					res = await request('share', {
+						type: 'getShareList',
+						value: value
+					});
+				} else {
+					res = await request('share', {
+						type: 'getShareList'
+					});
+				}
+
+				console.log(res);
+				shareList.length = 0;
+				res.data.forEach(item => {
+					shareList.push(item);
+				});
+				loading.value = false;
+			};
 			return {
 				list,
 				keyword,
 				searchContent,
 				gotoRelease,
 				shareList,
-				search_btn_style
+				search_btn_style,
+				init,
+				loading
 			}
 		},
-		async onShow() {
-			const res = await request('share', {
-				type: 'getShareList'
-			});
-			console.log(res);
-			this.shareList.length = 0;
-			res.data.forEach(item => {
-				this.shareList.push(item);
-			});
+		async onLoad() {
+			await this.init();
 		}
 
 	}
@@ -90,7 +113,7 @@
 	.fullScreen {
 		height: 100vh;
 		font-size: 32rpx;
-		background-color: #F2F4F7;
+		background-color: #F3F3F3;
 		width: 100%;
 
 		.top_tool {
@@ -103,7 +126,7 @@
 			padding-right: 30rpx;
 			position: fixed;
 			z-index: 99;
-			background-color: #F2F4F7;
+			background-color: #F3F3F3;
 
 			.release {
 				padding: 6rpx;

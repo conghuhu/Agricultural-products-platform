@@ -11,20 +11,46 @@ exports.main = async (event, context) => {
 
 	const _ = db.command;
 
+	const {
+		value
+	} = event;
+
 	let res = {};
 
 	try {
 		const shareDb = db.collection('share');
 
-		const shareList = await shareDb
-			.aggregate()
-			.lookup({
-				from: 'users',
-				localField: '_openid',
-				foreignField: '_openid',
-				as: 'author',
-			})
-			.end();
+		let shareList;
+
+		if (value) {
+			shareList = await shareDb
+				.aggregate()
+				.match({
+					title: db.RegExp({
+						//从搜索栏中获取的value作为规则进行匹配。
+						regexp: value,
+						//大小写不区分
+						options: 'i',
+					})
+				})
+				.lookup({
+					from: 'users',
+					localField: '_openid',
+					foreignField: '_openid',
+					as: 'author',
+				})
+				.end();
+		} else {
+			shareList = await shareDb
+				.aggregate()
+				.lookup({
+					from: 'users',
+					localField: '_openid',
+					foreignField: '_openid',
+					as: 'author',
+				})
+				.end();
+		}
 
 		res = {
 			sucess: true,

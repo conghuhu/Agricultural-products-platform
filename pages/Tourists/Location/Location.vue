@@ -1,11 +1,6 @@
 <template>
 	<view class="fullScreen">
-		<view>
-			<u-navbar title="选择地址" :is-back="true" :background="background">
-				<view class="slot-wrap" @click="rightClick()">
-				</view>
-			</u-navbar>
-		</view>
+		<Nav title="选择地址" isBack></Nav>
 
 		<view class="top_tool">
 			<view style="flex: 6;">
@@ -65,19 +60,6 @@
 			const user = userStore();
 			//tabbar
 			const list = reactive(navList)
-			//页面nav信息配置
-			const current = ref(0);
-			const background = ref({
-				backgroundColor: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))',
-
-				// 导航栏背景图
-				background: 'url(https://cdn.uviewui.com/uview/swiper/1.jpg) no-repeat',
-				// 还可以设置背景图size属性
-				backgroundSize: 'cover',
-
-				// 渐变色
-				backgroundImage: 'linear-gradient(45deg, rgb(76,200,24), rgb(212,198,119))'
-			})
 			async function rightClick() {
 				uni.navigateBack({})
 			}
@@ -155,8 +137,6 @@
 
 			return {
 				list,
-				current,
-				background,
 				rightClick,
 				keyword,
 				search,
