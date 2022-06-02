@@ -637,7 +637,7 @@
 			display: flex;
 			.info_left{
 				flex: 3;
-				margin-top: 4rpx;
+				margin-top: 40rpx;
 				
 			}
 			.info_right{
