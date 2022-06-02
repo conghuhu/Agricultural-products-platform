@@ -7,8 +7,18 @@ export const commonStore = defineStore('store', () => {
 	const updateCurCategory = (newVal: number) => {
 		currentCategory.value = newVal;
 	};
-	
-	
 
-	return { currentCategory, updateCurCategory };
+	const curSubmitOrderList = reactive<any[]>([]);
+	const clearCurSumbitOrderList = () => {
+		curSubmitOrderList.length = 0;
+	};
+	const addCurSumbitOrderList = (target: any[]) => {
+		console.log(target);
+		target.forEach(item => {
+			curSubmitOrderList.push(item);
+		});
+	};
+
+
+	return { currentCategory, updateCurCategory, curSubmitOrderList, clearCurSumbitOrderList, addCurSumbitOrderList };
 });

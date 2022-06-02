@@ -1,6 +1,7 @@
 const getAddress = require('./getAddress/index');
 const submitAdress = require('./submitAdress/index')
 const delAddress = require('./delAddress/index')
+const getAddressById = require('./getAddressById/index');
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -9,8 +10,10 @@ exports.main = async (event, context) => {
 			return await getAddress.main(event, context);
 		case 'submitAdress':
 			return await submitAdress.main(event, context);
-		case'delAddress':
-		    return await delAddress.main(event, context);
+		case 'delAddress':
+			return await delAddress.main(event, context);
+		case 'getAddressById':
+			return await getAddressById.main(event, context);
 		default:
 			return {
 				success: false,

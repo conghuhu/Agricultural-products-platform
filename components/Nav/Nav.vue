@@ -27,7 +27,7 @@
 				// 还可以设置背景图size属性
 				backgroundSize: 'cover',
 				// 渐变色
-				backgroundImage: 'linear-gradient(#dff7e1 2%,#ecf7f1 30%,#f0f6f6 60%, #F3F3F3 98%, #F3F3F3 98%)'
+				backgroundImage: 'linear-gradient(#e9ffe2 2%,#e8f7e9 25%,#eff6ef 60%, #F3F3F3 98%, #F3F3F3 98%)'
 			})
 			return {
 				background

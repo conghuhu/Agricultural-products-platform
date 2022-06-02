@@ -1,5 +1,5 @@
 <template>
-	<view class="goodCard" @click="goToDetail(item)">
+	<view v-if="item" class="goodCard" @click="goToDetail(item)">
 		<u-lazy-load threshold="10" border-radius="10" :image="item.imageShowList[0]" :index="item._id">
 		</u-lazy-load>
 		<view class="demo-title">
@@ -51,8 +51,8 @@
 			// 检测类型
 			item: {
 				type: Object,
-				default: () => ({}),
-				required: true,
+				default: null,
+				required: false,
 			},
 		},
 		setup(props) {
@@ -92,7 +92,7 @@
 
 
 			const change = () => {
-				console.log('触发动画')
+				// console.log('触发动画')
 			}
 
 

@@ -49,7 +49,8 @@
 								￥{{totalPrice}}
 							</view>
 						</view>
-						<u-button style="width: 146rpx;margin-right: 10rpx;margin-left: 20rpx;" type="primary">结算
+						<u-button @click="gotoSubmitOrder" style="width: 146rpx;margin-right: 10rpx;margin-left: 20rpx;"
+							type="primary">结算
 						</u-button>
 					</view>
 				</view>
@@ -73,9 +74,13 @@
 	import {
 		userStore
 	} from '@/stores/user';
+	import {
+		commonStore
+	} from '@/stores/store';
 	export default {
 		setup() {
 			const user = userStore();
+			const store = commonStore();
 			const list = reactive(navList)
 			const wantList = reactive([]);
 			const loading = ref(true);
@@ -134,12 +139,29 @@
 				loading.value = false;
 			}
 			const checkboxChange = async (e) => {
-				const res = await request('wanted', {
+				request('wanted', {
 					type: 'changeChecked',
 					wantId: e.name,
 					checked: e.value
 				});
 			}
+			/**
+			 * 跳转至提交订单
+			 */
+			const gotoSubmitOrder = async () => {
+				const checkedList = wantList.filter(item => item.checked);
+				if (checkedList.length == 0) {
+					uni.showToast({
+						title: '请选择商品'
+					})
+					return;
+				}
+				store.clearCurSumbitOrderList();
+				store.addCurSumbitOrderList(checkedList);
+				uni.navigateTo({
+					url: '/pages/Tourists/SubmitOrder/SubmitOrder'
+				});
+			};
 			return {
 				list,
 				wantList,
@@ -148,7 +170,8 @@
 				checkboxChange,
 				loading,
 				refresh,
-				totalPrice
+				totalPrice,
+				gotoSubmitOrder
 			}
 		},
 		async onShow() {
@@ -197,6 +220,7 @@
 						flex-direction: column;
 						justify-content: space-between;
 						padding-left: 20rpx;
+						min-width: 420rpx;
 
 						.right_top {
 							margin: 4rpx;

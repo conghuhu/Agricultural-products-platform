@@ -22,7 +22,7 @@
 		},
 		setup(props) {
 			const style = reactive({
-				width: props.width + 'rpx',
+				maxWidth: props.width + 'rpx',
 				overflow: 'hidden',
 				'white-space': 'nowrap',
 				'text-overflow': 'ellipsis',

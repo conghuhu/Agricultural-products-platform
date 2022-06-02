@@ -114,8 +114,6 @@
 
 			}
 			async function confirmDel(index) {
-				console.log(temp.value)
-
 				if (index === 0) {
 					await request("touristInfo", {
 						type: "delAddress",
@@ -125,12 +123,12 @@
 						url: "../Location/Location"
 					})
 				}
-
 			}
 
 			const goToHome = (item) => {
 				user.updateLocationInfo(item.adress, item.locationArr.coordinates[1], item.locationArr.coordinates[
 					0]);
+				user.updateLocationId(item._id);
 				uni.navigateBack();
 			}
 
@@ -172,7 +170,7 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F2F4F7;
+		background-color: #F3F3F3;
 		position: relative;
 
 		.top_tool {
@@ -183,7 +181,7 @@
 		}
 
 		.content {
-			background-color: #F2F4F7;
+			background-color: #F3F3F3;
 		}
 	}
 

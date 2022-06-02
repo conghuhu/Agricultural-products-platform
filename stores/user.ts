@@ -22,10 +22,13 @@ export const userStore = defineStore('user', () => {
 
 	// 用户当前所选的收货位置
 	const currentLocationVal = ref('请选择收货位置');
+	// 用户当前所选的收货位置地理坐标
 	const location = reactive({
 		latitude: 36.628296,
 		longitude: 117.060097
 	});
+	// 用户当前所选的收货地址的id
+	const curLocationId = ref('');
 
 	function setTotalWantedGoods(count: number) {
 		navList[3].count = count;
@@ -70,6 +73,13 @@ export const userStore = defineStore('user', () => {
 			location.longitude = longitude;
 		}
 	};
+	/**
+	 * 更新locationId
+	 */
+	function updateLocationId(id:string){
+		curLocationId.value = id;
+	}
+	
 	function updateUserInfo(info) {
 		Object.assign(userInfo, info);
 	};
@@ -85,6 +95,7 @@ export const userStore = defineStore('user', () => {
 		currentLocationVal, location, updateLocationInfo,
 		incrementWantedGood, decrementWantedGood,
 		likeShareSet, addToLikeShareSet, removeFromLikeShareSet,
-		setTotalWantedGoods, totalCount
+		setTotalWantedGoods, totalCount,
+		curLocationId,updateLocationId
 	};
 });
