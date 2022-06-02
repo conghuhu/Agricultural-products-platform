@@ -152,6 +152,7 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
+
 			}
 
 		}, {
@@ -162,7 +163,18 @@
 				"navigationStyle": "custom"
 			}
 		}
+
+		, {
+			"path": "pages/Tourists/Search/Search",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}
 	],
+
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

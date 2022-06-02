@@ -11,7 +11,7 @@
 			</view>
 		</Nav>
 		<view class="content">
-			<view class="search_contain">
+			<view class="search_contain" @click="toSearch">
 				<view class="search">
 					<view class="text">
 						点击查找商品
@@ -239,6 +239,12 @@
 					url: "/pages/Tourists/ClassificationBar/ClassificationBar"
 				})
 			}
+			
+			const toSearch = async function(){
+				uni.navigateTo({
+					url:"../Search/Search"
+				})
+			}
 			return {
 				list,
 				rightClick,
@@ -250,7 +256,8 @@
 				toClassification,
 				currentLocationVal,
 				goodListLoading,
-				categoryLoading
+				categoryLoading,
+				toSearch
 			}
 		},
 		async onLoad() {
