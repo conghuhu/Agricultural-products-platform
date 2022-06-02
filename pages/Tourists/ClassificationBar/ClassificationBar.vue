@@ -2,12 +2,6 @@
 	<view class="fullScreen">
 		<Nav title="分类"></Nav>
 		<view class="u-wrap">
-			<view class="u-search-box">
-				<view class="u-search-inner">
-					<u-icon name="search" color="#909399" :size="28"></u-icon>
-					<text class="u-search-text">搜索</text>
-				</view>
-			</view>
 			<view class="u-menu-wrap">
 				<scroll-view scroll-y scroll-with-animation class="u-tab-view menu-scroll-view" :scroll-top="scrollTop"
 					:scroll-into-view="itemId">
