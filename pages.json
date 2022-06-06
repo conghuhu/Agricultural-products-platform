@@ -172,6 +172,14 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/Tourists/Remark/Remark",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 

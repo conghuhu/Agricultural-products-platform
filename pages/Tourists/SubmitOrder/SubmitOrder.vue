@@ -81,10 +81,11 @@
 			</view>
 
 			<view class="card">
-				<view class="remark">
+				<view class="remark" @click="gotoRemark">
 					<text style="font-weight: 550;">订单备注</text>
 					<view style="display: flex;align-items: center;">
-						<Ellipsis style="color: #696969;margin-right: 10rpx;" :width="400" content="不放糖"></Ellipsis>
+						<Ellipsis style="color: #696969;margin-right: 10rpx;" :width="400" :content="remarkVal">
+						</Ellipsis>
 						<u-image style="display: flex; justify-content: center;align-items: center;" height="30rpx"
 							width="30rpx" mode="aspectFill"
 							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/right.png?sign=f45c0a34dce9a7e4eea366634636230e&t=1654052336">
@@ -150,6 +151,8 @@
 				return total;
 			});
 
+			const remarkVal = ref("");
+
 			const curLocationVal = reactive({
 				adress: "",
 				consignee: "",
@@ -170,6 +173,17 @@
 			const gotoLocation = () => {
 				uni.navigateTo({
 					url: '/pages/Tourists/Location/Location'
+				})
+			};
+
+			const gotoRemark = () => {
+				uni.navigateTo({
+					url: `/pages/Tourists/Remark/Remark?remarkVal=${remarkVal.value}`,
+					events:{
+						changeRemarkVal: function(data){
+							remarkVal.value = data;
+						}
+					}
 				})
 			};
 
@@ -205,7 +219,9 @@
 				initLocation,
 				initGoodList,
 				wantList,
-				totalPrice
+				totalPrice,
+				remarkVal,
+				gotoRemark
 			}
 		},
 		async onShow() {
@@ -219,13 +235,14 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F3F3F3;
+		background-color: $background-color;
 		position: relative;
 		font-size: 32rpx;
 
 		.content {
-			background-color: #F3F3F3;
+			background-color: $background-color;
 			padding: 20rpx;
+			padding-bottom: 150rpx;
 
 			.card {
 				background-color: #fff;
@@ -294,7 +311,7 @@
 										font-weight: 500;
 										font-size: 28rpx;
 										line-height: 1.25;
-										color: #696969;
+										color: $u-type-info-dark;
 									}
 
 									.right_bottom {
@@ -341,7 +358,7 @@
 							display: flex;
 							align-items: center;
 							font-size: 30rpx;
-							color: #696969;
+							color: $u-type-info-dark;
 						}
 					}
 				}
