@@ -64,7 +64,7 @@
 				})
 				wx.hideLoading();
 				uni.redirectTo({
-					url: "../../pages/Merchants/Shop/Shop"
+					url: "/pages/Merchants/Shop/Shop"
 				})
 			}
 
@@ -88,7 +88,7 @@
 					encrypt: true,
 				})
 				wx.hideLoading();
-				uni.redirectTo({
+				uni.switchTab({
 					url: "/pages/Tourists/HomeBar/HomeBar"
 				})
 			}
@@ -122,11 +122,11 @@
 				setTimeout(() => {
 					if (curStatus == 0) {
 						uni.redirectTo({
-							url: "../../pages/Merchants/Shop/Shop"
+							url: "/pages/Merchants/Shop/Shop"
 						})
 					} else if (curStatus == 1) {
 						uni.switchTab({
-							url: "../../pages/Tourists/HomeBar/HomeBar"
+							url: "/pages/Tourists/HomeBar/HomeBar"
 						})
 					}
 				}, 1600);
