@@ -208,6 +208,12 @@
 					});
 				}
 			}
+			
+			const gotoSubmitOrder = async()=>{
+				
+				console.log(wantList);
+				console.log(remarkVal.value);
+			}
 
 			onMounted(async () => {
 
@@ -221,7 +227,8 @@
 				wantList,
 				totalPrice,
 				remarkVal,
-				gotoRemark
+				gotoRemark,
+				gotoSubmitOrder
 			}
 		},
 		async onShow() {

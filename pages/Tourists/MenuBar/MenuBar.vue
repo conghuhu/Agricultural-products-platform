@@ -113,7 +113,7 @@
 	.fullScreen {
 		height: 100vh;
 		font-size: 32rpx;
-		background-color: #F3F3F3;
+		background-color: $background-color;
 		width: 100%;
 
 		.top_tool {
@@ -126,7 +126,7 @@
 			padding-right: 30rpx;
 			position: fixed;
 			z-index: 99;
-			background-color: #F3F3F3;
+			background-color: $background-color;
 
 			.release {
 				padding: 6rpx;
@@ -152,7 +152,7 @@
 
 		.content {
 			padding: 10rpx;
-			background-color: #F2F4F7;
+			background-color: $background-color;
 			padding-bottom: 50rpx;
 			margin-top: 100rpx;
 		}
