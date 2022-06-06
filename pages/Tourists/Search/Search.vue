@@ -84,7 +84,7 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F3F3F3;
+		
 		position: relative;
 		font-size: 32rpx;
 
@@ -149,7 +149,7 @@
 			margin-right: 20rpx;
 			border-radius: 20rpx;
 			border: 0;
-			background: #ffcdc9;
+			background: linear-gradient(#fedfda 6%,#feefe8 70%,#fff4f2 98%);
 			box-shadow: 0px 10rpx 15rpx 0px rgba(27, 28, 32, 0.05);
 
 			.card_top {
