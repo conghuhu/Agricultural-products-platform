@@ -39,7 +39,8 @@
 						</u-image>
 					</view>
 					<view class="right_item">
-						<view class="item_combine" v-for="(item,index) in orderList" :key="index">
+						<view class="item_combine" v-for="(item,index) in orderList" :key="index"
+							@click="gotoOrder(item.url,index)">
 							<u-image width="50rpx" mode="aspectFit" height="50rpx" :src="item.icon">
 							</u-image>
 							<view class="text">
@@ -99,13 +100,16 @@
 			// 订单菜单
 			const orderList = reactive([{
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%BE%85%E5%AE%8C%E6%88%90.png?sign=746d960471d02df9efbc111f2ce19e21&t=1653972109',
-				text: '待支付'
+				text: '待支付',
+				url: "/pages/Tourists/Order/Order"
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E8%BF%9B%E8%A1%8C%E4%B8%AD.png?sign=a65bd977bb15616d00af63ac7571e698&t=1653974111',
-				text: '进行中'
+				text: '进行中',
+				url: "/pages/Tourists/Order/Order"
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%B7%B2%E5%AE%8C%E6%88%90.png?sign=c2f487d81efb16d2d9144f6e18eefe96&t=1653974124',
-				text: '已完成'
+				text: '已完成',
+				url: "/pages/Tourists/Order/Order"
 			}]);
 			// 工具菜单
 			const toolList = reactive([{
@@ -120,6 +124,12 @@
 				text: '官方客服'
 			}]);
 
+			const gotoOrder = (url: string, index: number) => {
+				console.log(index);
+				uni.navigateTo({
+					url: url
+				})
+			}
 			const gotoPage = async (item) => {
 				console.log(item);
 				uni.navigateTo({
@@ -132,7 +142,8 @@
 				orderList,
 				toolList,
 				money,
-				gotoPage
+				gotoPage,
+				gotoOrder
 			}
 		},
 		async onShow() {
