@@ -182,6 +182,9 @@
 			</view>
 		</view>
 		<view class="bottom_info">
+			<view class="info_left" @click="tokefu">
+				<u-image width="100%" mode="aspectFit" height="20px" src="./static/images/kefu.png"></u-image>
+			</view>
 			<view class="info_left">
 				<u-image width="100%" mode="aspectFit" height="20px" src="./static/images/shoppingCart.png"></u-image>
 			</view>
@@ -237,10 +240,16 @@
 					title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
 				},
 			])
+			const tokefu  = async function(){
+				uni.navigateTo({
+					url:"../CharRoom/CharRoom"
+				})
+			}
 			return {
 				goodId,
 				goodInfo,
-				warpList
+				warpList,
+				tokefu
 			}
 		},
 		async onLoad(option) {

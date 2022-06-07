@@ -181,7 +181,17 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/Tourists/CharRoom/CharRoom",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
+    ],
 
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
