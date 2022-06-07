@@ -2,6 +2,7 @@ const addWanted = require('./CRUD/addWanted');
 const getWanted = require('./CRUD/getWanted');
 const deleteWanted = require('./CRUD/deleteWanted');
 const changeChecked = require('./CRUD/changeChecked');
+const deleteWantedBatch = require('./CRUD/deleteWantedBatch');
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -14,6 +15,8 @@ exports.main = async (event, context) => {
 			return await deleteWanted.main(event, context);
 		case 'changeChecked':
 			return await changeChecked.main(event, context);
+		case 'deleteWantedBatch':
+			return await deleteWantedBatch.main(event, context);
 		default:
 			return {
 				success: false,

@@ -48,7 +48,7 @@ export const userStore = defineStore('user', () => {
 		navList[3].count = totalCount.value;
 	};
 	/**
-	 * 移除某个想要的商品
+	 * 自减某个想要的商品
 	 */
 	function decrementWantedGood(goodId: string) {
 		if (!wantingGoods.has(goodId)) {
@@ -64,6 +64,20 @@ export const userStore = defineStore('user', () => {
 		navList[3].count = totalCount.value;
 	}
 	/**
+	 * 移除某项想要的商品
+	 */
+	function removeWantedGood(goodIdList: string[]) {
+		goodIdList.forEach(goodId => {
+			if (!wantingGoods.has(goodId)) {
+				return;
+			}
+			const res = wantingGoods.get(goodId);
+			wantingGoods.delete(goodId);
+			totalCount.value -= res;
+			navList[3].count = totalCount.value;
+		});
+	}
+	/**
 	 * 更新用户的地理信息
 	 */
 	function updateLocationInfo(currentLocation: string, latitude?: number, longitude?: number) {
@@ -76,10 +90,10 @@ export const userStore = defineStore('user', () => {
 	/**
 	 * 更新locationId
 	 */
-	function updateLocationId(id:string){
+	function updateLocationId(id: string) {
 		curLocationId.value = id;
 	}
-	
+
 	function updateUserInfo(info) {
 		Object.assign(userInfo, info);
 	};
@@ -96,6 +110,7 @@ export const userStore = defineStore('user', () => {
 		incrementWantedGood, decrementWantedGood,
 		likeShareSet, addToLikeShareSet, removeFromLikeShareSet,
 		setTotalWantedGoods, totalCount,
-		curLocationId,updateLocationId
+		curLocationId, updateLocationId,
+		removeWantedGood
 	};
 });

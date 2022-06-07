@@ -6,7 +6,7 @@
 				<MyLoading />
 			</view>
 			<block v-else>
-				<view class="card" v-for="(item, index) in wantList" :key="item._id">
+				<view class="card" v-if="wantList.length != 0" v-for="(item, index) in wantList" :key="item._id">
 					<u-checkbox :labelDisabled="true" @change="checkboxChange" v-model="item.checked" :name="item._id"
 						:size="44" :icon-size="28">
 						<view class="good_content">
@@ -35,6 +35,9 @@
 							</view>
 						</view>
 					</u-checkbox>
+				</view>
+				<view style="height: 60vh;" v-else>
+					<u-empty text="购物车为空" mode="car"></u-empty>
 				</view>
 				<view class="action_bottom">
 					<view class="left">

@@ -111,7 +111,7 @@
 			});
 
 			if (res.data.length === 1) {
-				console.log(res.data);
+				// console.log(res.data);
 				this.mask = true;
 				const curStatus = res.data[0].status;
 				this.user.updateUserInfo(res.data[0]);
@@ -130,7 +130,6 @@
 						})
 					}
 				}, 1600);
-
 			} else {
 				this.loading = false;
 				wx.hideLoading();

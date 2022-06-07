@@ -179,8 +179,8 @@
 			const gotoRemark = () => {
 				uni.navigateTo({
 					url: `/pages/Tourists/Remark/Remark?remarkVal=${remarkVal.value}`,
-					events:{
-						changeRemarkVal: function(data){
+					events: {
+						changeRemarkVal: function(data) {
 							remarkVal.value = data;
 						}
 					}
@@ -208,11 +208,61 @@
 					});
 				}
 			}
-			
-			const gotoSubmitOrder = async()=>{
-				
-				console.log(wantList);
-				console.log(remarkVal.value);
+
+			/**
+			 * 
+			 */
+			const gotoSubmitOrder = async () => {
+				if (curLocationVal._id == "") {
+					await uni.showToast({
+						title: '请选择收货地址',
+						icon: 'error'
+					});
+					return;
+				}
+				uni.showLoading({
+					title: "去支付"
+				})
+				const res = await request('order', {
+					type: 'createOrder',
+					curLocationId: curLocationVal._id,
+					remarkVal: remarkVal.value,
+					goodList: wantList.map(item => item.goodInfo[0]),
+					wantList: wantList.map(item => item._id),
+					price: totalPrice.value
+				});
+				user.removeWantedGood(wantList.map(item => item.goodId));
+				uni.hideLoading();
+
+				uni.showModal({
+					title: '微信支付',
+					content: `确认支付 ${totalPrice.value} 元`,
+					success: async function(e) {
+						if (e.confirm) {
+							uni.showLoading({
+								title: "支付中"
+							})
+							const temp = await request('order', {
+								type: 'payOrder',
+								orderId: res.data
+							});
+							uni.hideLoading();
+							uni.showToast({
+								title: "支付成功",
+								duration: 1500,
+							})
+							setTimeout(() => {
+								uni.switchTab({
+									url: '/pages/Tourists/HomeBar/HomeBar'
+								})
+							}, 1500);
+						} else if (e.cancel) {
+							uni.navigateBack();
+						}
+					}
+				})
+
+				// console.log(res)
 			}
 
 			onMounted(async () => {
