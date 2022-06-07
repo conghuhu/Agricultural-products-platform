@@ -1,6 +1,8 @@
 const createOrder = require('./CreateOrder/index');
 const payOrder = require('./payOrder/index');
 
+const queryUnpaidOrders = require('./queryUnpaidOrders/index');
+
 // 云函数入口函数
 exports.main = async (event, context) => {
 	switch (event.type) {
@@ -8,6 +10,8 @@ exports.main = async (event, context) => {
 			return await createOrder.main(event, context);
 		case 'payOrder':
 			return await payOrder.main(event, context);
+		case 'queryUnpaidOrders':
+			return await queryUnpaidOrders.main(event, context);
 		default:
 			return {
 				success: false,

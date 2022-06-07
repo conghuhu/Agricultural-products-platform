@@ -180,6 +180,14 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/Tourists/Order/Order",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	    ,{
             "path" : "pages/Tourists/CharRoom/CharRoom",

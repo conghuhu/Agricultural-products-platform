@@ -21,6 +21,7 @@ exports.main = async (event, context) => {
 
 	try {
 		const orderDb = db.collection('order');
+		const goodOrderDb = db.collection('good-orders');
 		console.log(orderId);
 
 		const temp = await orderDb.doc(orderId).update({
@@ -29,10 +30,23 @@ exports.main = async (event, context) => {
 				status: 2,
 			}
 		});
-		
+
+		const {
+			data
+		} = await orderDb.doc(orderId).get();
+
+
 		// TODO 更新各个子订单的状态,并通知对应的商家
-		
-		
+		for (let i = 0; i < data.goodList.length; i++) {
+			const item = data.goodList[i];
+			goodOrderDb.doc(item).update({
+				data: {
+					updateTime: new Date(),
+					status: 2,
+				}
+			});
+		}
+
 		res = {
 			sucess: true,
 			message: "支付成功",
