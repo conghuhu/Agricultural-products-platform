@@ -189,13 +189,22 @@
 			}
 
 		}
-	    ,{
-            "path" : "pages/Tourists/CharRoom/CharRoom",
+        ,{
+            "path" : "pages/Tourists/ChatRoom/ChatRoom",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
 				"navigationStyle": "custom"
+            }
+            
+        }
+        ,{
+            "path" : "pages/Tourists/room/room",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
             }
             
         }

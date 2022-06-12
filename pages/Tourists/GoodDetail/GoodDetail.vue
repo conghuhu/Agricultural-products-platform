@@ -242,7 +242,7 @@
 			])
 			const tokefu  = async function(){
 				uni.navigateTo({
-					url:"../CharRoom/CharRoom"
+					url:"/pages/Tourists/ChatRoom/ChatRoom"
 				})
 			}
 			return {
