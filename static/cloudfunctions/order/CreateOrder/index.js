@@ -31,7 +31,7 @@ exports.main = async (event, context) => {
 			data: {
 				createTime: new Date(),
 				updateTime: new Date(),
-				// 订单状态 1：待支付  2：已付款，但未收到货  3：已收到货，待评价
+				// 订单状态 1：待支付  2：已付款，但未收到货  3：已收到货，待评价 4：彻底完成
 				status: 1,
 				curLocationId,
 				remarkVal,

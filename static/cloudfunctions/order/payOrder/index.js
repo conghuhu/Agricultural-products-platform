@@ -23,13 +23,19 @@ exports.main = async (event, context) => {
 		const orderDb = db.collection('order');
 		const goodOrderDb = db.collection('good-orders');
 		console.log(orderId);
-
+		
+		// 更新订单状态
 		const temp = await orderDb.doc(orderId).update({
 			data: {
 				updateTime: new Date(),
 				status: 2,
 			}
 		});
+		
+		// 扣除用户金额
+		
+		// 写入sale表，存好销量数据
+		
 
 		const {
 			data
