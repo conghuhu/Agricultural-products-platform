@@ -1,4 +1,4 @@
-<template>
+git<template>
 	<view class="fullScreen">
 		<view class="content" v-if="isNew">
 			<u-empty text="还没有个人商铺" mode="list">
