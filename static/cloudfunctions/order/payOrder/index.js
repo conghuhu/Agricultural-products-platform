@@ -22,8 +22,28 @@ exports.main = async (event, context) => {
 	try {
 		const orderDb = db.collection('order');
 		const goodOrderDb = db.collection('good-orders');
-		console.log(orderId);
-		
+
+		// doc获取的数据结构 .data就是数据
+		const isAbsent = await orderDb.doc(orderId).get();
+
+		const price = isAbsent.data.price;
+
+		const moneyBalance = await cloud.callFunction({
+			name: 'user',
+			data: {
+				type: 'getMoneyBalance',
+				target_openid: openid
+			}
+		});
+
+		if (price < moneyBalance.result.data) {
+			return {
+				sucess: false,
+				message: "支付失败，余额不足",
+				data: null
+			}
+		}
+
 		// 更新订单状态
 		const temp = await orderDb.doc(orderId).update({
 			data: {
@@ -31,11 +51,21 @@ exports.main = async (event, context) => {
 				status: 2,
 			}
 		});
-		
+
 		// 扣除用户金额
-		
+		await cloud.callFunction({
+			// 要调用的云函数名称
+			name: 'user',
+			// 传递给云函数的参数
+			data: {
+				type: 'decrementMoney',
+				openid: openid,
+				price: price
+			}
+		});
+
 		// 写入sale表，存好销量数据
-		
+
 
 		const {
 			data
