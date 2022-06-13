@@ -18,7 +18,7 @@ exports.main = async (event, context) => {
 
 	let res = {};
 	if (form._id != "") {
-		res = await userDb.where({
+		const data = await userDb.where({
 			_id: _.eq(form._id)
 		}).update({
 			data: {
@@ -33,7 +33,7 @@ exports.main = async (event, context) => {
 			}
 		})
 	} else {
-		res = await userDb.add({
+		const data = await userDb.add({
 			data: {
 				_openid: wxContext.OPENID,
 				adress: form.adress,
@@ -47,7 +47,11 @@ exports.main = async (event, context) => {
 		})
 	}
 
-	return {
-		res
-	};
+	res = {
+		success: true,
+		message: "",
+		data: data,
+	}
+	return
+	res;
 }
