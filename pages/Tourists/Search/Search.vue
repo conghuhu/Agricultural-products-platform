@@ -24,7 +24,7 @@
 						<view class="tag_content">
 							<u-tag text="榴莲" borderColor="transparent" type="info" mode="plain" shape="circle" />
 						</view>
-						<view class="tag_content">
+						<view class="tag_content" @click="selectTag">
 							<u-tag text="西瓜" type="error" mode="dark" shape="circle" />
 						</view>
 						<view class="tag_content">
@@ -95,10 +95,16 @@
 				})
 			}
 
+			const selectTag = () => {
+				keyword.value = "西瓜";
+				searchContent();
+			};
+
 			return {
 				search_btn_style,
 				searchContent,
-				keyword
+				keyword,
+				selectTag
 			}
 		}
 	}

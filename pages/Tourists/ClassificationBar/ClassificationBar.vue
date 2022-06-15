@@ -19,7 +19,7 @@
 							</view>
 							<view class="item-container">
 								<view class="thumb-box" v-for="(item1, index1) in item.foods" :key="index1">
-									<image class="item-menu-image" :src="item1.icon" mode="" @click="toPage(item1._id)">
+									<image class="item-menu-image" :src="item1.icon" mode="" @click="toPage(item1)">
 									</image>
 									<view class="item-menu-name">{{item1.name}}</view>
 								</view>
@@ -193,7 +193,7 @@
 			}
 			async function toPage(data) {
 				uni.navigateTo({
-					url: `/pages/Tourists/ShowGoodsList/ShowGoodsList?id=${data}`
+					url: `/pages/Tourists/ShowGoodsList/ShowGoodsList?id=${data._id}&name=${data.name}`
 				});
 			}
 			return {

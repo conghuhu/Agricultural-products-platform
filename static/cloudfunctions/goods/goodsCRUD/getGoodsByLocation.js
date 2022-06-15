@@ -17,23 +17,37 @@ exports.main = async (event, context) => {
 		latitude,
 		longitude
 	} = event;
-	const goodDb = db.collection('goods');
-	const _ = db.command;
-
-	const {
-		data
-	} = await goodDb.where({
-		location: _.geoNear({
-			geometry: db.Geo.Point(longitude, latitude)
-		})
-	}).get();
-
+	
 	let res = {};
-	res = {
-		sucess: true,
-		message: "",
-		data: data
+	
+	try{
+		const goodDb = db.collection('goods');
+		const _ = db.command;
+		
+		const {
+			data
+		} = await goodDb.where({
+			location: _.geoNear({
+				geometry: db.Geo.Point(longitude, latitude)
+			})
+		}).get();
+		
+		
+		res = {
+			sucess: true,
+			message: "",
+			data: data
+		}
+	}catch(e){
+		//TODO handle the exception
+		console.trace(e);
+		res = {
+			sucess: false,
+			message: "获取商品列表失败",
+			data: null
+		}
 	}
+
 
 	return res;
 }

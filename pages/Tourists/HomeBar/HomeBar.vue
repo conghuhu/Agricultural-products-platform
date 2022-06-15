@@ -68,19 +68,7 @@
 			<view class="today">
 				<text class="today_text">附近商品</text>
 			</view>
-			<view class="wrap">
-				<MyLoading v-if="goodListLoading" />
-				<view style="width: 100%;" v-else>
-					<u-waterfall v-model="flowList" ref="uWaterfall">
-						<template v-slot:left="{leftList}">
-							<GoodShowCard v-for="item in leftList" :key="item._id" :item="item" />
-						</template>
-						<template v-slot:right="{rightList}">
-							<GoodShowCard v-for="item in rightList" :key="item._id" :item="item" />
-						</template>
-					</u-waterfall>
-				</view>
-			</view>
+			<GoodList :flowList="flowList" :goodListLoading="goodListLoading" />
 		</view>
 
 		<view>
@@ -232,14 +220,20 @@
 					url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodId}`
 				})
 			}
-
+			
+			/**
+			 * 跳到分类界面
+			 * @param {Object} index
+			 */
 			const toClassification = async function(index) {
 				store.updateCurCategory(index);
 				uni.switchTab({
 					url: "/pages/Tourists/ClassificationBar/ClassificationBar"
 				})
 			}
-			
+			/**
+			 * 去搜索界面
+			 */
 			const toSearch = async function(){
 				uni.navigateTo({
 					url:"../Search/Search"
@@ -293,10 +287,6 @@
 			justify-content: center;
 			align-items: center;
 			margin-left: 26rpx;
-		}
-
-		.wrap {
-			width: 100%;
 		}
 
 		.u-close {
@@ -506,13 +496,6 @@
 			height: 0;
 		}
 
-		.wrap {
-			padding: 20rpx;
-			padding-top: 0rpx;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
 
 		.badge-icon {
 			position: absolute;

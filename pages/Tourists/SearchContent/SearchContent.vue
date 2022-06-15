@@ -1,8 +1,8 @@
 <template>
 	<view class="fullScreen">
-		<Nav title="查询结果" :isBack="true"></Nav>
+		<Nav :title="title" :isBack="true"></Nav>
 		<view class="content">
-
+			<GoodList :flowList="goodList" :goodListLoading="goodListLoading" />
 		</view>
 	</view>
 </template>
@@ -12,16 +12,23 @@
 		ref,
 		reactive
 	} from 'vue';
+	import request from '@/api/request';
 	export default {
 		setup() {
 			const keywords = reactive([]);
+			const goodList = reactive([]);
+			const goodListLoading = ref(true);
+			const title = ref('查询结果');
 
 			return {
-				keywords
+				keywords,
+				goodList,
+				goodListLoading,
+				title
 			}
 		},
 		async onLoad(option) {
-			console.log(option.keyword);
+			this.title = option.keyword;
 			this.keywords.length = 0;
 			try {
 				const res = await wx.serviceMarket.invokeService({
@@ -32,10 +39,35 @@
 					},
 				});
 				console.log('invokeService success', res)
-				res.data.entities.product.forEach(item => {
-					this.keywords.push([item[0],item[1]]);
+				if (res.data.entities.product) {
+					res.data.entities.product.forEach(item => {
+						this.keywords.push([item[0], item[1]]);
+					});
+				} else {
+					this.keywords.push([option.keyword, 'name']);
+				}
+
+				let keyword = "";
+				for (let i = 0; i < this.keywords.length; i++) {
+					const item = this.keywords[i];
+					if (item[1] == "name") {
+						keyword = item[0];
+						break;
+					}
+				}
+				const {
+					data: list
+				} = await request('goods', {
+					type: 'getGoodsByKeyword',
+					keyword: keyword,
+					priceOrder: 'asc'
+				})
+				this.goodList.length = 0;
+				list.forEach(item => {
+					this.goodList.push(item);
 				});
-				console.log(this.keywords);
+				this.goodListLoading = false;
+				console.log(list);
 			} catch (e) {
 				console.trace(e);
 			}
