@@ -280,12 +280,12 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F3F3F3;
+		background-color: $background-color;
 		position: relative;
 		font-size: 32rpx;
 
 		.content {
-			background-color: #F3F3F3;
+			background-color: $background-color;
 		}
 
 		.location_group {
@@ -336,26 +336,26 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			padding-top: 20rpx;
-			padding-bottom: 20rpx;
+			padding-top: 16rpx;
+			padding-bottom: 16rpx;
 
 			.search {
-				width: 80vw;
-				height: 12vw;
+				width: 94vw;
+				height: 11vw;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				padding: 10rpx;
-				border-radius: 4px;
+				padding: 16rpx;
+				border-radius: 24rpx;
 				background: #F9FAFB;
 				box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.03);
-				padding-left: 20rpx;
-				padding-right: 20rpx;
+				padding-left: 24rpx;
+				padding-right: 24rpx;
 
 
 				.text {
 					font-family: SourceHanSansCN-ExtraLight;
-					font-size: 32rpx;
+					font-size: 30rpx;
 					font-weight: 500;
 					line-height: 32rpx;
 					letter-spacing: 0px;
