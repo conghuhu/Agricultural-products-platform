@@ -8,18 +8,18 @@ const db = cloud.database();
 // 云函数入口函数
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
-	
-	const goodDb = db.collection('goods');
+
+
 	const _ = db.command;
-	
+
 	const {
 		form
 	} = event;
 
-	const shopDb = db.collection('shops');
-
 	let res = {};
 	try {
+		const goodDb = db.collection('goods');
+		const shopDb = db.collection('shops');
 		const {
 			data: shopData
 		} = await shopDb.where({
@@ -40,6 +40,7 @@ exports.main = async (event, context) => {
 				createTime: new Date(),
 				updateTime: new Date(),
 				status: true,
+				goodPrice: Number(form.goodPrice),
 				_openid: wxContext.OPENID,
 				location: db.Geo.Point(form.location[0], form.location[1])
 			}

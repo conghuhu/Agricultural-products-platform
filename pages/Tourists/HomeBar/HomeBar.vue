@@ -68,19 +68,7 @@
 			<view class="today">
 				<text class="today_text">附近商品</text>
 			</view>
-			<view class="wrap">
-				<MyLoading v-if="goodListLoading" />
-				<view style="width: 100%;" v-else>
-					<u-waterfall v-model="flowList" ref="uWaterfall">
-						<template v-slot:left="{leftList}">
-							<GoodShowCard v-for="item in leftList" :key="item._id" :item="item" />
-						</template>
-						<template v-slot:right="{rightList}">
-							<GoodShowCard v-for="item in rightList" :key="item._id" :item="item" />
-						</template>
-					</u-waterfall>
-				</view>
-			</view>
+			<GoodList :flowList="flowList" :goodListLoading="goodListLoading" />
 		</view>
 
 		<view>
@@ -232,14 +220,20 @@
 					url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodId}`
 				})
 			}
-
+			
+			/**
+			 * 跳到分类界面
+			 * @param {Object} index
+			 */
 			const toClassification = async function(index) {
 				store.updateCurCategory(index);
 				uni.switchTab({
 					url: "/pages/Tourists/ClassificationBar/ClassificationBar"
 				})
 			}
-			
+			/**
+			 * 去搜索界面
+			 */
 			const toSearch = async function(){
 				uni.navigateTo({
 					url:"../Search/Search"
@@ -280,12 +274,12 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F3F3F3;
+		background-color: $background-color;
 		position: relative;
 		font-size: 32rpx;
 
 		.content {
-			background-color: #F3F3F3;
+			background-color: $background-color;
 		}
 
 		.location_group {
@@ -293,10 +287,6 @@
 			justify-content: center;
 			align-items: center;
 			margin-left: 26rpx;
-		}
-
-		.wrap {
-			width: 100%;
 		}
 
 		.u-close {
@@ -336,26 +326,26 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			padding-top: 20rpx;
-			padding-bottom: 20rpx;
+			padding-top: 16rpx;
+			padding-bottom: 16rpx;
 
 			.search {
-				width: 80vw;
-				height: 12vw;
+				width: 94vw;
+				height: 11vw;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				padding: 10rpx;
-				border-radius: 4px;
+				padding: 16rpx;
+				border-radius: 24rpx;
 				background: #F9FAFB;
 				box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.03);
-				padding-left: 20rpx;
-				padding-right: 20rpx;
+				padding-left: 24rpx;
+				padding-right: 24rpx;
 
 
 				.text {
 					font-family: SourceHanSansCN-ExtraLight;
-					font-size: 32rpx;
+					font-size: 30rpx;
 					font-weight: 500;
 					line-height: 32rpx;
 					letter-spacing: 0px;
@@ -506,13 +496,6 @@
 			height: 0;
 		}
 
-		.wrap {
-			padding: 20rpx;
-			padding-top: 0rpx;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
 
 		.badge-icon {
 			position: absolute;

@@ -11,8 +11,10 @@
 					shape="circle">新增地址</u-button>
 			</view>
 		</view>
+		
 		<view class="content">
-			<view v-for="(res, index) in infoAddress" :key="res._id">
+			<MyLoading v-if="loading" />
+			<view v-else v-for="(res, index) in infoAddress" :key="res._id">
 				<view class="item" @click="goToHome(res)">
 					<view class="top">
 						<view class="name">{{ res.consignee }}</view>
@@ -59,7 +61,8 @@
 		setup() {
 			const user = userStore();
 			//tabbar
-			const list = reactive(navList)
+			const list = reactive(navList);
+			const loading = ref(true);
 			async function rightClick() {
 				uni.navigateBack({})
 			}
@@ -98,20 +101,17 @@
 				width: '160rpx'
 			});
 
-
 			//删除用户地址信息
 			const sheetList = ref([{
 				text: '确定',
 				color: 'red',
 				fontSize: 28
-			}])
-			const listShow = ref(false)
-			const temp = ref("")
+			}]);
+			const listShow = ref(false);
+			const temp = ref("");
 			async function deleteAdress(index) {
-				listShow.value = true
-				temp.value = infoAddress[index]._id
-				console.log(temp.value)
-
+				listShow.value = true;
+				temp.value = infoAddress[index]._id;
 			}
 			async function confirmDel(index) {
 				if (index === 0) {
@@ -121,12 +121,11 @@
 					});
 					uni.redirectTo({
 						url: "../Location/Location"
-					})
+					});
 				}
 			}
-
+			
 			const goToHome = (item) => {
-				console.log(item)
 				user.updateLocationInfo(item.adress, item.locationArr.coordinates[1], item.locationArr.coordinates[
 					0]);
 				user.updateLocationId(item._id);
@@ -146,23 +145,23 @@
 				listShow,
 				confirmDel,
 				btnStyle,
-				goToHome
+				goToHome,
+				loading
 			}
 		},
 		async onShow() {
+			this.loading = true;
 			const temp: {
 				res: Array < any >
 			} = await request("touristInfo", {
 				type: "getAddress"
-			})
+			});
 			this.infoAddress.length = 0;
 			temp.res.forEach(item => {
 				this.infoAddress.push(item);
-
-			})
+			});
+			this.loading = false;
 		}
-
-
 
 	}
 </script>

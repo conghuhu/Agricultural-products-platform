@@ -209,6 +209,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/Tourists/SearchContent/SearchContent",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
     ],
 
 	"globalStyle": {

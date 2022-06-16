@@ -11,6 +11,10 @@ exports.main = async (event, context) => {
 
 	const openid = wxContext.OPENID;
 
+	const {
+		target_openid
+	} = event;
+
 	let res = {};
 
 	const _ = db.command;
@@ -18,7 +22,7 @@ exports.main = async (event, context) => {
 	try {
 		const userDb = db.collection('users');
 		const temp = await userDb.where({
-			_openid: openid
+			_openid: openid || target_openid,
 		}).get();
 
 		res = {

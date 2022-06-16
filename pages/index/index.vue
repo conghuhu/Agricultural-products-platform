@@ -2,11 +2,12 @@
 	<view class="content">
 		<view v-show="!loading">
 			<video class="video_back" objectFit="cover" :controls="false" :autoplay="true" :loop="true" :muted="true"
+				@loadedmetadata="loadedmetadata"
 				src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/back.mp4?sign=4d164a9b2c6a6b1d384eb48b89a8a212&t=1653992455"></video>
 
 			<view class="logo">
 				<u-image width="600rpx" mode="aspectFit" height="600rpx"
-					src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E4%B9%A1%E6%9D%91%E6%8C%AF%E5%85%B4.png?sign=dec378640f98a169e7c8937bc31268aa&t=1653992588">
+					src="/static/images/logo.png">
 				</u-image>
 			</view>
 			<view v-if="!mask" class="action">
@@ -92,6 +93,10 @@
 					url: "/pages/Tourists/HomeBar/HomeBar"
 				})
 			}
+
+			const loadedmetadata = (e) => {
+				console.log(e.detail)
+			};
 			return {
 				user,
 				loading,
@@ -99,7 +104,8 @@
 				touristLogin,
 				touristStyle,
 				merChantStyle,
-				mask
+				mask,
+				loadedmetadata
 			}
 		},
 		async onLoad() {
