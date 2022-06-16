@@ -1,14 +1,9 @@
 <template>
 	<Nav title="聊天室" :isBack="true"></Nav>
 	<view class="content">
-		<!-- 聊天渲染列表 -->
-		<view style="height: 100vh;" @click='touchend'>
-			<view v-for="item in newsList" :key="item">
-				<text v-if="item.text">{{item.text}}</text>
-				<image v-if="item.img" :src="item.img" mode="scaleToFill" class="touch-active" />
-				<video v-if="item.video" :src="item.video"></video>
-			</view>
-		</view>
+		<scroll-view class="cu-chat">
+			
+		</scroll-view>
 		<!-- 底部输入 -->
 		<view class="input-box" :class="{ 'input-box-mpInputMargin': mpInputMargin }">
 			<view class="input-box-flex">
@@ -21,18 +16,9 @@
 				<!-- 选择表情包 -->
 				<image class=" icon_btn_add" src="./static/images/kefu.png"  @click="exprec"></image>
 				<!-- 发送消息按钮 -->
-				<text class="send-out iconfont icon-fasong" @click="sendout" v-if="formData.content!==''"></text>
+				<u-button type="primary" v-if="formData.content!==''">发送</u-button>
+				<!-- <button class="send-out iconfont icon-fasong"  @click="sendout" v-if="formData.content!==''"></button> -->
 				<!-- 弹出拍照-->
-			</view>
-			<!-- 弹出拍照-->
-			<view class="fun-box" :class="{'show-fun-box':showFunBtn}">
-				<u-grid :col="4" hover-class="contentType2-hover-class" :border="false">
-					<u-grid-item v-for="(item, index) in funList" @click.stop="clickGrid(index)" :index="index"
-						:key="index" bg-color="#f3f3f3">
-						<u-icon :name="item.icon" :size="52"></u-icon>
-						<view class="grid-text">{{ item.title }}</view>
-					</u-grid-item>
-				</u-grid>
 			</view>
 			<!-- 弹出常用聊天 -->
 			<view class="fun-box1" :class="{'show-fun-box':showOften}">
