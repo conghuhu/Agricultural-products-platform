@@ -24,7 +24,8 @@ exports.main = async (event, context) => {
 
 		const ans = await goodDb.doc(goodId).update({
 			data: {
-				...form
+				...form,
+				goodPrice: Number(form.goodPrice)
 			}
 		})
 

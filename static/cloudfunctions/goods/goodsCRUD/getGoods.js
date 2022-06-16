@@ -16,22 +16,33 @@ exports.main = async (event, context) => {
 	const {
 		shopId
 	} = event;
-	const goodDb = db.collection('goods');
-	const _ = db.command;
-
-	const {
-		data
-	} = await goodDb.where({
-			shopId: _.eq(shopId),
-			status: true
-		}).orderBy('createTime', 'desc')
-		.get();
-
 	let res = {};
-	res = {
-		sucess: true,
-		message: "",
-		data: data
+	try {
+		const goodDb = db.collection('goods');
+		const _ = db.command;
+
+		const {
+			data
+		} = await goodDb.where({
+				shopId: _.eq(shopId),
+				status: true
+			}).orderBy('createTime', 'desc')
+			.get();
+
+		
+		res = {
+			sucess: true,
+			message: "",
+			data: data
+		}
+	} catch (e) {
+		//TODO handle the exception
+		console.trace(e);
+		res = {
+			sucess: false,
+			message: "获取商品列表失败",
+			data: null
+		}
 	}
 
 	return res;
