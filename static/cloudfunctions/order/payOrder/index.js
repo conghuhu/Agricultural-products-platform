@@ -22,7 +22,7 @@ exports.main = async (event, context) => {
 	try {
 		const orderDb = db.collection('order');
 		const goodOrderDb = db.collection('good-orders');
-
+        const saleDb = db.collection('sales');
 		// doc获取的数据结构 .data就是数据
 		const isAbsent = await orderDb.doc(orderId).get();
 
@@ -36,7 +36,7 @@ exports.main = async (event, context) => {
 			}
 		});
 
-		if (price < moneyBalance.result.data) {
+		if (price > moneyBalance.result.data) {
 			return {
 				sucess: false,
 				message: "支付失败，余额不足",
@@ -65,7 +65,28 @@ exports.main = async (event, context) => {
 		});
 
 		// 写入sale表，存好销量数据
-
+		const goodList = isAbsent.data.goodList;
+		const createTime = isAbsent.data.createTime;
+        for(let i = 0; i < goodList.length; i++){
+			const goodId = goodList[i];
+			// console.log("------");
+			// console.log(goodId);
+			await cloud.callFunction({
+				name: 'sale',
+				data: {
+					type: 'addSale',
+					goodId: goodId,
+					createTime: createTime
+				}
+			})
+			// db.collection('sales').add({
+			// 	  data: {
+			// 	    // _id可选自定义 _id，在此处场景下用数据库自动分配的就可以了
+			// 	    goodId: goodId,
+			// 	    createTime: createTime
+			// 	  }
+			// })
+		}
 
 		const {
 			data
