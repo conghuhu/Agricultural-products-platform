@@ -95,8 +95,10 @@ exports.main = async (event, context) => {
 
 		// TODO 更新各个子订单的状态,并通知对应的商家
 		for (let i = 0; i < data.goodList.length; i++) {
-			const item = data.goodList[i];
-			goodOrderDb.doc(item).update({
+			const goodId = data.goodList[i][0];
+			goodOrderDb.where({
+				goodId: _.eq(goodId)
+			}).update({
 				data: {
 					updateTime: new Date(),
 					status: 2,

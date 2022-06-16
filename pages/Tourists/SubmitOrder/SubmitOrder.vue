@@ -223,11 +223,17 @@
 				uni.showLoading({
 					title: "去支付"
 				})
+				console.log(wantList);
 				const res = await request('order', {
 					type: 'createOrder',
 					curLocationId: curLocationVal._id,
 					remarkVal: remarkVal.value,
-					goodList: wantList.map(item => item.goodInfo[0]),
+					goodList: wantList.map(item => {
+						return {
+							...item.goodInfo[0],
+							count: item.count
+						}
+					}),
 					wantList: wantList.map(item => item._id),
 					price: totalPrice.value
 				});

@@ -35,7 +35,14 @@ exports.main = async (event, context) => {
 				status: 1,
 				curLocationId,
 				remarkVal,
-				goodList: goodList.map(item => item._id),
+				goodList: goodList.map(item => {
+					// [goodId,数量，单价]
+					return [
+						item._id,
+						item.count,
+						item.goodPrice
+					]
+				}),
 				price,
 				_openid: openid
 			}
@@ -67,12 +74,12 @@ exports.main = async (event, context) => {
 					// 消费者id
 					_openid: openid,
 					shopId: item.shopId,
+					count: item.count
 				}
 			});
 			goodOrderIdList.push(goodOrderRes._id);
-			console.log(goodOrderIdList)
 		}
-		
+
 		// 4.开启15分钟定时器，时间到未付款，取消订单
 		cloud.callFunction({
 			// 要调用的云函数名称
