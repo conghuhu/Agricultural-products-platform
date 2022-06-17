@@ -215,7 +215,8 @@
 				status: true,
 				unit: "",
 				_id: "",
-				description: ""
+				description: "",
+				_openid:""
 			})
 			const count = computed(() => {
 				const exist = wantingGoods.value.has(goodInfo._id);
@@ -227,7 +228,7 @@
 			});
 			const tokefu = async function() {
 				uni.navigateTo({
-					url: "/pages/Tourists/ChatRoom/ChatRoom"
+					url: `/pages/Tourists/ChatRoom/ChatRoom?m_openId=${goodInfo._openid}`
 				})
 			}
 			/**
