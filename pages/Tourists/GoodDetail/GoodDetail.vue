@@ -155,14 +155,17 @@
 			</view>
 		</view>
 		<view class="bottom_info">
-			<view class="info_left" @click="tokefu">
-				<u-image width="100%" mode="aspectFit" height="20px" src="./static/images/kefu.png"></u-image>
-			</view>
 			<view class="info_left">
-				<u-image width="100%" mode="aspectFit" height="20px" src="./static/images/shoppingCart.png"></u-image>
+				<view class="item" @click="tokefu">
+					<u-image width="100%" mode="aspectFit" height="20px" src="./static/images/kefu.png"></u-image>
+				</view>
+				<view class="item">
+					<u-image width="100%" mode="aspectFit" height="20px" src="./static/images/shoppingCart.png"></u-image>
+					<u-badge type="error" :count="navList[3].count" :isCenter="true"></u-badge>
+				</view>
 			</view>
 			<view class="info_right">
-				<u-button shape="circle" type="success">+加入购物车</u-button>
+				<u-button shape="circle" type="success" @click="addToWant">+ 加入购物车</u-button>
 			</view>
 		</view>
 	</view>
@@ -171,11 +174,24 @@
 <script lang="ts">
 	import {
 		ref,
-		reactive
+		reactive,
+		computed
 	} from 'vue'
 	import request from '@/api/request';
+	import {
+		userStore
+	} from '@/stores/user';
+	import {
+		storeToRefs
+	} from 'pinia';
+	import navList from '@/pages/Tourists/utils/navList';
 	export default {
 		setup() {
+			const user = userStore();
+			const {
+				wantingGoods
+			} = storeToRefs(user);
+
 			const goodId = ref('');
 			// 货物信息
 			const goodInfo = reactive({
@@ -201,29 +217,36 @@
 				_id: "",
 				description: ""
 			})
-			const warpList = reactive([{
-					image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-					title: '昨夜星辰昨夜风，画楼西畔桂堂东'
-				},
-				{
-					image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-					title: '身无彩凤双飞翼，心有灵犀一点通'
-				},
-				{
-					image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
-					title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
-				},
-			])
+			const count = computed(() => {
+				const exist = wantingGoods.value.has(goodInfo._id);
+				if (exist) {
+					return wantingGoods.value.get(goodInfo._id);
+				} else {
+					return 0;
+				}
+			});
 			const tokefu = async function() {
 				uni.navigateTo({
 					url: "/pages/Tourists/ChatRoom/ChatRoom"
 				})
 			}
+			/**
+			 * 添加想要
+			 */
+			const addToWant = async (e) => {
+				user.incrementWantedGood(goodInfo._id);
+				const res = await request('wanted', {
+					type: 'addWanted',
+					goodId: goodInfo._id,
+					count: count.value
+				});
+			};
 			return {
 				goodId,
 				goodInfo,
-				warpList,
-				tokefu
+				tokefu,
+				addToWant,
+				navList
 			}
 		},
 		async onLoad(option) {
@@ -616,17 +639,25 @@
 			height: 120rpx;
 			background-color: #F2F4F7;
 			display: flex;
+			align-items: center;
 
 			.info_left {
-				flex: 3;
-				margin-top: 40rpx;
-
+				flex: 5;
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				padding-left: 20rpx;
+				.item{
+					width: 60rpx;
+					margin-left: 30rpx;
+					position: relative;
+				}
 			}
 
 			.info_right {
-				flex: 7;
+				flex: 8;
 				padding-right: 20rpx;
-				margin-top: 20rpx;
 			}
 		}
 	}

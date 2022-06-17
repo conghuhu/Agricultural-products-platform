@@ -93,14 +93,14 @@ exports.main = async (event, context) => {
 		});
 
 		res = {
-			sucess: true,
+			success: true,
 			message: "下单成功",
 			data: addRes._id
 		}
 	} catch (e) {
 		console.trace(e);
 		res = {
-			sucess: false,
+			success: false,
 			message: "下单失败",
 			data: e
 		}
