@@ -2,7 +2,8 @@
 	<view class="fullScreen">
 		<Nav title="分类"></Nav>
 		<view class="u-wrap">
-			<view class="u-menu-wrap">
+			<MyLoading v-if="loading" />
+			<view v-else class="u-menu-wrap">
 				<scroll-view scroll-y scroll-with-animation class="u-tab-view menu-scroll-view" :scroll-top="scrollTop"
 					:scroll-into-view="itemId">
 					<view v-for="(item,index) in tabbar" :key="index" class="u-tab-item"
@@ -29,9 +30,7 @@
 				</scroll-view>
 			</view>
 		</view>
-		<view>
-			<u-tabbar :list="list" :mid-button="true"></u-tabbar>
-		</view>
+		<u-tabbar :list="list" :mid-button="true"></u-tabbar>
 	</view>
 </template>
 
@@ -57,6 +56,7 @@
 			const {
 				currentCategory
 			} = storeToRefs(store);
+			const loading = ref(true);
 			const list = reactive(navList)
 			const current = ref(0)
 			const arr = reactive([]);
@@ -88,8 +88,6 @@
 					current.value = index;
 					leftMenuStatus(index);
 				})
-
-
 			}
 			// 获取一个目标元素的高度
 			async function getElRect(elClass, dataVal) {
@@ -218,12 +216,14 @@
 				obj,
 				getAllGoods,
 				toPage,
-				currentCategory
+				currentCategory,
+				loading
 			}
 		},
 
 		async onLoad() {
 			await this.getAllGoods();
+			this.loading = false;
 			await this.getMenuItemTop();
 			this.swichMenu(this.currentCategory);
 		},

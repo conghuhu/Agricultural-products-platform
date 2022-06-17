@@ -72,10 +72,10 @@
 			});
 
 			const goToDetail = async (item) => {
-				// uni.navigateTo({
-				// 	url: `/pages/Merchants/GoodDetail/GoodDetail?goodId=${item._id}`
-				// })
-				console.log(item);
+				const goodId = item._id;
+				uni.navigateTo({
+					url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodId}`
+				})
 			};
 
 			/**

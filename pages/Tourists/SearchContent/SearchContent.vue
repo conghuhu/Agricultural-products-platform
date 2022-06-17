@@ -55,6 +55,10 @@
 						break;
 					}
 				}
+				// 如果nlp接口无值，直接取用户输入的东西
+				if (keyword == '' || keyword == null) {
+					keyword = res.data.preprocessed_text;
+				}
 				const {
 					data: list
 				} = await request('goods', {
@@ -62,12 +66,17 @@
 					keyword: keyword,
 					priceOrder: 'asc'
 				})
-				this.goodList.length = 0;
-				list.forEach(item => {
-					this.goodList.push(item);
+				request('recommend', {
+					type: 'addHotWord',
+					keyword: keyword,
 				});
+				if (list) {
+					this.goodList.length = 0;
+					list.forEach(item => {
+						this.goodList.push(item);
+					});
+				}
 				this.goodListLoading = false;
-				console.log(list);
 			} catch (e) {
 				console.trace(e);
 			}

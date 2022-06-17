@@ -215,10 +215,11 @@
 			 * 跳转至该商品详情页
 			 */
 			const gotoGoodDetail = (item) => {
-				const goodId = "b69f67c06281bcfa02f3ffff249f0611";
-				uni.navigateTo({
-					url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodId}`
-				})
+				console.log(item);
+				// const goodId = "b69f67c06281bcfa02f3ffff249f0611";
+				// uni.navigateTo({
+				// 	url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodId}`
+				// })
 			}
 			
 			/**

@@ -36,6 +36,7 @@
 						</view>
 					</u-checkbox>
 				</view>
+
 				<view style="height: 60vh;" v-else>
 					<u-empty text="购物车为空" mode="car"></u-empty>
 				</view>
@@ -87,6 +88,7 @@
 			const list = reactive(navList)
 			const wantList = reactive([]);
 			const loading = ref(true);
+
 			/**
 			 * 所选商品总计
 			 */
@@ -137,7 +139,10 @@
 				});
 				wantList.length = 0;
 				res.data.forEach(item => {
-					wantList.push(item);
+					wantList.push({
+						...item,
+						show: false
+					});
 				});
 				loading.value = false;
 			}
@@ -165,6 +170,7 @@
 					url: '/pages/Tourists/SubmitOrder/SubmitOrder'
 				});
 			};
+
 			return {
 				list,
 				wantList,
@@ -174,7 +180,7 @@
 				loading,
 				refresh,
 				totalPrice,
-				gotoSubmitOrder
+				gotoSubmitOrder,
 			}
 		},
 		async onShow() {
