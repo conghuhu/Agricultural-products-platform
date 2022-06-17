@@ -48,7 +48,7 @@
 				type: [Boolean, String],
 				default: false
 			},
-			// 标签的大小，分为default（默认），mini（较小）
+			// 标签的大小，分为default（默认），mini（较小）,large(较大)
 			size: {
 				type: String,
 				default: 'default'
@@ -169,6 +169,11 @@
 		display: inline-block;
 		/* #endif */
 		line-height: 1;
+	}
+	
+	.u-size-large {
+		font-size: 28rpx;
+		padding: 14rpx 24rpx;
 	}
 	
 	.u-size-default {

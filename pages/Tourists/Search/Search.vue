@@ -11,64 +11,40 @@
 					<u-button :custom-style="search_btn_style" type="primary" @click="searchContent">搜索</u-button>
 				</view>
 			</view>
-			<view class="search_found">
-				<view class="content">搜索发现</view>
-				<view class="tag">
-					<view class="tag_top">
-						<view class="tag_content">
-							<u-tag text="旺仔" type="error" mode="dark" shape="circle" />
-						</view>
-						<view class="tag_content">
-							<u-tag text="粽子" type="error" mode="dark" shape="circle" />
-						</view>
-						<view class="tag_content">
-							<u-tag text="榴莲" borderColor="transparent" type="info" mode="plain" shape="circle" />
-						</view>
-						<view class="tag_content" @click="selectTag">
-							<u-tag text="西瓜" type="error" mode="dark" shape="circle" />
-						</view>
-						<view class="tag_content">
-							<u-tag text="鸡蛋" borderColor="transparent" type="info" mode="plain" shape="circle" />
-						</view>
-					</view>
-					<view class="tage_bottom">
-						<view class="tag_content">
-							<u-tag text="豆腐" type="error" mode="dark" shape="circle" />
-						</view>
-						<view class="tag_content">
-							<u-tag text="啤酒" borderColor="transparent" type="info" mode="plain" shape="circle" />
-						</view>
-						<view class="tag_content">
-							<u-tag text="水" borderColor="transparent" type="info" mode="plain" shape="circle" />
-						</view>
-						<view class="tag_content">
-							<u-tag text="面条" borderColor="transparent" type="info" mode="plain" shape="circle" />
-						</view>
-						<view class="tag_content">
-							<u-tag text="玉米" borderColor="transparent" type="info" mode="plain" shape="circle" />
+			<MyLoading v-if="loading" />
+			<block v-else>
+				<view class="search_found">
+					<view class="content">搜索发现</view>
+					<view class="tag">
+						<view class="tag_content" v-for="(item,index) in recommendWords" :key="item._id">
+							<u-tag size="large" v-if="item.count > 5" :text="item.keyword" @click="selectTag(item.keyword)"
+								type="error" mode="dark" shape="circle" />
+							<u-tag size="large" v-else :text="item.keyword" @click="selectTag(item.keyword)"
+								borderColor="transparent" type="info" mode="plain" shape="circle" />
 						</view>
 					</view>
 				</view>
-			</view>
-			<view class="card">
-				<view class="card_top">
-					<view class="top_left">商品热卖榜</view>
-					<view class="top_right">全部></view>
-				</view>
-				<view class="card_content">
-					<view class="content_info">
-						<view class="info_image">
-							<u-image width="100%" mode="widthFix" height="80px"
-								src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/categoryItem/%E7%95%AA%E8%8C%84.png?sign=a4138baa8d9412d42351c075c5151389&t=1654133092">
-							</u-image>
-						</view>
-						<view class="info_right">
-							<view class="right_top">蔬菜热卖榜</view>
-							<view class="right_bottom">热卖指数92.5</view>
+				<view class="card">
+					<view class="card_top">
+						<view class="top_left">商品热卖榜</view>
+						<view class="top_right">全部></view>
+					</view>
+					<view class="card_content">
+						<view class="content_info">
+							<view class="info_image">
+								<u-image width="100%" mode="widthFix" height="80px"
+									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/categoryItem/%E7%95%AA%E8%8C%84.png?sign=a4138baa8d9412d42351c075c5151389&t=1654133092">
+								</u-image>
+							</view>
+							<view class="info_right">
+								<view class="right_top">蔬菜热卖榜</view>
+								<view class="right_bottom">热卖指数92.5</view>
+							</view>
 						</view>
 					</view>
 				</view>
-			</view>
+			</block>
+
 		</view>
 
 
@@ -80,6 +56,7 @@
 		ref,
 		reactive
 	} from 'vue';
+	import request from '@/api/request';
 	export default {
 		setup() {
 			const search_btn_style = ref({
@@ -89,14 +66,18 @@
 
 			const keyword = ref('');
 
+			const recommendWords = reactive([]);
+
+			const loading = ref(true);
+
 			const searchContent = () => {
 				uni.navigateTo({
 					url: `/pages/Tourists/SearchContent/SearchContent?keyword=${keyword.value}`
 				})
 			}
 
-			const selectTag = () => {
-				keyword.value = "西瓜";
+			const selectTag = (value) => {
+				keyword.value = value;
 				searchContent();
 			};
 
@@ -104,8 +85,20 @@
 				search_btn_style,
 				searchContent,
 				keyword,
-				selectTag
+				selectTag,
+				recommendWords,
+				loading
 			}
+		},
+		async onLoad(option) {
+			const res = await request('recommend', {
+				type: 'getHotwords'
+			});
+			this.recommendWords.length = 0;
+			res.data.forEach(item => {
+				this.recommendWords.push(item);
+			});
+			this.loading = false;
 		}
 	}
 </script>
@@ -155,26 +148,13 @@
 			.tag {
 				display: flex;
 				margin-top: 20rpx;
-				flex-direction: column;
+				flex-wrap: wrap;
 
-				.tag_top {
-					display: flex;
-
-					.tag_content {
-						margin-left: 20rpx;
-					}
+				.tag_content {
+					margin-left: 10rpx;
+					margin-right: 10rpx;
+					margin-bottom: 20rpx;
 				}
-
-				.tage_bottom {
-					display: flex;
-					margin-top: 20rpx;
-
-					.tag_content {
-						margin-left: 20rpx;
-					}
-				}
-
-
 			}
 		}
 
