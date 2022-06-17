@@ -68,15 +68,24 @@ exports.main = async (event, context) => {
 		const goodList = isAbsent.data.goodList;
 		const createTime = isAbsent.data.createTime;
         for(let i = 0; i < goodList.length; i++){
-			const goodId = goodList[i];
+			const goodSubList = goodList[i];
 			// console.log("------");
 			// console.log(goodId);
+            const goodId = goodSubList[0];
+			const goodNums = goodSubList[1];
+			const goodPrice = goodSubList[2];
+			const goodTotalPrice = goodPrice*goodNums;
+			console.log(goodId);
+			console.log(goodNums);
+			console.log(goodTotalPrice);
 			await cloud.callFunction({
 				name: 'sale',
 				data: {
 					type: 'addSale',
 					goodId: goodId,
-					createTime: createTime
+					createTime: createTime,
+					goodNums: goodNums,
+					goodTotalPrice: goodTotalPrice
 				}
 			})
 			// db.collection('sales').add({

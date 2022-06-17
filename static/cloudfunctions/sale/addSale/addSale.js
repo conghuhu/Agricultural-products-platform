@@ -13,15 +13,18 @@ exports.main = async (event, context) => {
 	const _ = db.command;
 	
 	const {
-		goodId,createTime
+		goodId,createTime,goodNums,goodTotalPrice
 	} = event;
 
-
+    console.log(goodId);
+	console.log(goodNums);
 	try {
 		const temp = await goodDb.add({
 			data: {
 				goodId: goodId,
-				createTime: createTime
+				createTime: createTime,
+				goodNums: goodNums,
+				goodTotalPrice: goodTotalPrice
 			}
 		})
 		res = {
