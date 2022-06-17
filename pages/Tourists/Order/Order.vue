@@ -2,14 +2,17 @@
 	<view class="fullScreen">
 		<Nav title="订单" :isBack="true" />
 		<view class="wrap">
-			<view class="u-tabs-box">
-				<u-tabs-swiper activeColor="#4CC818" ref="tabs" :list="list" :current="current" @change="change"
-					:is-scroll="false" swiperWidth="750"></u-tabs-swiper>
-			</view>
-			<view v-show="loading">
+			<view v-if="loading">
 				<MyLoading />
 			</view>
-			<view :style="loading ? 'display: none;' :'height:100%'">
+
+			<block v-else>
+				<view class="u-tabs-box">
+					<u-tabs-swiper activeColor="#4CC818" ref="tabs" :list="list" :current="current" @change="change"
+						:is-scroll="false" swiperWidth="750"></u-tabs-swiper>
+				</view>
+
+
 				<swiper class="swiper-box" :current="swiperCurrent" @transition="transition"
 					@animationfinish="animationfinish">
 					<swiper-item class="swiper-item">
@@ -252,7 +255,10 @@
 						</scroll-view>
 					</swiper-item>
 				</swiper>
-			</view>
+
+			</block>
+
+
 		</view>
 	</view>
 </template>
@@ -314,12 +320,12 @@
 
 			const reachBottom = () => {
 				// 此tab为空数据
-				if (current.value != 2) {
-					loadStatus.splice(current.value, 1, "loading")
-					setTimeout(() => {
-						getOrderList(current.value);
-					}, 1200);
-				}
+				// if (current.value != 2) {
+				// 	loadStatus.splice(current.value, 1, "loading")
+				// 	setTimeout(() => {
+				// 		getOrderList(current.value);
+				// 	}, 1200);
+				// }
 			};
 
 			// 获取某页面数据
@@ -327,7 +333,7 @@
 				// dataList.forEach(item => {
 				// 	orderList[idx].push(item);
 				// })
-				loadStatus.splice(current.value, 1, "loadmore")
+				// loadStatus.splice(current.value, 1, "loadmore")
 			};
 
 			// 总价
@@ -349,18 +355,28 @@
 			// tab栏切换
 			const change = (index) => {
 				swiperCurrent.value = index;
-				getOrderList(index);
+				// getOrderList(index);
 			};
+
+			const initDx = ref(false);
 
 			const transition = ({
 				detail: {
 					dx
 				}
 			}) => {
-				tabs.value.setDx(dx);
+				if (!initDx.value) {
+					const val = dx - 375 * current.value;
+					tabs.value.setDx(val);
+				} else {
+					tabs.value.setDx(dx);
+				}
 			};
 			const animationfinish = (e) => {
 				const detail = e.detail;
+				if (!initDx.value) {
+					initDx.value = true;
+				}
 				tabs.value.setFinishCurrent(detail.current);
 				swiperCurrent.value = detail.current;
 				current.value = detail.current;
@@ -370,20 +386,82 @@
 			 * 取消订单
 			 */
 			const cancelOrder = async (item) => {
-				console.log(item);
-				const res = await request('order', {
+				await request('order', {
 					type: 'cancelOrder',
 					orderId: item._id
 				});
-				console.log(res);
+				initData(0);
 			}
 
 			/**
 			 * 支付订单
 			 */
 			const payOrder = async (item) => {
-				console.log(item);
+				uni.showModal({
+					title: '微信支付',
+					content: `确认支付 ${item.price} 元`,
+					success: async function(e) {
+						if (e.confirm) {
+							uni.showLoading({
+								title: "支付中"
+							})
+							const temp = await request('order', {
+								type: 'payOrder',
+								orderId: item._id
+							});
+							console.log(temp);
+							if (!temp.success) {
+								uni.hideLoading();
+								uni.showToast({
+									title: "支付失败",
+									duration: 1500,
+								});
+								return;
+							}
+
+							uni.hideLoading();
+							uni.showToast({
+								title: "支付成功",
+								duration: 1500,
+							})
+							initData(0);
+						} else if (e.cancel) {
+							uni.navigateBack();
+						}
+					}
+				})
 			}
+
+			const initData = async (index) => {
+				for (let i = 0; i < 4; i++) {
+					orderList[i].length = 0;
+				}
+
+				// index 1：待支付  2：已付款，但未收到货  3：已收到货，待评价 4：彻底完成
+				const resArr = await Promise.all([request("order", {
+					type: 'queryUnpaidOrders'
+				}), request("order", {
+					type: 'queryIngOrders'
+				}), request("order", {
+					type: 'queryEvaluateOrder'
+				}), request("order", {
+					type: 'queryCompletedOrders'
+				})]);
+				// console.log(resArr);
+				// 向四个页面的数组赋值
+				for (let i = 0; i < 4; i++) {
+					const dataList = resArr[i].data;
+					list[i].count = dataList.length;
+					dataList.forEach(item => {
+						orderList[i].push(item);
+					})
+				}
+
+				current.value = index;
+				change(index);
+
+				loading.value = false;
+			};
 
 			return {
 				orderList,
@@ -406,31 +484,12 @@
 				dayjs,
 				loading,
 				cancelOrder,
-				payOrder
+				payOrder,
+				initData
 			}
 		},
 		async onLoad(option) {
-			// index 1：待支付  2：已付款，但未收到货  3：已收到货，待评价 4：彻底完成
-			const resArr = await Promise.all([request("order", {
-				type: 'queryUnpaidOrders'
-			}), request("order", {
-				type: 'queryIngOrders'
-			}), request("order", {
-				type: 'queryEvaluateOrder'
-			}), request("order", {
-				type: 'queryCompletedOrders'
-			})]);
-			console.log(resArr);
-			// 向四个页面的数组赋值
-			for (let i = 0; i < 4; i++) {
-				const dataList = resArr[i].data;
-				this.list[i].count = dataList.length;
-				dataList.forEach(item => {
-					this.orderList[i].push(item);
-				})
-			}
-			this.change(option.index);
-			this.loading = false;
+			await this.initData(option.index);
 		},
 	};
 </script>

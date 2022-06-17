@@ -1,7 +1,7 @@
 <template>
 	<view v-if="show" class="u-tabbar" @touchmove.stop.prevent="() => {}">
 		<view class="u-tabbar__content safe-area-inset-bottom" :style="{
-			height: $u.addUnit(height),
+			height: $u.addUnit(height,'rpx'),
 			backgroundColor: bgColor,
 		}" :class="{
 			'u-border-top': borderTop
@@ -36,7 +36,7 @@
 		</view>
 		<!-- 这里加上一个48rpx的高度,是为了增高有凸起按钮时的防塌陷高度(也即按钮凸出来部分的高度) -->
 		<view class="u-fixed-placeholder safe-area-inset-bottom" :style="{
-				height: `calc(${$u.addUnit(height)} + ${midButton ? 48 : 0}rpx)`,
+				height: `calc(${$u.addUnit(height,'rpx')} + ${midButton ? 48 : 0}rpx)`,
 			}"></view>
 	</view>
 </template>
@@ -258,11 +258,15 @@
 
 	.u-tabbar {
 		background-color: #F3F3F3;
+		// position: fixed;
+		// bottom: 0;
+		// left: 0;
+		// width: 100%;
+		// z-index: 998;
 
 		&__content {
 			@include vue-flex;
 			align-items: center;
-			position: relative;
 			position: fixed;
 			bottom: 0;
 			left: 0;

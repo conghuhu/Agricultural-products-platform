@@ -1,11 +1,6 @@
 <template>
 	<view class="fullScreen">
-		<view>
-			<u-navbar title="新增收货地址" :is-back="true" :background="background">
-				<view class="slot-wrap" @click="rightClick">
-				</view>
-			</u-navbar>
-		</view>
+		<Nav title="新增收货地址" isBack />
 		<view class="content">
 			<u-form :model="form">
 				<u-form-item label="地址" labelWidth="80px">
@@ -31,7 +26,10 @@
 					<u-input v-model="form.phone" placeholder="请输入收货人手机号" />
 				</u-form-item>
 			</u-form>
-			<u-button @click="submit" type="success" shape="circle">提交</u-button>
+			<view style="margin-top: 40rpx;">
+				<u-button @click="submit" type="success" shape="circle">提交</u-button>
+			</view>
+
 		</view>
 	</view>
 </template>
@@ -54,10 +52,6 @@
 				locationArr: []
 			});
 
-			const background = ref({
-				// 渐变色
-				backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
-			});
 			async function rightClick() {
 				wx.navigateBack();
 			}
@@ -95,12 +89,10 @@
 					form: form,
 					type: "submitAdress"
 				})
-				console.log(result.res);
 				uni.navigateBack();
 			}
 			return {
 				form,
-				background,
 				rightClick,
 				inputAdress,
 				res,
@@ -122,11 +114,14 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F2F4F7;
+		background-color: $background-color;
 		position: relative;
+		font-size: 32rpx;
 
 		.content {
 			padding: 30rpx;
+			background-color: $background-color;
+			height: 100%;
 		}
 	}
 </style>
