@@ -199,7 +199,8 @@
 				status: true,
 				unit: "",
 				_id: "",
-				description: ""
+				description: "",
+				_openid:""
 			})
 			const warpList = reactive([{
 					image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
@@ -216,7 +217,7 @@
 			])
 			const tokefu = async function() {
 				uni.navigateTo({
-					url: "/pages/Tourists/ChatRoom/ChatRoom"
+					url: `/pages/Tourists/ChatRoom/ChatRoom?m_openId=${goodInfo._openid}`
 				})
 			}
 			return {

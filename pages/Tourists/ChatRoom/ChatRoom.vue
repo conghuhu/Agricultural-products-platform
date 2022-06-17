@@ -6,7 +6,7 @@
 				<!--对方发送的信息-->
 				<view class="cu-item">
 					<view class="cu-avatar radius">
-						<u-avatar src="/static/images/star.png"></u-avatar>
+						<u-avatar size="80" src="/static/images/star.png"></u-avatar>
 					</view>
 					<view class="main">
 						<view class="content bg-cyan shadow">
@@ -59,7 +59,7 @@
 				<!-- 选择表情包 -->
 				<image class=" icon_btn_add" src="./static/images/expression.png" @click="exprec"></image>
 				<!-- 发送消息按钮 -->
-				<u-button type="primary" v-if="formData.content!==''">发送</u-button>
+				<u-button type="primary" v-if="formData.content!==''" @click="sendContent">发送</u-button>
 				<!-- <button class="send-out iconfont icon-fasong"  @click="sendout" v-if="formData.content!==''"></button> -->
 				<!-- 弹出拍照-->
 			</view>
@@ -93,6 +93,14 @@
 	import request from '@/api/request';
 	export default {
 		setup() {
+			//发送消息变量
+			const messageData = reactive({
+				m_openId:"",
+				msgType:"",
+				content:"",
+				_createTime:""
+				
+			})
 			//表情包
 			const emojisList = reactive([
 				'😄', '😃', '😀', '😊', '😉', '😍', '😘', '😚', '😗',
@@ -135,7 +143,6 @@
 				showFunBtn.value = false; //隐藏功能
 				showExpre.value = false; //隐藏表情
 				showOften.value = !showOften.value; //显示常用
-				console.log(showOften.value)
 				uni.hideKeyboard();
 			}
 			const exprec = async function() {
@@ -144,25 +151,46 @@
 				showExpre.value = !showExpre.value; //显示表情
 				uni.hideKeyboard();
 			}
+			//商家openid
+			const m_openId = ref("");
 			//选择表情
 			async function expre(e) {
-					formData.content = !formData.content ? e : formData.content + e;
-				}
-				//
+				formData.content = !formData.content ? e : formData.content + e;
+			}
+			//发送消息
+			const sendContent = async function(){
+				messageData.m_openId=m_openId.value;
+				messageData.msgType="text";
+				messageData.content=formData.content;
+				const time = new Date();
+				messageData._createTime=time.toLocaleString();
+				console.log(messageData)
+				const res = await request("message",{
+					type:"messageAdd",
+					messageData:messageData
+				})
+				formData.content=""
+			}
 
-				return {
-					emojisList,
-					formData,
-					newsList,
-					showFunBtn,
-					showOften,
-					showExpre,
-					oftenTermList,
-					exprec,
-					oftenc,
-					oftenx,
-					expre
-				}
+			return {
+				emojisList,
+				formData,
+				newsList,
+				showFunBtn,
+				showOften,
+				showExpre,
+				oftenTermList,
+				exprec,
+				oftenc,
+				oftenx,
+				expre,
+				m_openId,
+				sendContent,
+				messageData
+			}
+		},
+		async onLoad(value) {
+			this.m_openId=value.m_openId
 		}
 	};
 </script>
