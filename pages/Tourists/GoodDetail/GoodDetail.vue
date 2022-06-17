@@ -3,45 +3,18 @@
 		<Nav title="商品详情" :isBack="true"></Nav>
 		<view class="content">
 			<view class="wrap">
-				<u-swiper height="450" :list="warpList"></u-swiper>
+				<u-swiper height="450" :border-radius="0" :list="goodInfo.imageShowList"></u-swiper>
 			</view>
 			<view class="card">
 				<view class="card_top">
 					<view class="top_left">
-						<view class="left_top">精选大苹果</view>
-						<view class="left_mid">精选大苹果的描述内容</view>
-						<view class="left_bottom">
-							<view class="bottom_image">
-								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png">
-								</u-image>
-							</view>
-							<view class="bottom_image">
-								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png">
-								</u-image>
-							</view>
-							<view class="bottom_image">
-								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png">
-								</u-image>
-							</view>
-							<view class="bottom_image">
-								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png">
-								</u-image>
-							</view>
-							<view class="bottom_image">
-								<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/xingxing.png">
-								</u-image>
-							</view>
-						</view>
+						<view class="left_top">{{goodInfo.goodName}}</view>
+						<view class="left_mid">{{goodInfo.description}}</view>
 					</view>
 					<view class="top_right">
 						<view class="right_top">
-							<view class="top_number">79</view>
-							<view class="top_content">元/份</view>
-						</view>
-						<view class="right_mid">
-							<view class="mid_tehu">现实折扣</view>
-							<view class="mid_number">59</view>
-							<view class="mid_content">元/份</view>
+							<view class="top_number">{{goodInfo.goodPrice}}</view>
+							<view class="top_content">元/{{goodInfo.unit}}</view>
 						</view>
 					</view>
 				</view>
@@ -51,7 +24,7 @@
 				<view class="card_bottom">
 					<view class="bottom_left">
 						<view class="left_left">
-							<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/peisongTime.png">
+							<u-image width="100%" height="40" mode="aspectFit" src="./static/images/peisongTime.png">
 							</u-image>
 						</view>
 						<view class="left_content">
@@ -61,21 +34,21 @@
 					</view>
 					<view class="bottom_left">
 						<view class="left_left">
-							<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/fahuoAddress.png">
+							<u-image width="100%" height="40" mode="aspectFit" src="./static/images/fahuoAddress.png">
 							</u-image>
 						</view>
 						<view class="left_content">
-							<view class="content_top">山东烟台</view>
+							<view class="content_top">{{goodInfo.originPlace}}</view>
 							<view class="content_bottom">产地</view>
 						</view>
 					</view>
 					<view class="bottom_left">
 						<view class="left_left">
-							<u-image width="100%" height="12px" mode="aspectFit" src="./static/images/peisongStyle.png">
+							<u-image width="100%" height="40" mode="aspectFit" src="./static/images/peisongStyle.png">
 							</u-image>
 						</view>
 						<view class="left_content">
-							<view class="content_top">顺丰快递</view>
+							<view class="content_top">{{goodInfo.mode == 1 ? "即时配送":"顺丰物流"}}</view>
 							<view class="content_bottom">配送方式</view>
 						</view>
 					</view>
@@ -225,7 +198,8 @@
 				specification: "",
 				status: true,
 				unit: "",
-				_id: ""
+				_id: "",
+				description: ""
 			})
 			const warpList = reactive([{
 					image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
@@ -240,9 +214,9 @@
 					title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
 				},
 			])
-			const tokefu  = async function(){
+			const tokefu = async function() {
 				uni.navigateTo({
-					url:"/pages/Tourists/ChatRoom/ChatRoom"
+					url: "/pages/Tourists/ChatRoom/ChatRoom"
 				})
 			}
 			return {
@@ -271,19 +245,19 @@
 		height: 100vh;
 		font-size: 32rpx;
 		color: #333333;
-		background-color: #F2F4F7;
+		background-color: $background-color;
 
 		.content {
 			position: relative;
 			display: flex;
 			flex-direction: column;
-			padding-bottom: 130rpx;
+			padding-bottom: 160rpx;
+			background-color: $background-color;
 
 			.wrap {
 				position: absolute;
 				top: 0;
 				left: 0;
-				height: 10vh;
 				width: 100%;
 			}
 
@@ -315,19 +289,19 @@
 							flex: 1;
 							margin-top: 20rpx;
 							font-family: SourceHanSansCN-Ex;
-							font-size: 16px;
-							font-weight: 250;
-							line-height: 16px;
-							letter-spacing: 0px;
+							font-size: 32rpx;
+							font-weight: 550;
+							line-height: 32rpx;
+							letter-spacing: 0rpx;
 							color: #333333;
 						}
 
 						.left_mid {
 							flex: 1;
 							margin-top: 20rpx;
-							font-size: 11px;
-							font-weight: 250;
-							line-height: 11px;
+							font-size: 30rpx;
+							font-weight: 500;
+							line-height: 30rpx;
 							letter-spacing: 0px;
 							color: #949397;
 						}
@@ -363,19 +337,19 @@
 							.top_number {
 								margin-left: 80rpx;
 								font-family: SourceHanSansCN-ExtraLight;
-								font-size: 16px;
-								font-weight: 250;
-								line-height: 11px;
+								font-size: 34rpx;
+								line-height: 34rpx;
 								font-weight: 550;
+								color: red;
 							}
 
 							.top_content {
 								justify-content: flex-start;
 								font-family: SourceHanSansCN-ExtraLight;
-								font-size: 11px;
-								font-weight: 250;
-								line-height: 11px;
-
+								font-size: 30rpx;
+								font-weight: 500;
+								line-height: 30rpx;
+								margin-left: 6rpx;
 							}
 						}
 
@@ -424,21 +398,21 @@
 				}
 
 				.card_bottom {
-					margin-left: 20rpx;
+					padding-left: 10rpx;
+					padding-right: 10rpx;
+					padding-bottom: 16rpx;
 					display: flex;
 					align-items: center;
-					justify-content: center;
+					justify-content: space-around;
 					flex: 2;
 
 					.bottom_left {
 						display: flex;
 						align-items: center;
 						justify-content: center;
-						margin-right: 50rpx;
 
 						.left_left {
-
-							width: 5vw;
+							width: 40rpx;
 							margin-right: 10rpx;
 						}
 
@@ -452,21 +426,18 @@
 
 							.content_top {
 								font-family: SourceHanSansCN-ExtraLight;
-								font-size: 13px;
-								font-weight: 250;
-								line-height: 13px;
+								font-size: 30rpx;
+								font-weight: 520;
+								line-height: 34rpx;
 								letter-spacing: 0px;
-								font-weight: bold;
 							}
 
 							.content_bottom {
-								margin-top: 14rpx;
+								margin-top: 6rpx;
 								font-family: SourceHanSansCN-ExtraLight;
-								font-size: 9px;
-								font-weight: 250;
-								line-height: 9px;
+								font-size: 28rpx;
+								font-weight: 500;
 								letter-spacing: 0px;
-								font-weight: bold;
 								color: #949397;
 							}
 						}
@@ -632,11 +603,12 @@
 				.image_info {
 					margin-left: 26rpx;
 					width: 25vw;
+					height: 25vw;
 				}
 			}
 		}
 
-        .bottom_info{
+		.bottom_info {
 			position: fixed;
 			bottom: 0;
 			left: 0;
@@ -644,12 +616,14 @@
 			height: 120rpx;
 			background-color: #F2F4F7;
 			display: flex;
-			.info_left{
+
+			.info_left {
 				flex: 3;
 				margin-top: 40rpx;
-				
+
 			}
-			.info_right{
+
+			.info_right {
 				flex: 7;
 				padding-right: 20rpx;
 				margin-top: 20rpx;
