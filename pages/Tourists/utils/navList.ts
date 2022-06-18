@@ -36,6 +36,7 @@ const list = reactive([{
 	text: '我的',
 	isDot: false,
 	customIcon: false,
+	count: 0,
 	pagePath: "/pages/Tourists/MeBar/MeBar"
 },
 ]);

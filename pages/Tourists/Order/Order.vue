@@ -271,9 +271,14 @@
 	} from 'vue';
 	import request from '@/api/request';
 	import dayjs from 'dayjs';
+	import {
+		userStore
+	} from '@/stores/user';
 	export default {
 		setup() {
+			const user = userStore();
 			const loading = ref(true);
+
 			const orderList = reactive([
 				[],
 				[],
@@ -433,9 +438,11 @@
 			}
 
 			const initData = async (index) => {
+				loading.value = true;
 				for (let i = 0; i < 4; i++) {
 					orderList[i].length = 0;
 				}
+				refreshOrderStatus();
 
 				// index 1：待支付  2：已付款，但未收到货  3：已收到货，待评价 4：彻底完成
 				const resArr = await Promise.all([request("order", {
@@ -462,6 +469,17 @@
 
 				loading.value = false;
 			};
+
+			/**
+			 * 刷新order状态
+			 */
+			const refreshOrderStatus = async () => {
+				const res = await request('order', {
+					type: 'queryOrderStatus'
+				});
+				user.setOrderMap(res.data);
+				console.log(res.data);
+			}
 
 			return {
 				orderList,

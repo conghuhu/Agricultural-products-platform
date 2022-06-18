@@ -18,6 +18,7 @@ export const userStore = defineStore('user', () => {
 	const likeShareSet: Set<string> = reactive(new Set());
 	// 加入购物车的商品 k:goodId v:count
 	const wantingGoods: Map<string, number> = reactive(new Map());
+	// 购物车的总数量
 	const totalCount: number = ref(0);
 
 	// 用户当前所选的收货位置
@@ -29,6 +30,8 @@ export const userStore = defineStore('user', () => {
 	});
 	// 用户当前所选的收货地址的id
 	const curLocationId = ref('');
+	// 订单状态集合 status : count
+	const orderMap: Map<number, number> = reactive(new Map());
 
 	function setTotalWantedGoods(count: number) {
 		navList[3].count = count;
@@ -93,7 +96,10 @@ export const userStore = defineStore('user', () => {
 	function updateLocationId(id: string) {
 		curLocationId.value = id;
 	}
-
+	/**
+	 * 更新用户信息
+	 * @param {Object} info
+	 */
 	function updateUserInfo(info) {
 		Object.assign(userInfo, info);
 	};
@@ -104,6 +110,23 @@ export const userStore = defineStore('user', () => {
 		likeShareSet.delete(shareId);
 	};
 
+	/**
+	 * 设置订单map
+	 */
+	function setOrderMap(arr: { _id: number; count: number }[]) {
+		orderMap.clear();
+		let total = 0;
+		arr.forEach(item => {
+			// 略过已完结的订单
+			if (item._id != 4) {
+				orderMap.set(item._id, item.count);
+				total += item.count;
+			}
+		});
+		navList[4].count = total;
+	}
+
+
 	return {
 		userInfo, updateUserInfo, wantingGoods,
 		currentLocationVal, location, updateLocationInfo,
@@ -111,6 +134,6 @@ export const userStore = defineStore('user', () => {
 		likeShareSet, addToLikeShareSet, removeFromLikeShareSet,
 		setTotalWantedGoods, totalCount,
 		curLocationId, updateLocationId,
-		removeWantedGood
+		removeWantedGood, orderMap, setOrderMap
 	};
 });

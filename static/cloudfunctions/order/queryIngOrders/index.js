@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
 
 	const openid = wxContext.OPENID;
-	
+
 	const log = cloud.logger();
 
 	const _ = db.command;
@@ -20,13 +20,13 @@ exports.main = async (event, context) => {
 
 	try {
 		const orderDb = db.collection('order');
-		
+
 		const goodDb = db.collection('goods');
 
 		const temp = await orderDb.where({
 			_openid: _.eq(openid),
 			status: 2
-		}).get();
+		}).orderBy('createTime', 'desc').get();
 
 
 		log.info({

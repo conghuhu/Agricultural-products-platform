@@ -24,9 +24,10 @@ exports.main = async (event, context) => {
 		const goodDb = db.collection('goods');
 
 		const temp = await orderDb.where({
-			_openid: _.eq(openid),
-			status: 1
-		}).get();
+				_openid: _.eq(openid),
+				status: 1
+			}).orderBy('createTime', 'desc')
+			.get();
 
 		log.info({
 			name: 'queryUnpaidOrders',

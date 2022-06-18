@@ -28,16 +28,26 @@
 				type: 'getWanted'
 			}), request('star_focus', {
 				type: 'getOneStarList'
+			}), request('order', {
+				type: 'queryOrderStatus'
 			})]);
+			console.log(res);
+			// wanted
 			let count = 0;
 			res[0].data.forEach(item => {
 				count += item.count;
 				this.user.wantingGoods.set(item.goodId, item.count);
 			});
+			this.user.setTotalWantedGoods(count);
+
+			// star_focus
 			res[1].data.forEach(item => {
 				this.user.addToLikeShareSet(item);
 			});
-			this.user.setTotalWantedGoods(count);
+
+			// order
+			this.user.setOrderMap(res[2].data);
+
 			// console.log(this.user.wantingGoods)
 			console.log('App Show');
 		},
