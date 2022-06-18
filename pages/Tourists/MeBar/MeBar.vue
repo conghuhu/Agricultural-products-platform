@@ -1,7 +1,5 @@
 <template>
 	<view class="fullScreen">
-		<!-- <Nav title="我的信息"></Nav> -->
-
 		<view class="content">
 			<view class="top_back">
 			</view>
@@ -9,10 +7,23 @@
 				<view class="avatar_container">
 					<view class="avatar" :style="`background-image:url(${userInfo.avatarUrl});`" />
 				</view>
-				<view class="content">
-					<view class="nickname">
-						{{userInfo.nickName}}
+				<view style="flex: 3;height: 150rpx;">
+					<view class="content">
+						<view class="nickname">
+							{{userInfo.nickName}}
+						</view>
+						<view class="right">
+							<view style="position: relative;height: 50rpx;margin-right: 45rpx;">
+								<u-image height="50rpx" width="50rpx" mode="aspectFit"
+									src="/static/images/message_me.png">
+								</u-image>
+							</view>
+
+							<u-image height="50rpx" width="50rpx" mode="aspectFit" src="/static/images/set.png">
+							</u-image>
+						</view>
 					</view>
+
 				</view>
 			</view>
 			<view class="cantainer">
@@ -63,18 +74,19 @@
 						</u-image>
 					</view>
 					<view class="right_item">
-						<view class="item_combine" v-for="(item,index) in toolList" :key="index">
-							<u-image @click="gotoPage(item)" width="50rpx" mode="aspectFit" height="50rpx"
-								:src="item.icon">
+						<view class="item_combine" v-for="(item,index) in toolList" :key="index"
+							@click="gotoPage(item)">
+							<u-image width="50rpx" mode="aspectFit" height="50rpx" :src="item.icon">
 							</u-image>
 							<view class="text">
 								{{item.text}}
 							</view>
+							<button v-if="item.concat" open-type="contact"
+								style="position: absolute;opacity: 0;width: 85rpx;height: 100rpx;"></button>
 						</view>
 					</view>
 				</view>
 			</view>
-
 		</view>
 
 		<u-tabbar :list="list" :mid-button="true"></u-tabbar>
@@ -112,7 +124,7 @@
 				url: "/pages/Tourists/Order/Order",
 				count: 0
 			}, {
-				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E8%BF%9B%E8%A1%8C%E4%B8%AD.png?sign=a65bd977bb15616d00af63ac7571e698&t=1653974111',
+				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%BE%85%E6%94%B6%E8%B4%A7.png?sign=e737ce0a901b7541237a98e097478f3b&t=1655528862',
 				text: '待收货',
 				url: "/pages/Tourists/Order/Order",
 				count: 0
@@ -133,7 +145,7 @@
 					text: '关注'
 				},
 				{
-					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%9C%B0%E5%9D%80.png?sign=cec3bc5ea67c8dec43c79dabb404e261&t=1653982220',
+					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E7%A7%8D%E8%8D%89.png?sign=7734a781e420ca814fc11074939baaae&t=1655528876',
 					text: '种草',
 					url: '/pages/Tourists/Location/Location'
 				}, {
@@ -142,7 +154,8 @@
 					url: '/pages/Tourists/Location/Location'
 				}, {
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%AE%A2%E6%9C%8D.png?sign=e3c73806b4be9918334f5284c48ca9ae&t=1653982332',
-					text: '客服'
+					text: '客服',
+					concat: true
 				}
 			]);
 
@@ -153,6 +166,9 @@
 				})
 			}
 			const gotoPage = async (item) => {
+				if (item.concat) {
+					return;
+				}
 				console.log(item);
 				uni.navigateTo({
 					url: item.url
@@ -168,7 +184,7 @@
 				money,
 				gotoPage,
 				gotoOrder,
-				orderMap
+				orderMap,
 			}
 		},
 		async onShow() {
@@ -196,8 +212,8 @@
 
 			.top_back {
 				width: 100%;
-				height: 30vh;
-				background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/Mask.png?sign=e8dfa044bfc47b36aa3ed2ae25f3899b&t=1653962723');
+				height: 22vh;
+				background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/myBack.png?sign=27ceb4b354d32c51bbb7b9d3dc28801a&t=1655529238');
 				background-size: cover;
 				background-repeat: no-repeat;
 				position: relative;
@@ -212,14 +228,14 @@
 				z-index: 99;
 
 				.avatar_container {
-					flex: 1;
+					flex: 2;
 					display: flex;
 					justify-content: center;
 					z-index: 98;
 
 					.avatar {
-						width: 36vw;
-						height: 36vw;
+						width: 32vw;
+						height: 32vw;
 						border-radius: 50%;
 						border: 15rpx solid white;
 						background-size: cover;
@@ -236,13 +252,20 @@
 					letter-spacing: 0px;
 					color: #4A4A4A;
 					font-weight: bold;
-					flex: 1;
 					font-size: 40rpx;
 					line-height: 40rpx;
-					height: 150rpx;
 
-					.nickname {
-						margin-top: 20rpx;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					margin-top: 20rpx;
+
+					.nickname {}
+
+					.right {
+						display: flex;
+						align-items: center;
+						margin-right: 35rpx;
 					}
 				}
 			}
@@ -300,7 +323,7 @@
 						justify-content: flex-start;
 						align-items: center;
 						height: 100%;
-						transform: translateX(-16rpx);
+						transform: translateX(-24rpx);
 
 						.item_combine {
 							display: flex;

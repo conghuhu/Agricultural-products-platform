@@ -44,13 +44,6 @@ exports.main = async (event, context) => {
 			}
 		}
 
-		// 更新订单状态
-		const temp = await orderDb.doc(orderId).update({
-			data: {
-				updateTime: new Date(),
-				status: 2,
-			}
-		});
 
 		// 扣除用户金额
 		await cloud.callFunction({
@@ -64,6 +57,14 @@ exports.main = async (event, context) => {
 			}
 		});
 
+		// 更新订单状态
+		const temp = await orderDb.doc(orderId).update({
+			data: {
+				updateTime: new Date(),
+				status: 2,
+			}
+		});
+
 		// 写入sale表，存好销量数据
 		const goodList = isAbsent.data.goodList;
 		const createTime = isAbsent.data.createTime;
@@ -73,7 +74,7 @@ exports.main = async (event, context) => {
 			const goodNums = goodSubList[1];
 			const goodPrice = goodSubList[2];
 			const goodTotalPrice = goodPrice * goodNums;
-			await cloud.callFunction({
+			cloud.callFunction({
 				name: 'sale',
 				data: {
 					type: 'addSale',
@@ -83,13 +84,6 @@ exports.main = async (event, context) => {
 					goodTotalPrice: goodTotalPrice
 				}
 			})
-			// db.collection('sales').add({
-			// 	  data: {
-			// 	    // _id可选自定义 _id，在此处场景下用数据库自动分配的就可以了
-			// 	    goodId: goodId,
-			// 	    createTime: createTime
-			// 	  }
-			// })
 		}
 
 		const {
@@ -108,6 +102,7 @@ exports.main = async (event, context) => {
 					status: 2,
 				}
 			});
+
 		}
 
 		res = {
