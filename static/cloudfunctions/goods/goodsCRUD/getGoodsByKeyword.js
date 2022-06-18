@@ -15,8 +15,9 @@ exports.main = async (event, context) => {
 
 	const {
 		keyword, //搜索关键字
-		orderType, // 排序方式
-		priceOrder, // 价格升序还是降序
+		orderType, // 排序方式 price升序 销量降序
+		categoryIdList,
+		priceRange,
 		latitude,
 		longitude
 	} = event;
@@ -25,6 +26,17 @@ exports.main = async (event, context) => {
 	try {
 		const goodDb = db.collection('goods');
 		const _ = db.command;
+
+		const log = cloud.logger();
+
+		log.info({
+			name: 'getGoodsByKeyword',
+			message: '前端传值为',
+			keyword, //搜索关键字
+			orderType, // 排序方式 price升序 销量降序
+			categoryIdList,
+			priceRange,
+		})
 
 		const {
 			data
@@ -45,7 +57,7 @@ exports.main = async (event, context) => {
 					})
 				}
 			]))
-			.orderBy('goodPrice', priceOrder)
+			.orderBy(orderType == "price" ? 'goodPrice' : 'sale', 'asc')
 			.get();
 
 
