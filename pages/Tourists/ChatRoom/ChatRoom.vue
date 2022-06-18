@@ -2,48 +2,48 @@
 	<Nav title="聊天室" :isBack="true"></Nav>
 	<view class="content">
 		<scroll-view class="cu-chat" scroll-y="true">
-			<view>
+			<view v-for="(item,index) in chatList" :key="index">
 				<!--对方发送的信息-->
-				<view class="cu-item">
+				<view class="cu-item" v-if="item.openId === m_openId && item.msgType === 'text'">
 					<view class="cu-avatar radius">
-						<u-avatar size="80" src="/static/images/star.png"></u-avatar>
+						<u-avatar size="80" :src="item.m_userInfo.avatarUrl"></u-avatar>
 					</view>
 					<view class="main">
 						<view class="content bg-cyan shadow">
-							<text>1111111</text>
+							<text>{{item.content}}</text>
 						</view>
 					</view>
-					<view class="date">2022.6.17 10:54</view>
+					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-				<view class="cu-item">
+				<view class="cu-item" v-if="item.m_openId === m_openId && item.msgType === 'image'">
 					<view class="cu-avatar radius">
-						<u-avatar src="/static/images/star.png"></u-avatar>
+						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
 					</view>
 					<view class="main">
-						<image src="/static/images/star.png" class="radius" mode="widthFix"></image>
+						<image :src="item.content" class="radius" mode="widthFix"></image>
 					</view>
-					<view class="date">2022.6.17 10:54</view>
+					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
 				<!--自己发送的信息-->
-				<view class="cu-item self">
+				<view class="cu-item self" v-if="item.openId != m_openId && item.msgType === 'text'">
 					<view class="main">
 						<view class="content bg-green shadow">
-							<text>111111111</text>
+							<text>{{item.content}}</text>
 						</view>
 					</view>
 					<view class="cu-avatar radius">
-						<u-avatar src="/static/images/star.png"></u-avatar>
+						<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
 					</view>
-					<view class="date">2022.6.17 10:54</view>
+					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-				<view class="cu-item self">
+				<view class="cu-item self" v-if="item.openId != m_openId && item.msgType === 'image'">
 					<view class="main">
-						<image src="/static/images/star.png" class="radius" mode="widthFix"></image>
+						<image :src="item.content" class="radius" mode="widthFix"></image>
 					</view>
 					<view class="cu-avatar radius">
-						<u-avatar src="/static/images/star.png"></u-avatar>
+						<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
 					</view>
-					<view class="date">2022.6.17 10:54</view>
+					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
 			</view>
 		</scroll-view>
@@ -91,15 +91,18 @@
 		reactive
 	} from 'vue'
 	import request from '@/api/request';
+	import dayjs from 'dayjs';
 	export default {
 		setup() {
+			//聊天列表
+			const chatList = reactive([])
 			//发送消息变量
 			const messageData = reactive({
-				m_openId:"",
-				msgType:"",
-				content:"",
-				_createTime:""
-				
+				m_openId: "",
+				msgType: "",
+				content: "",
+				_createTime: ""
+
 			})
 			//表情包
 			const emojisList = reactive([
@@ -158,19 +161,50 @@
 				formData.content = !formData.content ? e : formData.content + e;
 			}
 			//发送消息
-			const sendContent = async function(){
-				messageData.m_openId=m_openId.value;
-				messageData.msgType="text";
-				messageData.content=formData.content;
+			const sendContent = async function() {
+				messageData.m_openId = m_openId.value;
+				messageData.msgType = "text";
+				messageData.content = formData.content;
 				const time = new Date();
-				messageData._createTime=time.toLocaleString();
+				messageData._createTime = time;
 				console.log(messageData)
-				const res = await request("message",{
-					type:"messageAdd",
-					messageData:messageData
+				const res = await request("message", {
+					type: "messageAdd",
+					messageData: messageData
 				})
-				formData.content=""
+				formData.content = ""
 			}
+			//消息监听
+			
+			
+			const initWatcher = async function(){
+				const openId = await request("user",{
+					type:"userOpenId",
+				})
+				const db = wx.cloud.database();
+				const _ = db.command;
+				const res = db.collection('chat-msgs').where({
+					openId:openId.data,
+					m_openId:m_openId.value
+				}).watch({
+					onChange:function(snapshot){
+						console.log(snapshot)
+						if(snapshot.docChanges.length!=0){
+							snapshot.docChanges.forEach(item=>{
+								if(item.dataType!="init"){
+									chatList.push(item.doc)
+								}
+							})
+							console.log(chatList)
+						}
+					},
+					onError:function(err) {
+						console.error('the watch closed because of error', err)
+					}
+				})
+				
+			}
+			
 
 			return {
 				emojisList,
@@ -186,11 +220,25 @@
 				expre,
 				m_openId,
 				sendContent,
-				messageData
+				messageData,
+				chatList,
+				initWatcher,
+				dayjs
 			}
 		},
 		async onLoad(value) {
-			this.m_openId=value.m_openId
+			this.m_openId = value.m_openId
+			const temp: {
+				data: Array < any >
+			} = await request("message", {
+				type: "messageGet",
+				m_openId: this.m_openId
+			});
+			this.chatList.length=0;
+			temp.data.forEach(item => {
+				this.chatList.push(item);
+			});
+			 this.initWatcher();
 		}
 	};
 </script>
@@ -201,6 +249,27 @@
 	}
 
 	.content {
+		.cu-timeline {
+			display: block;
+			background-color: #ffffff;
+		}
+		.cu-timeline .cu-time {
+			width: 120upx;
+			text-align: center;
+			padding: 20upx 0;
+			font-size: 26upx;
+			color: #888;
+			display: block;
+		}
+		
+		.cu-timeline .cu-time {
+			width: 120upx;
+			text-align: center;
+			padding: 20upx 0;
+			font-size: 26upx;
+			color: #888;
+			display: block;
+		}
 
 		.cu-chat {
 			display: flex;
