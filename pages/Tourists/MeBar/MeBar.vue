@@ -188,6 +188,9 @@
 			}
 		},
 		async onShow() {
+			this.orderList.forEach(item => {
+				item.count = 0;
+			});
 			this.orderMap.forEach((value, key) => {
 				this.orderList[key - 1].count = value;
 			});

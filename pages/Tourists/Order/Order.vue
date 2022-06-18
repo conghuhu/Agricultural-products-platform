@@ -478,7 +478,6 @@
 					type: 'queryOrderStatus'
 				});
 				user.setOrderMap(res.data);
-				console.log(res.data);
 			}
 
 			return {
