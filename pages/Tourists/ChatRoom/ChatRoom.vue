@@ -1,38 +1,67 @@
 <template>
 	<Nav title="聊天室" :isBack="true"></Nav>
 	<view class="content">
-		<!-- 聊天渲染列表 -->
-		<view style="height: 100vh;" @click='touchend'>
-			<view v-for="item in newsList" :key="item">
-				<text v-if="item.text">{{item.text}}</text>
-				<image v-if="item.img" :src="item.img" mode="scaleToFill" class="touch-active" />
-				<video v-if="item.video" :src="item.video"></video>
+		<scroll-view class="cu-chat" scroll-y="true">
+			<view>
+				<!--对方发送的信息-->
+				<view class="cu-item">
+					<view class="cu-avatar radius">
+						<u-avatar size="80" src="/static/images/star.png"></u-avatar>
+					</view>
+					<view class="main">
+						<view class="content bg-cyan shadow">
+							<text>1111111</text>
+						</view>
+					</view>
+					<view class="date">2022.6.17 10:54</view>
+				</view>
+				<view class="cu-item">
+					<view class="cu-avatar radius">
+						<u-avatar src="/static/images/star.png"></u-avatar>
+					</view>
+					<view class="main">
+						<image src="/static/images/star.png" class="radius" mode="widthFix"></image>
+					</view>
+					<view class="date">2022.6.17 10:54</view>
+				</view>
+				<!--自己发送的信息-->
+				<view class="cu-item self">
+					<view class="main">
+						<view class="content bg-green shadow">
+							<text>111111111</text>
+						</view>
+					</view>
+					<view class="cu-avatar radius">
+						<u-avatar src="/static/images/star.png"></u-avatar>
+					</view>
+					<view class="date">2022.6.17 10:54</view>
+				</view>
+				<view class="cu-item self">
+					<view class="main">
+						<image src="/static/images/star.png" class="radius" mode="widthFix"></image>
+					</view>
+					<view class="cu-avatar radius">
+						<u-avatar src="/static/images/star.png"></u-avatar>
+					</view>
+					<view class="date">2022.6.17 10:54</view>
+				</view>
 			</view>
-		</view>
+		</scroll-view>
 		<!-- 底部输入 -->
 		<view class="input-box" :class="{ 'input-box-mpInputMargin': mpInputMargin }">
 			<view class="input-box-flex">
 				<!--弹出常用 -->
-				<image class="icon_img" src="./static/images/kefu.png"  @click="oftenx"></image>
+				<image class="icon_img" src="./static/images/reply.png" @click="oftenx"></image>
 				<!-- 输入框 -->
 				<view class="input-box-flex-grow"> <input type="text" class="contenxxt" id="input"
 						v-model="formData.content" :hold-keyboard="true" :confirm-type="'send'" :confirm-hold="true"
 						placeholder-style="color:#DDDDDD;" :cursor-spacing="10" /> </view>
 				<!-- 选择表情包 -->
-				<image class=" icon_btn_add" src="./static/images/kefu.png"  @click="exprec"></image>
+				<image class=" icon_btn_add" src="./static/images/expression.png" @click="exprec"></image>
 				<!-- 发送消息按钮 -->
-				<text class="send-out iconfont icon-fasong" @click="sendout" v-if="formData.content!==''"></text>
+				<u-button type="primary" v-if="formData.content!==''" @click="sendContent">发送</u-button>
+				<!-- <button class="send-out iconfont icon-fasong"  @click="sendout" v-if="formData.content!==''"></button> -->
 				<!-- 弹出拍照-->
-			</view>
-			<!-- 弹出拍照-->
-			<view class="fun-box" :class="{'show-fun-box':showFunBtn}">
-				<u-grid :col="4" hover-class="contentType2-hover-class" :border="false">
-					<u-grid-item v-for="(item, index) in funList" @click.stop="clickGrid(index)" :index="index"
-						:key="index" bg-color="#f3f3f3">
-						<u-icon :name="item.icon" :size="52"></u-icon>
-						<view class="grid-text">{{ item.title }}</view>
-					</u-grid-item>
-				</u-grid>
 			</view>
 			<!-- 弹出常用聊天 -->
 			<view class="fun-box1" :class="{'show-fun-box':showOften}">
@@ -57,134 +86,112 @@
 	</view>
 </template>
 <script lang="ts">
+	import {
+		ref,
+		reactive
+	} from 'vue'
+	import request from '@/api/request';
 	export default {
-		data() {
-			return {
-				imgUrl22: this.$imgUrl22,
-				mpInputMargin: false, //适配微信小程序 底部输入框高度被顶起的问题
-				//发送的聊天消息
-				formData: {
-					content: "",
-					limit: 15,
-					index: 1,
-				},
-				newsList: [],
-				showFunBtn: false, //是否展示功能型按钮
-				showOften: false, //是否展示常用
-				showExpre: false, //是否显示表情
-				//九宫格
-				funList: [{
-						icon: "photo-fill",
-						title: "照片",
-						uploadType: ["album"]
-					},
-					{
-						icon: "camera-fill",
-						title: "拍摄",
-						uploadType: ["camera"]
-					},
-				],
-				emojisList: [
-					'😄', '😃', '😀', '😊', '😉', '😍', '😘', '😚', '😗',
-					'😙', '😜', '😝', '😛', '😳', '😁', '😔', '😌', '😒',
-					'😞', '😣', '😢', '😂', '😭', '😪', '😥', '😰', '😅',
-					'😓', '😩', '😫', '😨', '😱', '😠', '😡', '😤', '😖',
-					'👦', '👧', '👨', '👩', '👴', '👵', '👱', '👼', '👸',
-					'👀', '👍', '👎', '👌', '👊', '✊', '✌', '👉', '👏',
-					'💗', '💛', '💙', '💜', '💚', '❤', '💔', '💓', '💕',
-					'🌟', '💢', '🏃', '🙅', '💁', '🙋', '💼', '💬', '💭',
-				], //表情包
-				//常用语
-				oftenTermList: [{
-						id: 0,
-						title: "你好，很高兴",
-					},
-					{
-						id: 0,
-						title: "在吗",
-					},
-				],
-			};
-		},
-		onLoad() {},
-		methods: {
-			touchend() {
-				this.showFunBtn = false; //隐藏功能
-				this.showExpre = false; //隐藏表情
-				this.showOften = false; //隐藏常用
-			},
-			sendout() {
-				this.newsList.push({
-					text: this.formData.content
-				})
-				// let data = this.formData.content
-				// this.$socket.send(JSON.stringify(data));
-				this.formData.content = '' //清空输入框的文本
-			},
-			//输入常用消息
-			oftenc(e) {
-				this.formData.content = e.title;
-			},
-			//选择表情
-			expre(e) {
-				this.formData.content = !this.formData.content ? e : this.formData.content + e;
-			},
-			//切换功能性按钮
-			switchFun() {
-				this.showOften = false; //隐藏常用
-				this.showExpre = false; //隐藏表情
-				this.showFunBtn = !this.showFunBtn; //显示功能
-				uni.hideKeyboard();
-			},
+		setup() {
+			//发送消息变量
+			const messageData = reactive({
+				m_openId:"",
+				msgType:"",
+				content:"",
+				_createTime:""
+				
+			})
+			//表情包
+			const emojisList = reactive([
+				'😄', '😃', '😀', '😊', '😉', '😍', '😘', '😚', '😗',
+				'😙', '😜', '😝', '😛', '😳', '😁', '😔', '😌', '😒',
+				'😞', '😣', '😢', '😂', '😭', '😪', '😥', '😰', '😅',
+				'😓', '😩', '😫', '😨', '😱', '😠', '😡', '😤', '😖',
+				'👦', '👧', '👨', '👩', '👴', '👵', '👱', '👼', '👸',
+				'👀', '👍', '👎', '👌', '👊', '✊', '✌', '👉', '👏',
+				'💗', '💛', '💙', '💜', '💚', '❤', '💔', '💓', '💕',
+				'🌟', '💢', '🏃', '🙅', '💁', '🙋', '💼', '💬', '💭',
+			])
+			//发送的聊天消息
+			const formData = reactive({
+				content: "",
+				limit: 15,
+				index: 1,
+			})
+			const newsList = reactive([])
+			//是否展示功能型按钮
+			const showFunBtn = ref(false)
 			//是否展示常用
-			oftenx() {
-				this.showFunBtn = false; //隐藏功能
-				this.showExpre = false; //隐藏表情
-				this.showOften = !this.showOften; //显示常用
+			const showOften = ref(false)
+			//是否显示表情
+			const showExpre = ref(false)
+			//常用语
+			const oftenTermList = reactive([{
+					id: 0,
+					title: "你好，很高兴",
+				},
+				{
+					id: 0,
+					title: "在吗",
+				},
+			])
+			const oftenc = async function(e) {
+				formData.content = e.title;
+			}
+			const oftenx = async function() {
+				console.log(11111)
+				showFunBtn.value = false; //隐藏功能
+				showExpre.value = false; //隐藏表情
+				showOften.value = !showOften.value; //显示常用
 				uni.hideKeyboard();
-			},
-			//是否展示表情
-			exprec() {
-				this.showFunBtn = false; //隐藏功能
-				this.showOften = false; //隐藏常用
-				this.showExpre = !this.showExpre; //显示表情
+			}
+			const exprec = async function() {
+				showFunBtn.value = false; //隐藏功能
+				showOften.value = false; //隐藏常用
+				showExpre.value = !showExpre.value; //显示表情
 				uni.hideKeyboard();
-			},
-			//点击宫格时触发
-			clickGrid(index) {
-				if (index == 0) {
-					this.chooseImage(["album"]);
-				} else if (index == 1) {
-					this.chooseImage(["camera"]);
-				}
-			},
-			//发送图片
-			chooseImage(sourceType) {
-				console.log(sourceType, "sourceType");
-				uni.chooseImage({
-					sourceType,
-					sizeType: ["compressed"],
-					success: (res) => {
-						console.log(res, "kkkk");
-						this.showFunBtn = false;
-						for (let i = 0; i < res.tempFilePaths.length; i++) {
-							const params = {
-								contentType: 3,
-								content: res.tempFilePaths[i],
-							};
-							this.newsList.push({
-								img: res.tempFilePaths[i]
-							})
-							console.log(this.newsList, '图片');
-						}
-					},
-				});
-			},
-			//用户触摸屏幕的时候隐藏键盘
-			touchstart() {
-				uni.hideKeyboard();
-			},
+			}
+			//商家openid
+			const m_openId = ref("");
+			//选择表情
+			async function expre(e) {
+				formData.content = !formData.content ? e : formData.content + e;
+			}
+			//发送消息
+			const sendContent = async function(){
+				messageData.m_openId=m_openId.value;
+				messageData.msgType="text";
+				messageData.content=formData.content;
+				const time = new Date();
+				messageData._createTime=time.toLocaleString();
+				console.log(messageData)
+				const res = await request("message",{
+					type:"messageAdd",
+					messageData:messageData
+				})
+				formData.content=""
+			}
+
+			return {
+				emojisList,
+				formData,
+				newsList,
+				showFunBtn,
+				showOften,
+				showExpre,
+				oftenTermList,
+				exprec,
+				oftenc,
+				oftenx,
+				expre,
+				m_openId,
+				sendContent,
+				messageData
+			}
 		},
+		async onLoad(value) {
+			this.m_openId=value.m_openId
+		}
 	};
 </script>
 
@@ -194,6 +201,134 @@
 	}
 
 	.content {
+
+		.cu-chat {
+			display: flex;
+			flex-direction: column;
+			padding-bottom: 200rpx;
+		}
+
+		.cu-chat .cu-item {
+			display: flex;
+			padding: 30upx 30upx 70upx;
+			position: relative;
+		}
+
+		.cu-chat .cu-item>.cu-avatar {
+			width: 80upx;
+			height: 80upx;
+		}
+
+		.cu-chat .cu-item>.main {
+			max-width: calc(100% - 260upx);
+			margin: 0 40upx;
+			display: flex;
+			align-items: center;
+		}
+
+		.cu-chat .cu-item>image {
+			height: 320upx;
+		}
+
+		.cu-chat .cu-item>.main .content {
+			padding: 20upx;
+			border-radius: 6upx;
+			display: inline-flex;
+			max-width: 100%;
+			align-items: center;
+			font-size: 30upx;
+			position: relative;
+			min-height: 80upx;
+			line-height: 40upx;
+			text-align: left;
+		}
+
+		.cu-chat .cu-item>.main .content:not([class*="bg-"]) {
+			background-color: #ffffff;
+			color: #333333;
+		}
+
+		.cu-chat .cu-item .date {
+			position: absolute;
+			font-size: 24upx;
+			color: #8799a3;
+			width: calc(100% - 320upx);
+			bottom: 20upx;
+			left: 160upx;
+		}
+
+		.cu-chat .cu-item .action {
+			padding: 0 30upx;
+			display: flex;
+			align-items: center;
+		}
+
+		.cu-chat .cu-item>.main .content::after {
+			content: "";
+			top: 27upx;
+			transform: rotate(45deg);
+			position: absolute;
+			z-index: 100;
+			display: inline-block;
+			overflow: hidden;
+			width: 24upx;
+			height: 24upx;
+			left: -12upx;
+			right: initial;
+			background-color: inherit;
+		}
+
+		.cu-chat .cu-item.self>.main .content::after {
+			left: auto;
+			right: -12upx;
+		}
+
+		.cu-chat .cu-item>.main .content::before {
+			content: "";
+			top: 30upx;
+			transform: rotate(45deg);
+			position: absolute;
+			z-index: -1;
+			display: inline-block;
+			overflow: hidden;
+			width: 24upx;
+			height: 24upx;
+			left: -12upx;
+			right: initial;
+			background-color: inherit;
+			filter: blur(5upx);
+			opacity: 0.3;
+		}
+
+		.cu-chat .cu-item>.main .content:not([class*="bg-"])::before {
+			background-color: #333333;
+			opacity: 0.1;
+		}
+
+		.cu-chat .cu-item.self>.main .content::before {
+			left: auto;
+			right: -12upx;
+		}
+
+		.cu-chat .cu-item.self {
+			justify-content: flex-end;
+			text-align: right;
+		}
+
+		.cu-chat .cu-info {
+			display: inline-block;
+			margin: 20upx auto;
+			font-size: 24upx;
+			padding: 8upx 12upx;
+			background-color: rgba(0, 0, 0, 0.2);
+			border-radius: 6upx;
+			color: #ffffff;
+			max-width: 400upx;
+			line-height: 1.4;
+		}
+
+		.content bg-cyan shadow {}
+
 		.input-box {
 			position: fixed;
 			bottom: 0;

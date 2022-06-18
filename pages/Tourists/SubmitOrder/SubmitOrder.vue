@@ -252,6 +252,16 @@
 								type: 'payOrder',
 								orderId: res.data
 							});
+							console.log(temp);
+							if (!temp.success) {
+								uni.hideLoading();
+								uni.showToast({
+									title: "支付失败",
+									duration: 1500,
+								});
+								return;
+							}
+
 							uni.hideLoading();
 							uni.showToast({
 								title: "支付成功",

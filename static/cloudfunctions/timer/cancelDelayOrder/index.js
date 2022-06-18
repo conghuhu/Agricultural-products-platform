@@ -11,6 +11,8 @@ exports.main = async (event, context) => {
 
 	const openid = wxContext.OPENID;
 
+	const log = cloud.logger();
+
 	const _ = db.command;
 
 	const {
@@ -21,6 +23,12 @@ exports.main = async (event, context) => {
 	let res = {};
 
 	try {
+		log.info({
+			name: 'cancelDelayOrder',
+			message: `开启${orderId}订单的定时取消任务`,
+			data: goodOrderIdList
+		});
+
 		const orderDb = db.collection('order');
 		const goodOrderDb = db.collection('good-orders');
 		setTimeout(async () => {
@@ -34,9 +42,15 @@ exports.main = async (event, context) => {
 					const item = goodOrderIdList[i];
 					goodOrderDb.doc(item).remove();
 				}
+
+				log.info({
+					name: 'cancelDelayOrder',
+					message: `成功移除${orderId}未支付订单`,
+					data: goodOrderIdList
+				});
 			}
 
-		}, 60000);
+		}, 60000 * 15);
 		res = {
 			sucess: true,
 			message: "订单超时取消设置成功",

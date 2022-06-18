@@ -425,7 +425,7 @@
 		@include vue-flex;
 		// align-items: flex-start;
 		padding: 20rpx 0;
-		font-size: 28rpx;
+		font-size: 32rpx;
 		color: $u-main-color;
 		box-sizing: border-box;
 		line-height: $u-form-item-height;
@@ -495,8 +495,8 @@
 		}
 
 		&__message {
-			font-size: 24rpx;
-			line-height: 24rpx;
+			font-size: 28rpx;
+			line-height: 28rpx;
 			color: $u-type-error;
 			margin-top: 12rpx;
 		}

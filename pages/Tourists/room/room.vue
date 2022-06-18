@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="fullScreen">
 		
 	</view>
 </template>
@@ -8,15 +8,14 @@
 	export default {
 		data() {
 			return {
-				
+
 			}
 		},
 		methods: {
-			
+
 		}
 	}
 </script>
 
-<style>
-
+<style lang="scss" scoped>
 </style>

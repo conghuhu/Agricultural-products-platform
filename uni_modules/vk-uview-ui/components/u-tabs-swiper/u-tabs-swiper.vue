@@ -3,10 +3,11 @@
 			zIndex: zIndex,
 			background: bgColor
 		}">
-		<scroll-view scroll-x class="u-scroll-view" :scroll-left="scrollLeft" scroll-with-animation :style="{ zIndex: zIndex + 1 }">
+		<scroll-view scroll-x class="u-scroll-view" :scroll-left="scrollLeft" scroll-with-animation
+			:style="{ zIndex: zIndex + 1 }">
 			<view class="u-tabs-scroll-box" :class="{'u-tabs-scorll-flex': !isScroll}">
-				<view class="u-tabs-item" :style="[tabItemStyle(index)]"
-				 v-for="(item, index) in getTabs" :key="index" :class="[preId + index]" @tap="emit(index)">
+				<view class="u-tabs-item" :style="[tabItemStyle(index)]" v-for="(item, index) in getTabs" :key="index"
+					:class="[preId + index]" @tap="emit(index)">
 					<u-badge :count="item[count] || item['count'] || 0" :offset="offset" size="mini"></u-badge>
 					{{ item[name] || item['name']}}
 				</view>
@@ -19,7 +20,9 @@
 <script>
 	import colorGradient from '../../libs/function/colorGradient';
 	let color = colorGradient;
-	const { windowWidth } = uni.getSystemInfoSync();
+	const {
+		windowWidth
+	} = uni.getSystemInfoSync();
 	const preId = 'UEl_';
 
 	/**
@@ -50,7 +53,7 @@
 	 */
 	export default {
 		name: "u-tabs-swiper",
-    emits: ["update:modelValue", "input", "change"],
+		emits: ["update:modelValue", "input", "change"],
 		props: {
 			// 导航菜单是否需要滚动，如只有2或者3个的时候，就不需要滚动了，此时使用flex平分tab的宽度
 			isScroll: {
@@ -154,7 +157,7 @@
 			// 当前活动tab item的样式
 			activeItemStyle: {
 				type: Object,
-				default() {
+				default () {
 					return {}
 				}
 			},
@@ -166,7 +169,7 @@
 			// 底部滑块的自定义样式
 			barStyle: {
 				type: Object,
-				default() {
+				default () {
 					return {}
 				}
 			}
@@ -217,12 +220,13 @@
 						height: this.height + 'rpx',
 						lineHeight: this.height + 'rpx',
 						padding: `0 ${this.gutter / 2}rpx`,
-						color: this.tabsInfo.length > 0 ? (this.tabsInfo[index] ? this.tabsInfo[index].color : this.activeColor) : this.inactiveColor,
+						color: this.tabsInfo.length > 0 ? (this.tabsInfo[index] ? this.tabsInfo[index].color : this
+							.activeColor) : this.inactiveColor,
 						fontSize: this.fontSize + 'rpx',
 						zIndex: this.zIndex + 2,
 						fontWeight: (index == this.getCurrent && this.bold) ? 'bold' : 'normal'
 					};
-					if(index == this.getCurrent) {
+					if (index == this.getCurrent) {
 						// 给选中的tab item添加外部自定义的样式
 						style = Object.assign(style, this.activeItemStyle);
 					}
@@ -339,7 +343,8 @@
 				}
 			},
 			setDx(dx) {
-				let nextTabIndex = dx > 0 ? this.animationFinishCurrent + 1 : this.animationFinishCurrent - 1;
+				let nextTabIndex = dx > 0 ? parseInt(this.animationFinishCurrent) + 1 : parseInt(this
+					.animationFinishCurrent) - 1;
 				// 判断索引是否超出边界
 				nextTabIndex = nextTabIndex <= 0 ? 0 : nextTabIndex;
 				nextTabIndex = nextTabIndex >= this.list.length ? this.list.length - 1 : nextTabIndex;
@@ -405,6 +410,7 @@
 		-webkit-appearance: none;
 		background: transparent;
 	}
+
 	/* #endif */
 
 	/* #ifdef H5 */

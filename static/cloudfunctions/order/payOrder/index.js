@@ -22,7 +22,7 @@ exports.main = async (event, context) => {
 	try {
 		const orderDb = db.collection('order');
 		const goodOrderDb = db.collection('good-orders');
-        const saleDb = db.collection('sales');
+		const saleDb = db.collection('sales');
 		// doc获取的数据结构 .data就是数据
 		const isAbsent = await orderDb.doc(orderId).get();
 
@@ -38,7 +38,7 @@ exports.main = async (event, context) => {
 
 		if (price > moneyBalance.result.data) {
 			return {
-				sucess: false,
+				success: false,
 				message: "支付失败，余额不足",
 				data: null
 			}
@@ -67,17 +67,12 @@ exports.main = async (event, context) => {
 		// 写入sale表，存好销量数据
 		const goodList = isAbsent.data.goodList;
 		const createTime = isAbsent.data.createTime;
-        for(let i = 0; i < goodList.length; i++){
+		for (let i = 0; i < goodList.length; i++) {
 			const goodSubList = goodList[i];
-			// console.log("------");
-			// console.log(goodId);
-            const goodId = goodSubList[0];
+			const goodId = goodSubList[0];
 			const goodNums = goodSubList[1];
 			const goodPrice = goodSubList[2];
-			const goodTotalPrice = goodPrice*goodNums;
-			console.log(goodId);
-			console.log(goodNums);
-			console.log(goodTotalPrice);
+			const goodTotalPrice = goodPrice * goodNums;
 			await cloud.callFunction({
 				name: 'sale',
 				data: {
@@ -116,14 +111,14 @@ exports.main = async (event, context) => {
 		}
 
 		res = {
-			sucess: true,
+			success: true,
 			message: "支付成功",
 			data: temp
 		}
 	} catch (e) {
 		console.trace(e);
 		res = {
-			sucess: false,
+			success: false,
 			message: "支付失败",
 			data: e
 		}

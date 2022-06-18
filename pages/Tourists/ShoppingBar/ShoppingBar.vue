@@ -193,12 +193,12 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F3F3F3;
+		background-color: $background-color;
 		position: relative;
 		font-size: 32rpx;
 
 		.content {
-			background-color: #F3F3F3;
+			background-color: $background-color;
 			padding: 20rpx;
 			display: flex;
 			align-items: center;
@@ -278,7 +278,7 @@
 				align-items: center;
 				position: fixed;
 				background-color: white;
-				bottom: 100rpx;
+				bottom: calc(100rpx + env(safe-area-inset-bottom));
 				z-index: 600;
 
 				.right {

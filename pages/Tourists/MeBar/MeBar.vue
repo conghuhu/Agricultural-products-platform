@@ -7,7 +7,7 @@
 			</view>
 			<view class="head">
 				<view class="avatar_container">
-					<view class="avatar" />
+					<view class="avatar" :style="`background-image:url(${userInfo.avatarUrl});`" />
 				</view>
 				<view class="content">
 					<view class="nickname">
@@ -27,7 +27,10 @@
 							本月消费: ￥2230
 						</view>
 						<view class="total">
-							余额：￥{{money}}
+							<view>
+								余额：￥
+							</view>
+							<Ellipsis :content="money" :width="90" />
 						</view>
 					</view>
 				</view>
@@ -104,7 +107,11 @@
 				url: "/pages/Tourists/Order/Order"
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E8%BF%9B%E8%A1%8C%E4%B8%AD.png?sign=a65bd977bb15616d00af63ac7571e698&t=1653974111',
-				text: '进行中',
+				text: '待收货',
+				url: "/pages/Tourists/Order/Order"
+			}, {
+				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E8%BF%9B%E8%A1%8C%E4%B8%AD.png?sign=a65bd977bb15616d00af63ac7571e698&t=1653974111',
+				text: '待评价',
 				url: "/pages/Tourists/Order/Order"
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%B7%B2%E5%AE%8C%E6%88%90.png?sign=c2f487d81efb16d2d9144f6e18eefe96&t=1653974124',
@@ -113,21 +120,27 @@
 			}]);
 			// 工具菜单
 			const toolList = reactive([{
-				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%85%B3%E6%B3%A8.png?sign=823e5e8f340f6cf004b527befa4b0b86&t=1653974741',
-				text: '关注店铺'
-			}, {
-				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%9C%B0%E5%9D%80.png?sign=cec3bc5ea67c8dec43c79dabb404e261&t=1653982220',
-				text: '收获地址',
-				url: '/pages/Tourists/Location/Location'
-			}, {
-				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%AE%A2%E6%9C%8D.png?sign=e3c73806b4be9918334f5284c48ca9ae&t=1653982332',
-				text: '官方客服'
-			}]);
+					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%85%B3%E6%B3%A8.png?sign=823e5e8f340f6cf004b527befa4b0b86&t=1653974741',
+					text: '关注'
+				},
+				{
+					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%9C%B0%E5%9D%80.png?sign=cec3bc5ea67c8dec43c79dabb404e261&t=1653982220',
+					text: '种草',
+					url: '/pages/Tourists/Location/Location'
+				}, {
+					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%9C%B0%E5%9D%80.png?sign=cec3bc5ea67c8dec43c79dabb404e261&t=1653982220',
+					text: '地址',
+					url: '/pages/Tourists/Location/Location'
+				}, {
+					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%AE%A2%E6%9C%8D.png?sign=e3c73806b4be9918334f5284c48ca9ae&t=1653982332',
+					text: '客服'
+				}
+			]);
+
 
 			const gotoOrder = (url: string, index: number) => {
-				console.log(index);
 				uni.navigateTo({
-					url: url
+					url: url + `?index=${index}`
 				})
 			}
 			const gotoPage = async (item) => {
@@ -194,7 +207,6 @@
 						height: 36vw;
 						border-radius: 50%;
 						border: 15rpx solid white;
-						background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/shopAvatar.jpg?sign=86737ed47c27d68c83cba096cbd8aaaa&t=1652501346');
 						background-size: cover;
 						background-repeat: no-repeat;
 						overflow: visible;
@@ -261,6 +273,11 @@
 						.consumer {
 							margin-right: 40rpx;
 						}
+
+						.total {
+							display: flex;
+							align-items: center;
+						}
 					}
 
 					.right_item {
@@ -275,8 +292,8 @@
 							justify-content: center;
 							align-items: center;
 							flex-direction: column;
-							margin-right: 36rpx;
-							width: 120rpx;
+							margin-right: 32rpx;
+							width: 90rpx;
 
 							.text {
 								margin-top: 10rpx;

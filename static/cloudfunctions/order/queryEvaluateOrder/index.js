@@ -25,13 +25,13 @@ exports.main = async (event, context) => {
 
 		const temp = await orderDb.where({
 			_openid: _.eq(openid),
-			status: 4
+			status: 3
 		}).get();
 
 
 		log.info({
-			name: 'queryCompletedOrders',
-			message: '查询到的order为4的结果',
+			name: 'queryEvaluateOrders',
+			message: '查询到的order为3的结果',
 			data: temp
 		});
 		
@@ -50,7 +50,7 @@ exports.main = async (event, context) => {
 			const goodRes = await Promise.all(tasks);
 		
 			log.info({
-				name: 'queryCompletedOrders',
+				name: 'queryEvaluateOrders',
 				message: `查询到_id为 ${item._id} order的goodList信息`,
 				data: goodRes
 			});

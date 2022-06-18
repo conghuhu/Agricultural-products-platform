@@ -3,7 +3,6 @@
 	import {
 		userStore
 	} from '@/stores/user';
-	import navList from '@/pages/Tourists/utils/navList';
 	export default {
 		setup() {
 			const user = userStore();
@@ -30,7 +29,6 @@
 			}), request('star_focus', {
 				type: 'getOneStarList'
 			})]);
-			console.log(res);
 			let count = 0;
 			res[0].data.forEach(item => {
 				count += item.count;
@@ -40,7 +38,7 @@
 				this.user.addToLikeShareSet(item);
 			});
 			this.user.setTotalWantedGoods(count);
-			console.log(this.user.wantingGoods)
+			// console.log(this.user.wantingGoods)
 			console.log('App Show');
 		},
 		async onHide() {
