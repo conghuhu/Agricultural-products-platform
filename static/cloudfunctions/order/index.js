@@ -6,6 +6,7 @@ const queryUnpaidOrders = require('./queryUnpaidOrders/index');
 const queryIngOrders = require('./queryIngOrders/index');
 const queryEvaluateOrder = require('./queryEvaluateOrder/index');
 const queryCompletedOrders = require('./queryCompletedOrders/index');
+const queryOrderStatus = require('./queryOrderStatus/index');
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -24,6 +25,8 @@ exports.main = async (event, context) => {
 			return await queryEvaluateOrder.main(event, context);
 		case 'queryCompletedOrders':
 			return await queryCompletedOrders.main(event, context);
+		case 'queryOrderStatus':
+			return await queryOrderStatus.main(event, context);
 		default:
 			return {
 				success: false,

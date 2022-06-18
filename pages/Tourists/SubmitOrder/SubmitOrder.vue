@@ -210,7 +210,7 @@
 			}
 
 			/**
-			 * 
+			 * 提交订单
 			 */
 			const gotoSubmitOrder = async () => {
 				if (curLocationVal._id == "") {
@@ -223,7 +223,6 @@
 				uni.showLoading({
 					title: "去支付"
 				})
-				console.log(wantList);
 				const res = await request('order', {
 					type: 'createOrder',
 					curLocationId: curLocationVal._id,
@@ -239,7 +238,13 @@
 				});
 				user.removeWantedGood(wantList.map(item => item.goodId));
 				uni.hideLoading();
-
+				pay(res.data);
+				// console.log(res)
+			}
+			/**
+			 * 支付
+			 */
+			const pay = (orderId) => {
 				uni.showModal({
 					title: '微信支付',
 					content: `确认支付 ${totalPrice.value} 元`,
@@ -250,7 +255,7 @@
 							})
 							const temp = await request('order', {
 								type: 'payOrder',
-								orderId: res.data
+								orderId: orderId
 							});
 							console.log(temp);
 							if (!temp.success) {
@@ -261,24 +266,31 @@
 								});
 								return;
 							}
-
 							uni.hideLoading();
 							uni.showToast({
 								title: "支付成功",
 								duration: 1500,
-							})
+							});
+							refreshOrderStatus();
+
 							setTimeout(() => {
 								uni.switchTab({
 									url: '/pages/Tourists/HomeBar/HomeBar'
 								})
 							}, 1500);
 						} else if (e.cancel) {
+							refreshOrderStatus();
 							uni.navigateBack();
 						}
 					}
 				})
+			}
 
-				// console.log(res)
+			const refreshOrderStatus = async () => {
+				const res = await request('order', {
+					type: 'queryOrderStatus'
+				});
+				user.setOrderMap(res.data);
 			}
 
 			onMounted(async () => {

@@ -42,13 +42,16 @@
 						</u-image>
 					</view>
 					<view class="right_item">
-						<view class="item_combine" v-for="(item,index) in orderList" :key="index"
+						<view style="position: relative;" v-for="(item,index) in orderList" :key="index"
 							@click="gotoOrder(item.url,index)">
-							<u-image width="50rpx" mode="aspectFit" height="50rpx" :src="item.icon">
-							</u-image>
-							<view class="text">
-								{{item.text}}
+							<view class="item_combine">
+								<u-image width="50rpx" mode="aspectFit" height="50rpx" :src="item.icon">
+								</u-image>
+								<view class="text">
+									{{item.text}}
+								</view>
 							</view>
+							<u-badge :offset="[-2,20]" :count="item.count"></u-badge>
 						</view>
 					</view>
 				</view>
@@ -82,7 +85,8 @@
 <script lang="ts">
 	import {
 		ref,
-		reactive
+		reactive,
+		onMounted
 	} from 'vue';
 	import request from '@/api/request';
 	import navList from '@/pages/Tourists/utils/navList';
@@ -96,7 +100,8 @@
 		setup() {
 			const user = userStore();
 			const {
-				userInfo
+				userInfo,
+				orderMap
 			} = storeToRefs(user);
 			const list = reactive(navList);
 			const money = ref(0);
@@ -104,19 +109,23 @@
 			const orderList = reactive([{
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%BE%85%E5%AE%8C%E6%88%90.png?sign=746d960471d02df9efbc111f2ce19e21&t=1653972109',
 				text: '待支付',
-				url: "/pages/Tourists/Order/Order"
+				url: "/pages/Tourists/Order/Order",
+				count: 0
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E8%BF%9B%E8%A1%8C%E4%B8%AD.png?sign=a65bd977bb15616d00af63ac7571e698&t=1653974111',
 				text: '待收货',
-				url: "/pages/Tourists/Order/Order"
+				url: "/pages/Tourists/Order/Order",
+				count: 0
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E8%BF%9B%E8%A1%8C%E4%B8%AD.png?sign=a65bd977bb15616d00af63ac7571e698&t=1653974111',
 				text: '待评价',
-				url: "/pages/Tourists/Order/Order"
+				url: "/pages/Tourists/Order/Order",
+				count: 0
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%B7%B2%E5%AE%8C%E6%88%90.png?sign=c2f487d81efb16d2d9144f6e18eefe96&t=1653974124',
 				text: '已完成',
-				url: "/pages/Tourists/Order/Order"
+				url: "/pages/Tourists/Order/Order",
+				count: 0
 			}]);
 			// 工具菜单
 			const toolList = reactive([{
@@ -149,6 +158,8 @@
 					url: item.url
 				})
 			};
+
+			onMounted(() => {});
 			return {
 				list,
 				userInfo,
@@ -156,10 +167,14 @@
 				toolList,
 				money,
 				gotoPage,
-				gotoOrder
+				gotoOrder,
+				orderMap
 			}
 		},
 		async onShow() {
+			this.orderMap.forEach((value, key) => {
+				this.orderList[key - 1].count = value;
+			});
 			const res = await request('user', {
 				type: 'getMoneyBalance'
 			});

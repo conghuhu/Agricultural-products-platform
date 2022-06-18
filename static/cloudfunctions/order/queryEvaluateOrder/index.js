@@ -26,7 +26,7 @@ exports.main = async (event, context) => {
 		const temp = await orderDb.where({
 			_openid: _.eq(openid),
 			status: 3
-		}).get();
+		}).orderBy('createTime', 'desc').get();
 
 
 		log.info({

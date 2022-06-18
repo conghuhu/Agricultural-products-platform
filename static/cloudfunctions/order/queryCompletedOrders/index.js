@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
 
 	const openid = wxContext.OPENID;
-	
+
 	const log = cloud.logger();
 
 	const _ = db.command;
@@ -20,13 +20,13 @@ exports.main = async (event, context) => {
 
 	try {
 		const orderDb = db.collection('order');
-		
+
 		const goodDb = db.collection('goods');
 
 		const temp = await orderDb.where({
 			_openid: _.eq(openid),
 			status: 4
-		}).get();
+		}).orderBy('createTime', 'desc').get();
 
 
 		log.info({
@@ -34,41 +34,41 @@ exports.main = async (event, context) => {
 			message: '查询到的order为4的结果',
 			data: temp
 		});
-		
+
 		const dataList = [];
-		
+
 		for (let i = 0; i < temp.data.length; i++) {
 			const item = temp.data[i];
 			const tasks = [];
-		
+
 			for (let i = 0; i < item.goodList.length; i++) {
 				const goodId = item.goodList[i][0];
 				const promise = goodDb.doc(goodId).get();
 				tasks.push(promise);
 			}
-		
+
 			const goodRes = await Promise.all(tasks);
-		
+
 			log.info({
 				name: 'queryCompletedOrders',
 				message: `查询到_id为 ${item._id} order的goodList信息`,
 				data: goodRes
 			});
-		
+
 			const goodList = [];
-		
+
 			for (let i = 0; i < goodRes.length; i++) {
 				const goodInfo = goodRes[i].data;
 				goodInfo.count = item.goodList[i][1];
 				goodList.push(goodInfo);
 			}
-		
+
 			item.goodList = goodList;
-		
+
 			dataList.push(item);
 		}
-		
-		
+
+
 		res = {
 			success: true,
 			message: "查询成功",

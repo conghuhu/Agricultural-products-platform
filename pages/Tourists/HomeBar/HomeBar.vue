@@ -221,7 +221,7 @@
 				// 	url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodId}`
 				// })
 			}
-			
+
 			/**
 			 * 跳到分类界面
 			 * @param {Object} index
@@ -235,9 +235,9 @@
 			/**
 			 * 去搜索界面
 			 */
-			const toSearch = async function(){
+			const toSearch = async function() {
 				uni.navigateTo({
-					url:"../Search/Search"
+					url: "../Search/Search"
 				})
 			}
 			return {
@@ -259,7 +259,7 @@
 			this.categoryLoading = true;
 			this.getGoodsList();
 			const temp: {
-				res: Array < any >
+				data: Array < any >
 			} = await request("goods", {
 				type: "getFirstCategory"
 			});
