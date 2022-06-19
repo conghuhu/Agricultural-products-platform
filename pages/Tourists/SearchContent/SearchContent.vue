@@ -4,7 +4,7 @@
 		<view class="content">
 			<view style="margin-bottom: 16rpx;">
 				<u-tabs activeColor="#4CC818" :showBar="false" :list="tabList" :is-scroll="false" v-model="current"
-					@change="changeTab" />
+					@change="changeTab" :clickChange="true" />
 			</view>
 
 			<GoodList :flowList="goodList" :goodListLoading="goodListLoading" />
@@ -16,8 +16,6 @@
 					<view class="category_body">
 						<view style="margin-bottom: 26rpx;margin-right: 26rpx;"
 							v-for="(item,index) in firstCategoryList" :key="item._id">
-							<!-- 							<u-tag :index="index" :text="item.name" :mode="item.checked ? 'dark':'plain'"
-								@click="selectCategory" /> -->
 							<u-button @click="selectCategory(index)" :custom-style="customStyle" size="medium"
 								:type="item.checked ? 'success':'info'">
 								{{item.name}}
@@ -90,7 +88,9 @@
 			 */
 			const changeTab = (index) => {
 				console.log(index);
-				if (index == 2) {
+				if (index == 0) {
+					initData();
+				} else if (index == 2) {
 					show.value = true;
 				}
 			}
@@ -103,6 +103,7 @@
 			 * 初始化数据
 			 */
 			const initData = async (categoryIdList ? : string[], priceRange ? : number[]) => {
+
 				goodListLoading.value = true;
 
 				const {
@@ -111,8 +112,8 @@
 					type: 'getGoodsByKeyword',
 					keyword: keyword.value,
 					orderType: 'price',
-					categoryIdList,
-					priceRange
+					categoryIdList: categoryIdList || [],
+					priceRange: priceRange ? priceRange.map(item => Number(item)) : [NaN, NaN]
 				})
 				if (list) {
 					goodList.length = 0;
@@ -136,9 +137,44 @@
 			}
 
 			const search = () => {
+				if ((isNanOrNull(priceRange[0]) && !isNanOrNull(priceRange[1])) || (!isNanOrNull(priceRange[0]) &&
+						isNanOrNull(priceRange[
+							1]))) {
+					uni.showToast({
+						icon: 'error',
+						title: '区间要完整'
+					})
+					return;
+				} else if (priceRange[0] > priceRange[1]) {
+					uni.showToast({
+						icon: 'error',
+						title: '最低要小于最高'
+					})
+					return;
+				} else if (priceRange[0] < 0 || priceRange[1] < 0) {
+					uni.showToast({
+						icon: 'error',
+						title: '价格要大于0'
+					})
+					return;
+				}
 				const categoryIdList = firstCategoryList.filter(item => item.checked).map(item => item._id);
-				console.log(categoryIdList)
-				initData(categoryIdList, priceRange);
+
+				initData(categoryIdList, priceRange.map(item => {
+					if (isNanOrNull(item)) {
+						return NaN
+					} else {
+						return item
+					}
+				}));
+				show.value = false;
+			}
+
+			/**
+			 * 判断元素是否为null Nan ""
+			 */
+			const isNanOrNull = (e) => {
+				return isNaN(e) || e == null || e == "";
 			}
 
 			return {
