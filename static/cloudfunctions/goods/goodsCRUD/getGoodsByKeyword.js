@@ -42,29 +42,34 @@ exports.main = async (event, context) => {
 
 		// 1. 没有附加的筛选条件
 		if (categoryIdList.length == 0 && priceRange[0] == null) {
-			temp = await goodDb.where(_.or([{
-						goodName: db.RegExp({
-							//从搜索栏中获取的value作为规则进行匹配。
-							regexp: keyword,
-							//大小写不区分
-							options: 'i',
-						})
+			temp = await goodDb.where(_.and([{
+						status: true
 					},
-					{
-						description: db.RegExp({
-							//从搜索栏中获取的value作为规则进行匹配。
-							regexp: keyword,
-							//大小写不区分
-							options: 'i',
-						})
-					}
+					_.or([{
+							goodName: db.RegExp({
+								//从搜索栏中获取的value作为规则进行匹配。
+								regexp: keyword,
+								//大小写不区分
+								options: 'i',
+							})
+						},
+						{
+							description: db.RegExp({
+								//从搜索栏中获取的value作为规则进行匹配。
+								regexp: keyword,
+								//大小写不区分
+								options: 'i',
+							})
+						}
+					])
 				]))
 				.orderBy(orderType == "price" ? 'goodPrice' : 'sale', orderType == "price" ? 'asc' : 'desc')
 				.get();
 		} else if (categoryIdList.length != 0 && priceRange[0] == null) {
 			// 2. 只有分类筛选
 			temp = await goodDb.where(_.and([{
-					firstCategoryId: _.in(categoryIdList)
+					firstCategoryId: _.in(categoryIdList),
+					status: true
 				}, _.or([{
 						goodName: db.RegExp({
 							//从搜索栏中获取的value作为规则进行匹配。
@@ -87,7 +92,8 @@ exports.main = async (event, context) => {
 		} else if (categoryIdList.length == 0 && priceRange[0] != null) {
 			// 3. 只有价格筛选
 			temp = await goodDb.where(_.and([{
-					goodPrice: _.and(_.gt(priceRange[0]), _.lt(priceRange[1]))
+					goodPrice: _.and(_.gt(priceRange[0]), _.lt(priceRange[1])),
+					status: true
 				}, _.or([{
 						goodName: db.RegExp({
 							//从搜索栏中获取的value作为规则进行匹配。
@@ -110,7 +116,8 @@ exports.main = async (event, context) => {
 		} else if (categoryIdList.length != 0 && priceRange[0] != null) {
 			// 4. 有价格，有种类筛选
 			temp = await goodDb.where(_.and([{
-					goodPrice: _.and(_.gt(priceRange[0]), _.lt(priceRange[1]))
+					goodPrice: _.and(_.gt(priceRange[0]), _.lt(priceRange[1])),
+					status: true
 				}, {
 					firstCategoryId: _.in(categoryIdList)
 				}, _.or([{

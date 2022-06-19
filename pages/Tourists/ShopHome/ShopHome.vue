@@ -1,22 +1,11 @@
 <template>
 	<view class="fullScreen">
-		<!-- <view class="content" v-if="isNew"> -->
-		<view class="content" v-if="true">
-			<Nav title="我的店铺" />
-			<view class="empty">
-				<u-empty text="还没有个人商铺" mode="list">
-					<template #bottom>
-						<u-button :customStyle="buttonStyle" type="primary" @click="createShop">去创建</u-button>
-					</template>
-				</u-empty>
-			</view>
-		</view>
-
-		<view class="content" v-else>
+		<NavTransparent />
+		<view class="content">
 			<view class="shopBack" />
 			<view class="shopContent">
 				<view class="shopTitle">
-					<view class="shopAvatar" :style="`background-image:url(${shopInfo.shopAvatar});`" />
+					<view class="shopAvatar" />
 					<view class="shop_name">
 						{{shopInfo.shopName}}
 					</view>
@@ -65,21 +54,18 @@
 
 				<block v-else>
 					<view v-if="goodList.length == 0" style="padding-top: 100rpx;">
-						<u-empty text="本店还没有上架商品" mode="data">
-							<template #bottom>
-								<u-button :customStyle="buttonStyle" type="primary" @click="goToAddGood">去上架</u-button>
-							</template>
+						<u-empty text="商品为空" mode="data">
 						</u-empty>
 					</view>
 					<u-waterfall v-else v-model="goodList">
 						<template v-slot:left="{leftList}">
 							<view v-for="(item, index) in leftList" :key="item._id">
-								<GoodSimpleCard :item="item" />
+								<GoodSimpleCard :item="item" :isShop="false" />
 							</view>
 						</template>
 						<template v-slot:right="{rightList}">
 							<view v-for="(item, index) in rightList" :key="item._id">
-								<GoodSimpleCard :item="item" />
+								<GoodSimpleCard :item="item" :isShop="false" />
 							</view>
 						</template>
 					</u-waterfall>
@@ -87,7 +73,6 @@
 
 			</view>
 		</view>
-		<u-tabbar :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
 	</view>
 </template>
 
@@ -95,30 +80,28 @@
 	import {
 		ref,
 		reactive,
-		computed,
-		onMounted
+		watch,
+		onMounted,
+		computed
 	} from 'vue';
-	import navList from '@/pages/Merchants/utils/navList';
 	import request from '@/api/request';
-	import dayjs from "dayjs";
 	import {
 		userStore
 	} from '@/stores/user';
-
+	import {
+		commonStore
+	} from '@/stores/store';
+	import {
+		storeToRefs
+	} from 'pinia';
+	import dayjs from "dayjs";
 	export default {
 		setup() {
-			const user = userStore();
-			const list = reactive(navList);
-			const isNew = ref(false);
-
 			const searchVal = ref('');
 
 			const buttonStyle = reactive({
-				margin: '15px',
-				width: '300rpx'
+				margin: '15px'
 			});
-
-
 			/**
 			 * 店铺信息
 			 */
@@ -131,10 +114,8 @@
 				star: 0,
 				username: "",
 				_id: "",
-				_openid: "",
-				shopAvatar: ''
+				_openid: ""
 			});
-
 			const star = computed(() => {
 				console.log(shopInfo)
 				return shopInfo.star;
@@ -154,34 +135,8 @@
 				return now.diff(start, 'day');
 			})
 
-			/**
-			 * 创建个人商铺
-			 */
-			const createShop = async () => {
-				uni.navigateTo({
-					url: "/pages/Merchants/CreateShop/CreateShop"
-				})
-			}
-
-			/**
-			 * 获取商铺信息
-			 */
-			const getShopInfo = async () => {
-				const {
-					res
-				} = await request("shop", {
-					type: "checkCreatedShop"
-				});
-				const temp = res.data.length == 0;
-				if (!temp) {
-					Object.assign(shopInfo, res.data[0]);
-				}
-				isNew.value = temp;
-
-				await getGoodList();
-			}
-
 			const goodListLoading = ref(true);
+
 			/**
 			 * 获取商品列表
 			 */
@@ -202,30 +157,36 @@
 				goodListLoading.value = false;
 			}
 
-			const goToAddGood = async () => {
-				uni.navigateTo({
-					url: "/pages/Merchants/GoodsPutaway/GoodsPutaway"
-				})
+			/**
+			 * 获取商铺信息
+			 */
+			const getShopInfo = async () => {
+				const res = await request("shop", {
+					type: "getShopInfo",
+					shopId: shopInfo._id
+				});
+
+				Object.assign(shopInfo, res.data);
+
+				await getGoodList();
 			}
 
+
 			return {
-				list,
-				isNew,
-				createShop,
+				searchVal,
 				buttonStyle,
 				shopInfo,
-				getShopInfo,
-				day,
 				star,
-				searchVal,
-				getGoodList,
 				goodList,
-				goToAddGood,
-				goodListLoading
+				day,
+				getGoodList,
+				getShopInfo,
+				goodListLoading,
 			}
 		},
-		async onLoad() {},
-		async onShow() {
+		async onLoad(option) {
+			console.log(option);
+			this.shopInfo._id = option.shopId;
 			await this.getShopInfo();
 		}
 	}
@@ -234,9 +195,12 @@
 <style lang="scss" scoped>
 	.fullScreen {
 		height: 100vh;
-		font-size: 32rpx;
 		width: 100%;
 		background-color: $background-color;
+		position: relative;
+		font-size: 32rpx;
+
+
 
 		.content {
 			position: relative;
@@ -244,13 +208,6 @@
 			flex-direction: column;
 			align-items: center;
 			background-color: $background-color;
-
-			.empty {
-				height: 80vh;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
 
 			.shopBack {
 				width: 100%;
@@ -278,7 +235,7 @@
 						height: 42vw;
 						border-radius: 24rpx;
 						border: 15rpx solid white;
-						// background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/shopAvatar.jpg?sign=86737ed47c27d68c83cba096cbd8aaaa&t=1652501346');
+						background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/shopAvatar.jpg?sign=86737ed47c27d68c83cba096cbd8aaaa&t=1652501346');
 						background-size: cover;
 						background-repeat: no-repeat;
 					}
@@ -345,8 +302,5 @@
 			}
 		}
 
-		.createFormContent {
-			padding: 20px;
-		}
 	}
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<view class="fullScreen">
-		<Nav title="商品详情" :isBack="true"></Nav>
+		<NavTransparent />
 		<view class="content">
 			<view class="wrap">
 				<u-swiper height="450" :border-radius="0" :list="goodInfo.imageShowList"></u-swiper>
@@ -38,7 +38,9 @@
 							</u-image>
 						</view>
 						<view class="left_content">
-							<view class="content_top">{{goodInfo.originPlace}}</view>
+							<view class="content_top">
+								<Ellipsis :content="goodInfo.originPlace" :width="160" />
+							</view>
 							<view class="content_bottom">产地</view>
 						</view>
 					</view>
@@ -48,7 +50,9 @@
 							</u-image>
 						</view>
 						<view class="left_content">
-							<view class="content_top">{{goodInfo.mode == 1 ? "即时配送":"顺丰物流"}}</view>
+							<view class="content_top">
+								<Ellipsis :content="goodInfo.mode == 1 ? '即时配送':'顺丰物流'" :width="160" />
+							</view>
 							<view class="content_bottom">配送方式</view>
 						</view>
 					</view>
@@ -154,13 +158,18 @@
 				</view>
 			</view>
 		</view>
+
 		<view class="bottom_info">
 			<view class="info_left">
-				<view class="item" @click="tokefu">
-					<u-image width="100%" mode="aspectFit" height="20px" src="./static/images/kefu.png"></u-image>
+				<view class="item" @click="gotoShop">
+					<u-image width="100%" mode="aspectFit" height="50rpx" src="./static/images/dianpu.png"></u-image>
 				</view>
-				<view class="item">
-					<u-image width="100%" mode="aspectFit" height="20px" src="./static/images/shoppingCart.png"></u-image>
+				<view class="item" @click="tokefu">
+					<u-image width="100%" mode="aspectFit" height="50rpx" src="./static/images/kefu.png"></u-image>
+				</view>
+				<view class="item" @click="gotoShoppingBar">
+					<u-image width="100%" mode="aspectFit" height="50rpx" src="./static/images/shoppingCart.png">
+					</u-image>
 					<u-badge type="error" :count="navList[3].count" :isCenter="true"></u-badge>
 				</view>
 			</view>
@@ -216,7 +225,7 @@
 				unit: "",
 				_id: "",
 				description: "",
-				_openid:""
+				_openid: ""
 			})
 			const count = computed(() => {
 				const exist = wantingGoods.value.has(goodInfo._id);
@@ -242,12 +251,27 @@
 					count: count.value
 				});
 			};
+
+
+			const gotoShop = () => {
+				uni.navigateTo({
+					url: `/pages/Tourists/ShopHome/ShopHome?shopId=${goodInfo.shopId}`
+				})
+			};
+
+			const gotoShoppingBar = () => {
+				uni.switchTab({
+					url: '/pages/Tourists/ShoppingBar/ShoppingBar'
+				})
+			};
 			return {
 				goodId,
 				goodInfo,
 				tokefu,
 				addToWant,
-				navList
+				navList,
+				gotoShoppingBar,
+				gotoShop
 			}
 		},
 		async onLoad(option) {
@@ -290,17 +314,17 @@
 				flex-direction: column;
 				z-index: 999;
 				margin-top: 380rpx;
-				margin-left: 50rpx;
-				margin-right: 50rpx;
-				height: 30vw;
-				border-radius: 4px;
+				margin-left: 40rpx;
+				margin-right: 40rpx;
+				border-radius: 8rpx;
 				background: #FFFFFF;
-				box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.03);
+				box-shadow: 0rpx 20rpx 40rpx 0rpx rgba(0, 0, 0, 0.03);
 
 				.card_top {
 					flex: 3;
 					display: flex;
 					justify-content: space-between;
+					padding-bottom: 10rpx;
 
 					.top_left {
 						flex: 1;
@@ -313,9 +337,9 @@
 							flex: 1;
 							margin-top: 20rpx;
 							font-family: SourceHanSansCN-Ex;
-							font-size: 32rpx;
+							font-size: 36rpx;
 							font-weight: 550;
-							line-height: 32rpx;
+							line-height: 40rpx;
 							letter-spacing: 0rpx;
 							color: #333333;
 						}
@@ -323,25 +347,11 @@
 						.left_mid {
 							flex: 1;
 							margin-top: 20rpx;
-							font-size: 30rpx;
+							font-size: 32rpx;
 							font-weight: 500;
-							line-height: 30rpx;
+							line-height: 36rpx;
 							letter-spacing: 0px;
 							color: #949397;
-						}
-
-						.left_bottom {
-							margin-top: 0;
-							flex: 1;
-							display: flex;
-							align-items: center;
-
-							.bottom_image {
-								margin: 0;
-								padding: 0;
-								width: 3vw;
-								height: 14px;
-							}
 						}
 					}
 
@@ -355,14 +365,13 @@
 							flex: 1;
 							display: flex;
 							align-items: center;
-							justify-content: center;
-							margin-left: 40rpx;
+							justify-content: flex-end;
+							margin-right: 30rpx;
 
 							.top_number {
-								margin-left: 80rpx;
 								font-family: SourceHanSansCN-ExtraLight;
-								font-size: 34rpx;
-								line-height: 34rpx;
+								font-size: 36rpx;
+								line-height: 36rpx;
 								font-weight: 550;
 								color: red;
 							}
@@ -370,10 +379,10 @@
 							.top_content {
 								justify-content: flex-start;
 								font-family: SourceHanSansCN-ExtraLight;
-								font-size: 30rpx;
+								font-size: 32rpx;
 								font-weight: 500;
-								line-height: 30rpx;
-								margin-left: 6rpx;
+								line-height: 32rpx;
+								margin-left: 10rpx;
 							}
 						}
 
@@ -422,9 +431,9 @@
 				}
 
 				.card_bottom {
-					padding-left: 10rpx;
-					padding-right: 10rpx;
-					padding-bottom: 16rpx;
+					padding-left: 16rpx;
+					padding-right: 16rpx;
+					padding-bottom: 24rpx;
 					display: flex;
 					align-items: center;
 					justify-content: space-around;
@@ -434,10 +443,10 @@
 						display: flex;
 						align-items: center;
 						justify-content: center;
+						flex: 1;
 
 						.left_left {
 							width: 40rpx;
-							margin-right: 10rpx;
 						}
 
 						.left_content {
@@ -450,19 +459,25 @@
 
 							.content_top {
 								font-family: SourceHanSansCN-ExtraLight;
-								font-size: 30rpx;
+								font-size: 32rpx;
 								font-weight: 520;
-								line-height: 34rpx;
+								line-height: 36rpx;
 								letter-spacing: 0px;
+								width: 100%;
+
+								display: flex;
+								justify-content: center;
 							}
 
 							.content_bottom {
 								margin-top: 6rpx;
 								font-family: SourceHanSansCN-ExtraLight;
-								font-size: 28rpx;
+								font-size: 30rpx;
 								font-weight: 500;
 								letter-spacing: 0px;
 								color: #949397;
+								width: 100%;
+								text-align: center;
 							}
 						}
 					}
@@ -649,15 +664,16 @@
 				align-items: center;
 				justify-content: flex-start;
 				padding-left: 20rpx;
-				.item{
-					width: 60rpx;
-					margin-left: 30rpx;
+
+				.item {
+					width: 70rpx;
+					margin-left: 20rpx;
 					position: relative;
 				}
 			}
 
 			.info_right {
-				flex: 8;
+				flex: 6;
 				padding-right: 20rpx;
 			}
 		}

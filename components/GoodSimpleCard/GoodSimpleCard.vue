@@ -32,12 +32,23 @@
 				default: () => ({}),
 				required: true,
 			},
+			isShop: {
+				type: Boolean,
+				default: true
+			}
 		},
-		setup() {
+		setup(props) {
 			const goToDetail = async (item) => {
-				uni.navigateTo({
-					url: `/pages/Merchants/GoodDetail/GoodDetail?goodId=${item._id}`
-				})
+				if (props.isShop) {
+					uni.navigateTo({
+						url: `/pages/Merchants/GoodDetail/GoodDetail?goodId=${item._id}`
+					})
+				} else {
+					const goodId = item._id;
+					uni.navigateTo({
+						url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodId}`
+					})
+				}
 			}
 			return {
 				goToDetail
