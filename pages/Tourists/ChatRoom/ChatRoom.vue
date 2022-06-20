@@ -4,7 +4,7 @@
 		<scroll-view class="cu-chat" scroll-y="true">
 			<view v-for="(item,index) in chatList" :key="index">
 				<!--对方发送的信息-->
-				<view class="cu-item" v-if="item.openId === m_openId && item.msgType === 'text'">
+				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='mTOt'">
 					<view class="cu-avatar radius">
 						<u-avatar size="80" :src="item.m_userInfo.avatarUrl"></u-avatar>
 					</view>
@@ -15,7 +15,7 @@
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-				<view class="cu-item" v-if="item.m_openId === m_openId && item.msgType === 'image'">
+				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='mTOt'">
 					<view class="cu-avatar radius">
 						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
 					</view>
@@ -25,7 +25,7 @@
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
 				<!--自己发送的信息-->
-				<view class="cu-item self" v-if="item.openId != m_openId && item.msgType === 'text'">
+				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='tTOm'">
 					<view class="main">
 						<view class="content bg-green shadow">
 							<text>{{item.content}}</text>
@@ -36,7 +36,7 @@
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-				<view class="cu-item self" v-if="item.openId != m_openId && item.msgType === 'image'">
+				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='tTOm'">
 					<view class="main">
 						<image :src="item.content" class="radius" mode="widthFix"></image>
 					</view>
