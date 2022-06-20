@@ -20,7 +20,7 @@
 
 				<view style="padding-bottom: 100rpx;" v-else>
 					<view class="card" v-for="(item, index) in goodList" :key="item._id">
-						<u-checkbox :labelDisabled="true" v-model="item.checked" :name="item._id" :size="44"
+						<u-checkbox v-model="item.checked" :name="item._id" :size="44"
 							:icon-size="28" @change="selectGood">
 							<view class="good_content">
 								<view class="list_left">

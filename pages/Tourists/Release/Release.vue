@@ -4,7 +4,7 @@
 		<view class="content">
 			<u-form :model="form" ref="formRef" :label-width="0">
 				<u-form-item label="" prop="title">
-					<u-input placeholder="填写标题会有更多赞哦~" v-model="form.title" />
+					<u-input placeholder="(必填)填写标题会有更多赞哦~" v-model="form.title" />
 				</u-form-item>
 				<u-form-item label="" prop="content">
 					<u-input placeholder="添加正文" type="textarea" :height="200" :auto-height="true"
@@ -30,7 +30,7 @@
 								src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/location.png?sign=c1ea39e3c461e32946bed9fa5417d24f&t=1652769718"
 								mode="aspectFit"></image>
 							<view class="locationVal">
-								{{form.locationVal == "" ? '添加位置' :form.locationVal}}
+								{{form.locationVal == "" ? '(必填)添加位置' :form.locationVal}}
 							</view>
 						</view>
 						<image style="width: 36rpx;height: 36rpx;"
@@ -40,7 +40,7 @@
 				</u-form-item>
 				<u-form-item label="" prop="imageList">
 					<u-upload @on-choose-complete="chooseComplete" @on-remove="removeImg" :auto-upload="false"
-						:max-size="5 * 1024 * 1024" max-count="6"></u-upload>
+						:max-size="5 * 1024 * 1024" max-count="6" uploadText="(必填)上传"></u-upload>
 				</u-form-item>
 			</u-form>
 
@@ -250,8 +250,8 @@
 					line-height: normal;
 					margin-left: 10rpx;
 				}
-				
-				.recommend_good_checked{
+
+				.recommend_good_checked {
 					font-size: 28rpx;
 					// color: #b6bac0;
 					line-height: normal;
