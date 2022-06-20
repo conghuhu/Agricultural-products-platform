@@ -1,6 +1,6 @@
 const messageAdd = require('./MessageCRUD/messageAdd');
 const messageGet = require('./MessageCRUD/messageGet')
-
+const messageListGet = require('./MessageLIst/messageListGet')
 // 云函数入口函数
 exports.main = async (event, context) => {
 	switch (event.type) {
@@ -8,6 +8,8 @@ exports.main = async (event, context) => {
 			return await messageAdd.main(event, context);
 		case 'messageGet':
 			return await messageGet.main(event, context);
+		case 'messageListGet':
+			return await messageListGet.main(event, context);
 		default:
 			return {
 				success: false,
