@@ -40,6 +40,20 @@ exports.main = async (event, context) => {
 
 		let temp;
 
+		if (keyword == "" || keyword == null) {
+			temp = await goodDb.where({
+					status: true
+				})
+				.orderBy('goodPrice', 'asc')
+				.get();
+
+			return {
+				sucess: true,
+				message: "",
+				data: temp.data || null
+			}
+		}
+
 		// 1. 没有附加的筛选条件
 		if (categoryIdList.length == 0 && priceRange[0] == null) {
 			temp = await goodDb.where(_.and([{

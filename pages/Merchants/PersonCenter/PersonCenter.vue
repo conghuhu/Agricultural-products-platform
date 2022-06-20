@@ -89,7 +89,7 @@
 			</view>
 		</view>
 
-		<u-tabbar :list="list" :mid-button="true"></u-tabbar>
+		<u-tabbar :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
 
 	</view>
 </template>
@@ -175,9 +175,9 @@
 				})
 			};
 			//消息列表界面
-			const toMessageList = async function(){
+			const toMessageList = async function() {
 				uni.navigateTo({
-					url:"../MessageList/MessageList"
+					url: "../MessageList/MessageList"
 				})
 			}
 

@@ -29,7 +29,7 @@
 
 <style lang="scss" scoped>
 	.icon {
-		position: absolute;
+		position: fixed;
 		left: 30rpx;
 		z-index: 998;
 		background-color: rgba(255, 255, 255, 0.8);
