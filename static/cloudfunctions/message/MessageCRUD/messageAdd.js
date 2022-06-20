@@ -46,7 +46,8 @@ exports.main = async (event, context) => {
 				content: messageData.content,
 				o_userInfo: o_userInfo,
 				m_userInfo: m_userInfo,
-				_createTime: messageData._createTime
+				_createTime: messageData._createTime,
+				read:"0",
 			}
 		})
 		res = {

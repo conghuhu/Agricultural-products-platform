@@ -188,31 +188,7 @@
 				"navigationStyle": "custom"
 			}
 
-		}, {
-			"path": "pages/Tourists/ChatRoom/ChatRoom",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-			}
-
-		}, {
-			"path": "pages/Tourists/room/room",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-			}
-
-		}, {
-			"path": "pages/Tourists/SearchContent/SearchContent",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
-			}
-
-		}, {
+		},  {
 			"path": "pages/Tourists/ShopHome/ShopHome",
 			"style": {
 				"navigationBarTitleText": "",
@@ -228,8 +204,55 @@
 				"navigationStyle": "custom"
 			}
 
+		},
+
+		{
+			"path": "pages/Tourists/ChatRoom/ChatRoom",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		},
+		{
+			"path": "pages/Tourists/room/room",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		},
+		{
+			"path": "pages/Tourists/SearchContent/SearchContent",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		},
+		{
+			"path": "pages/Merchants/MessageList/MessageList",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		},
+		{
+			"path": "pages/Merchants/ChatRoom/ChatRoom",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
+
 
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
