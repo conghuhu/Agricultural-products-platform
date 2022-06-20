@@ -20,18 +20,18 @@ exports.main = async (event, context) => {
 	try {
 		const messageDb = db.collection('chat-msgs');
 		const userDb = db.collection("users")
-		const openId = wxContext.OPENID;
+		const m_openId = wxContext.OPENID;
 		const resTemp = await userDb.where({
-			_openid: _.eq(openId)
+			_openid: _.eq(m_openId)
 		}).get()
-		const o_userInfo = {
+		const m_userInfo = {
 			avatarUrl: resTemp.data[0].avatarUrl,
 			nickName: resTemp.data[0].nickName
 		}
 		const userInfo = await userDb.where({
-			_openid: _.eq(messageData.m_openId)
+			_openid: _.eq(messageData.openId)
 		}).get()
-		const m_userInfo = {
+		const o_userInfo = {
 			avatarUrl: userInfo.data[0].avatarUrl,
 			nickName: userInfo.data[0].nickName
 		}
@@ -40,14 +40,15 @@ exports.main = async (event, context) => {
 
 		const temp = await messageDb.add({
 			data: {
-				openId: openId,
-				m_openId: messageData.m_openId,
+				openId: messageData.openId,
+				m_openId: m_openId,
 				msgType: messageData.msgType,
 				content: messageData.content,
 				o_userInfo: o_userInfo,
 				m_userInfo: m_userInfo,
 				_createTime: new Date(),
 				read:"0",
+				to:"mTOt"
 			}
 		})
 		res = {

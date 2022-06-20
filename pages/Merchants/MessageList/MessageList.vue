@@ -2,11 +2,12 @@
 	<view class="fullScreen">
 		<Nav title="消息列表" :isBack="true"></Nav>
 		<uni-list>
-			<uni-list :border="true" v-for="(item,index) in messageList">
+			<uni-list :border="true" v-for="(item,index) in showMessage">
 				<!-- 右侧带角标 -->
-				<uni-list-chat :clickable="true" to="../ChatRoom/ChatRoom" :avatar-circle="true" :title="item.o_userInfo.nickName"
-					:avatar="item.o_userInfo.avatarUrl"	:note="item.content" :time="dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')" badge-text="12" :badge-style="{backgroundColor:'#FF80AB'}"
-					></uni-list-chat>
+				<uni-list-chat :clickable="true" :to="`../ChatRoom/ChatRoom?openId=${item.openId}`" :avatar-circle="true"
+					:title="item.o_userInfo.nickName" :avatar="item.o_userInfo.avatarUrl" :note="item.content"
+					:time="dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')" :badge-text="item.num"
+					:badge-style="{backgroundColor:'#FF80AB'}"></uni-list-chat>
 			</uni-list>
 		</uni-list>
 	</view>
@@ -22,6 +23,8 @@
 
 	export default {
 		setup() {
+			//展示消息列表
+			const showMessage = reactive([])
 			//消息列表
 			const messageList = reactive([]);
 			//聊天数据监听
@@ -53,7 +56,8 @@
 
 			return {
 				messageList,
-				dayjs
+				dayjs,
+				showMessage
 			}
 		},
 		async onLoad() {
@@ -62,10 +66,26 @@
 			} = await request("message", {
 				type: "messageListGet",
 			});
-			res.data.forEach(item=>{
+			await res.data.forEach(item => {
 				this.messageList.push(item);
 			})
-			console.log(this.messageList)
+			const temp: {
+				data: Array < any >
+			} = await request("message", {
+				type: "messageListCount"
+			})
+			await temp.data.forEach(item => {
+				for(let i = 0; i<this.messageList.length;i++){
+					if(item._id===this.messageList[i].openId){
+						this.showMessage.push({
+							...this.messageList[i],
+							num:item.num
+						})
+						break;
+					}
+				}
+			})
+			console.log(this.showMessage)
 		}
 	};
 </script>

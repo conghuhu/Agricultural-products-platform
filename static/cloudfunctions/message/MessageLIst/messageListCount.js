@@ -16,20 +16,22 @@ exports.main = async (event, context) => {
 	try {
 		const msgDb = db.collection('chat-msgs');
 		const _ = db.command;
+		const $ = db.command.aggregate;
 
-		const {
-			data
-		} = await msgDb.where({
+		const {list} = await msgDb.aggregate().match({
 				m_openId: _.eq(openId),
 				read:_.eq("0")
-			}).orderBy('_createTime', 'desc')
-			.get();
+			}).group({
+				_id:'$openId',
+				num:$.sum(1)
+			})
+			.end();
 
 		
 		res = {
 			sucess: true,
 			message: "",
-			data: data
+			data: list
 		}
 	} catch (e) {
 		//TODO handle the exception
