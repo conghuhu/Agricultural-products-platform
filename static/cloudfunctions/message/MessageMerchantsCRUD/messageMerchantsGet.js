@@ -7,10 +7,10 @@ const db = cloud.database();
 
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
-	const openId = wxContext.OPENID;
+	const m_openId = wxContext.OPENID;
 
 	const {
-		m_openId
+		openId
 	} = event;
 	let res = {};
 	try {
@@ -20,9 +20,9 @@ exports.main = async (event, context) => {
 		const {
 			data
 		} = await msgDb.where({
-				m_openId: _.eq(openId),
-				read:_.eq("0")
-			}).orderBy('_createTime', 'desc')
+				openId: _.eq(openId),
+				m_openId: _.eq(m_openId)
+			}).orderBy('_createTime', 'asc')
 			.get();
 
 		
