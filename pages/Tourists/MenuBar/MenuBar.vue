@@ -32,7 +32,6 @@
 					</template>
 				</u-waterfall>
 			</block>
-
 		</view>
 		<u-tabbar :list="list" :mid-button="true"></u-tabbar>
 	</view>

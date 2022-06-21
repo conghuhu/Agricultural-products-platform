@@ -149,7 +149,7 @@
 				{
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E7%A7%8D%E8%8D%89.png?sign=7734a781e420ca814fc11074939baaae&t=1655528876',
 					text: '种草',
-					url: '/pages/Tourists/Love/Love'
+					url: '/pages/Tourists/MyRelease/MyRelease'
 				}, {
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%9C%B0%E5%9D%80.png?sign=cec3bc5ea67c8dec43c79dabb404e261&t=1653982220',
 					text: '地址',
@@ -168,9 +168,9 @@
 				})
 			}
 			//跳转消息列表
-			const toMessageList = async function(){
+			const toMessageList = async function() {
 				uni.navigateTo({
-					url:"../MessageList/MessageList"
+					url: "../MessageList/MessageList"
 				})
 			}
 			const gotoPage = async (item) => {

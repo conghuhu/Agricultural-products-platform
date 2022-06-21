@@ -26,7 +26,21 @@ exports.main = async (event, context) => {
 		}).get();
 
 		const actionList = data.map(item => {
-			return shareDb.doc(item.shareId).get();
+			return shareDb
+				.aggregate()
+				.match({
+					_id: _.eq(item.shareId)
+				})
+				.lookup({
+					from: 'users',
+					localField: '_openid',
+					foreignField: '_openid',
+					as: 'author',
+				})
+				.sort({
+					createTime: -1
+				})
+				.end();
 		});
 
 		const temp = await Promise.all(actionList);
@@ -34,7 +48,7 @@ exports.main = async (event, context) => {
 		res = {
 			sucess: true,
 			message: "",
-			data: temp.map(item => item.data),
+			data: temp.map(item => item.list[0]),
 		}
 	} catch (e) {
 		console.trace(e);

@@ -1,6 +1,6 @@
 <template>
 	<view class="fullScreen">
-		<Nav title="心选种草" isBack />
+		<Nav title="我的种草" isBack />
 		<view class="content">
 			<view style="width: 100%;height: 70vh;display: flex;justify-content: center;align-items: center;"
 				v-if="loading">
@@ -49,8 +49,8 @@
 			}
 		},
 		async onLoad() {
-			const res = await request('star_focus', {
-				type: 'getOneStarInfoList'
+			const res = await request('share', {
+				type: 'getOneShareList'
 			});
 			console.log(res);
 			this.shareList.length = 0;

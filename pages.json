@@ -283,6 +283,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/Tourists/MyRelease/MyRelease",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
