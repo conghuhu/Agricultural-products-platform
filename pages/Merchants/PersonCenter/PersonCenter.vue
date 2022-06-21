@@ -19,7 +19,8 @@
 								</u-image>
 							</view>
 
-							<u-image height="50rpx" width="50rpx" mode="aspectFit" src="/static/images/set.png">
+							<u-image @click="gotoSet" height="50rpx" width="50rpx" mode="aspectFit"
+								src="/static/images/set.png">
 							</u-image>
 						</view>
 					</view>
@@ -181,6 +182,12 @@
 				})
 			}
 
+			const gotoSet = () => {
+				uni.navigateTo({
+					url: "/pages/Public/Setting/Setting"
+				})
+			}
+
 			onMounted(() => {});
 			return {
 				list,
@@ -191,7 +198,8 @@
 				gotoPage,
 				gotoOrder,
 				orderMap,
-				toMessageList
+				toMessageList,
+				gotoSet
 			}
 		},
 		async onShow() {

@@ -4,6 +4,7 @@
 			<view class="top_img">
 				<u-lazy-load threshold="-100" imgMode="widthFix" :image="shareInfo.imageList[0]"
 					:index="shareInfo._id" />
+				<LocationBottom :value="shareInfo.locationVal" />
 			</view>
 			<view class="title">
 				{{shareInfo.title}}
@@ -85,6 +86,8 @@
 
 		.top_img {
 			width: 100%;
+			position: relative;
+
 		}
 
 		.title {

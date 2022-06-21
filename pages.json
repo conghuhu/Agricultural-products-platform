@@ -202,7 +202,6 @@
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
-
 		},
 
 		{
@@ -251,6 +250,14 @@
 
 		}, {
 			"path": "pages/Tourists/SelectGood/SelectGood",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/Public/Setting/Setting",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,

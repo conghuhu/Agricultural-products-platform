@@ -1,7 +1,10 @@
 <template>
 	<view v-if="item" class="goodCard" @click="goToDetail(item)">
-		<u-lazy-load threshold="10" border-radius="10" :image="item.imageShowList[0]" :index="item._id">
-		</u-lazy-load>
+		<view style="position: relative;">
+			<u-lazy-load threshold="10" border-radius="10" :image="item.imageShowList[0]" :index="item._id" />
+			<LocationBottom :value="item.originPlace" />
+		</view>
+
 		<view class="demo-title">
 			{{item.goodName}}
 		</view>
@@ -18,7 +21,7 @@
 		</view>
 		<view class="demo-shop">
 			<view>
-				{{item.originPlace}}
+				<Ellipsis :content="item.description" :width="190" />
 			</view>
 			<view class="bottom_right" @click.stop="addToWant">
 				<u-image height="100%" width="100%" mode="aspectFit" src="/static/images/upload.png">
@@ -143,7 +146,7 @@
 		.demo-shop {
 			font-size: 28rpx;
 			color: $u-tips-color;
-			padding: 6rpx 12rpx 12rpx 12rpx;
+			padding: 0rpx 12rpx 12rpx 12rpx;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;

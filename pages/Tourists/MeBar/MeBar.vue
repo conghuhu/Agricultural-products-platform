@@ -19,7 +19,8 @@
 								</u-image>
 							</view>
 
-							<u-image height="50rpx" width="50rpx" mode="aspectFit" src="/static/images/set.png">
+							<u-image @click="gotoSet" height="50rpx" width="50rpx" mode="aspectFit"
+								src="/static/images/set.png">
 							</u-image>
 						</view>
 					</view>
@@ -181,6 +182,15 @@
 				})
 			};
 
+			/**
+			 * 去设置页面
+			 */
+			const gotoSet = () => {
+				uni.navigateTo({
+					url: "/pages/Public/Setting/Setting"
+				})
+			}
+
 			onMounted(() => {});
 			return {
 				list,
@@ -191,7 +201,11 @@
 				gotoPage,
 				gotoOrder,
 				orderMap,
+<<<<<<< HEAD
 				toMessageList
+=======
+				gotoSet
+>>>>>>> fd060d2742238468dcfbe1b9499b86d0346d3972
 			}
 		},
 		async onShow() {
@@ -213,12 +227,12 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F3F3F3;
+		background-color: $background-color;
 		position: relative;
 		font-size: 32rpx;
 
 		.content {
-			background-color: #F3F3F3;
+			background-color: $background-color;
 
 			.top_back {
 				width: 100%;

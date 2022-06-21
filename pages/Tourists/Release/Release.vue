@@ -169,7 +169,7 @@
 						title: "请选择位置"
 					});
 					return false;
-				} else if (form.imageList.length = 0) {
+				} else if (form.imageList.length == 0) {
 					uni.showToast({
 						icon: 'error',
 						title: "请上传图片"
@@ -199,6 +199,7 @@
 				fileList.forEach(item => {
 					form.imageList.push(item.fileID);
 				});
+				console.log(form);
 				const res = await request('share', {
 					type: 'addShare',
 					form,

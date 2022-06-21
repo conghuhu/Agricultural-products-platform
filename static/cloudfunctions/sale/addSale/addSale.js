@@ -4,29 +4,29 @@ const cloud = require('wx-server-sdk');
 cloud.init();
 
 const db = cloud.database();
-
+const dayjs = require("dayjs");
 // 云函数入口函数
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
 	
 	const goodDb = db.collection('sales');
 	const _ = db.command;
+    const $ = db.command.aggregate;
 	
 	const {
 		goodId,createTime,goodNums,goodTotalPrice
 	} = event;
 
-    console.log(goodId);
-	console.log(goodNums);
 	try {
 		const temp = await goodDb.add({
 			data: {
 				goodId: goodId,
-				createTime: createTime,
+				newTime: newTime,
 				goodNums: goodNums,
 				goodTotalPrice: goodTotalPrice
 			}
 		})
+		
 		res = {
 			sucess: true,
 			message: "",
