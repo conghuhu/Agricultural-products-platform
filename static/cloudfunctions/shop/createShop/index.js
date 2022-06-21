@@ -18,7 +18,8 @@ exports.main = async (event, context) => {
 		username,
 		phone,
 		shopName,
-		description
+		description,
+		shopAvatar
 	} = createShopForm;
 
 	const shopDb = db.collection('shops');
@@ -42,7 +43,8 @@ exports.main = async (event, context) => {
 				username,
 				phone,
 				shopName,
-				description
+				description,
+				shopAvatar
 			}
 		})
 		res = {
@@ -53,11 +55,9 @@ exports.main = async (event, context) => {
 	} else {
 		res = {
 			success: false,
-			message: "已存在商铺，不可再申请"
+			message: "不可重复申请"
 		}
 	}
 
-	return {
-		res
-	};
+	return res;
 }

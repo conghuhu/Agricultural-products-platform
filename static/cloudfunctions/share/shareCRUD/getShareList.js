@@ -39,6 +39,9 @@ exports.main = async (event, context) => {
 					foreignField: '_openid',
 					as: 'author',
 				})
+				.sort({
+					createTime: -1
+				})
 				.end();
 		} else {
 			shareList = await shareDb
@@ -48,6 +51,9 @@ exports.main = async (event, context) => {
 					localField: '_openid',
 					foreignField: '_openid',
 					as: 'author',
+				})
+				.sort({
+					createTime: -1
 				})
 				.end();
 		}

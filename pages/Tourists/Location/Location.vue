@@ -4,7 +4,7 @@
 
 		<view class="top_tool">
 			<view style="flex: 6;">
-				<u-search bg-color="#f2f2f2" placeholder="请输入位置" v-model="keyword" @change="search"></u-search>
+				<u-search bg-color="#f2f2f2" borderColor="#909399" placeholder="请输入位置" v-model="keyword" @change="search"></u-search>
 			</view>
 			<view style="flex: 1;">
 				<u-button :customStyle="btnStyle" :hairLine="false" @click="insertAdress()" type="success"

@@ -8,8 +8,8 @@
 			</view>
 			<view class="search">
 				<view class="search_content">
-					<u-search placeholder="请输入关键字" v-model="keyword" :clearabled="true" :show-action="false"
-						@search="searchContent"></u-search>
+					<u-search borderColor="#909399" placeholder="请输入关键字" v-model="keyword" :clearabled="true"
+						:show-action="false" @search="searchContent" @clear="searchContent"></u-search>
 				</view>
 				<view class="search_btn">
 					<u-button :custom-style="search_btn_style" type="primary" @click="searchContent">搜索</u-button>

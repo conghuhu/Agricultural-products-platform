@@ -4,9 +4,9 @@
 		<scroll-view class="cu-chat" scroll-y="true">
 			<view v-for="(item,index) in chatList" :key="index">
 				<!--对方发送的信息-->
-				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='mTOt'">
+				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='tTOm'">
 					<view class="cu-avatar radius">
-						<u-avatar size="80" :src="item.m_userInfo.avatarUrl"></u-avatar>
+						<u-avatar size="80" :src="item.o_userInfo.avatarUrl"></u-avatar>
 					</view>
 					<view class="main">
 						<view class="content bg-cyan shadow">
@@ -15,9 +15,9 @@
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='mTOt'">
+				<view class="cu-item" v-if="item.m_openId === openId && item.msgType === 'image'">
 					<view class="cu-avatar radius">
-						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
+						<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
 					</view>
 					<view class="main">
 						<image :src="item.content" class="radius" mode="widthFix"></image>
@@ -25,23 +25,23 @@
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
 				<!--自己发送的信息-->
-				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='tTOm'">
+				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='mTOt'">
 					<view class="main">
 						<view class="content bg-green shadow">
 							<text>{{item.content}}</text>
 						</view>
 					</view>
 					<view class="cu-avatar radius">
-						<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
+						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='tTOm'">
+				<view class="cu-item self" v-if="item.openId != openId && item.msgType === 'image'">
 					<view class="main">
 						<image :src="item.content" class="radius" mode="widthFix"></image>
 					</view>
 					<view class="cu-avatar radius">
-						<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
+						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
@@ -154,22 +154,22 @@
 				showExpre.value = !showExpre.value; //显示表情
 				uni.hideKeyboard();
 			}
-			//商家openid
-			const m_openId = ref("");
+			//用户openid
+			const openId = ref("");
 			//选择表情
 			async function expre(e) {
 				formData.content = !formData.content ? e : formData.content + e;
 			}
 			//发送消息
 			const sendContent = async function() {
-				messageData.m_openId = m_openId.value;
+				messageData.openId = openId.value;
 				messageData.msgType = "text";
 				messageData.content = formData.content;
 				const time = new Date();
 				messageData._createTime = time;
 				console.log(messageData)
 				const res = await request("message", {
-					type: "messageAdd",
+					type: "messageMerchantsAdd",
 					messageData: messageData
 				})
 				formData.content = ""
@@ -178,7 +178,7 @@
 			
 			
 			const initWatcher = async function(){
-				const openId = await request("user",{
+				const m_openId = await request("user",{
 					type:"userOpenId",
 				})
 				const db = wx.cloud.database();
@@ -218,7 +218,7 @@
 				oftenc,
 				oftenx,
 				expre,
-				m_openId,
+				openId,
 				sendContent,
 				messageData,
 				chatList,
@@ -226,14 +226,17 @@
 				dayjs
 			}
 		},
-		async onLoad(value) {
-			this.m_openId = value.m_openId
+		async onLoad(option) {
+			console.log(option)
+			this.openId = option.openId
+			console.log(this.openId)
 			const temp: {
 				data: Array < any >
 			} = await request("message", {
-				type: "messageGet",
-				m_openId: this.m_openId
+				type: "messageMerchantsGet",
+				openId: this.openId
 			});
+			console.log(temp)
 			this.chatList.length=0;
 			temp.data.forEach(item => {
 				this.chatList.push(item);
