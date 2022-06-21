@@ -2,60 +2,68 @@
 	<view class="fullScreen">
 		<Nav title="商品详情" isBack="true" />
 		<view class="content">
-			<view class="good_card">
-				<view class="good_card_top">
-					<view style="font-size: 44rpx;font-weight: 550;">
-						{{goodInfo.goodName}}
-					</view>
-					<view class="right">
-						<view style="display: flex;align-items: center;justify-content: center;">
-							<view style="font-weight: 550;margin-right: 10rpx;">
-								{{goodInfo.goodPrice}}
+			<view style="width: 100%;justify-content: center;align-items: center;height: 70vh;" v-if="loading">
+				<MyLoading />
+			</view>
+
+			<block v-else>
+				<view class="good_card">
+					<view class="good_card_top">
+						<view style="font-size: 44rpx;font-weight: 550;">
+							{{goodInfo.goodName}}
+						</view>
+						<view class="right">
+							<view style="display: flex;align-items: center;justify-content: center;">
+								<view style="font-weight: 550;margin-right: 10rpx;">
+									{{goodInfo.goodPrice}}
+								</view>
+								元/{{goodInfo.unit}}
 							</view>
-							元/{{goodInfo.unit}}
+							<view style="padding-left: 26rpx;padding-right: 20rpx;" @click="actionSheetShow = true">
+								<u-icon name="more-dot-fill"></u-icon>
+							</view>
+							<u-action-sheet @click="clickAction" :list="actionList" v-model="actionSheetShow">
+							</u-action-sheet>
 						</view>
-						<view style="padding-left: 26rpx;padding-right: 20rpx;" @click="actionSheetShow = true">
-							<u-icon name="more-dot-fill"></u-icon>
+					</view>
+					<view class="good_card_content">
+						<view class="item">
+							产地:{{goodInfo.originPlace}}
 						</view>
-						<u-action-sheet @click="clickAction" :list="actionList" v-model="actionSheetShow">
-						</u-action-sheet>
+						<view class="item">
+							规格:{{goodInfo.specification}}
+						</view>
+						<view class="item">
+							有效期:{{goodInfo.expirationDate}}
+						</view>
+						<view class="item">
+							支持:{{goodInfo.mode == 0 ? '自提':'配送'}}
+						</view>
+						<view class="item">
+							类别:{{goodInfo.firstCategoryName}} - {{goodInfo.secondCategoryName}}
+						</view>
+						<view class="item">
+							上架日期:{{goodInfo.createTime}}
+						</view>
+					</view>
+					<view class="good_card_Img">
+						<u-upload :fileList="goodInfo.imageShowList.map(item=>{return{
+							url:item
+						} })" :maxCount="goodInfo.imageShowList.length" :deletable="false"></u-upload>
 					</view>
 				</view>
-				<view class="good_card_content">
-					<view class="item">
-						产地:{{goodInfo.originPlace}}
-					</view>
-					<view class="item">
-						规格:{{goodInfo.specification}}
-					</view>
-					<view class="item">
-						有效期:{{goodInfo.expirationDate}}
-					</view>
-					<view class="item">
-						支持:{{goodInfo.mode == 0 ? '自提':'配送'}}
-					</view>
-					<view class="item">
-						类别:{{goodInfo.firstCategoryName}} - {{goodInfo.secondCategoryName}}
-					</view>
-					<view class="item">
-						上架日期:{{goodInfo.createTime}}
-					</view>
+				<view class="last_week_card">
+					<qiun-data-charts type="line" :ontouch="true" :opts="chartOption" :chartData="option" />
 				</view>
-				<view class="good_card_Img">
-					<u-upload :fileList="goodInfo.imageShowList.map(item=>{return{
-						url:item
-					} })" :maxCount="goodInfo.imageShowList.length" :deletable="false"></u-upload>
+				<view class="last_month_card">
+
 				</view>
-			</view>
-			<view class="last_week_card">
+				<view class="comments_card">
 
-			</view>
-			<view class="last_month_card">
+				</view>
+			</block>
 
-			</view>
-			<view class="comments_card">
 
-			</view>
 		</view>
 	</view>
 </template>
@@ -64,10 +72,13 @@
 	import {
 		ref,
 		reactive,
-		computed
+		computed,
+		inject,
+		onMounted
 	} from 'vue';
 	import request from '@/api/request';
 	import dayjs from 'dayjs';
+
 	export default {
 		setup() {
 			const userId = ref('');
@@ -87,6 +98,9 @@
 				createTime: null,
 				updateTime: null
 			});
+			const goodSaleInfo = reactive([]);
+			const timeList = reactive([]);
+			const numList = reactive([]);
 			const actionSheetShow = ref(false);
 			const actionList = reactive([{
 				text: '编辑商品',
@@ -94,6 +108,45 @@
 				text: '下架',
 				color: 'red',
 			}]);
+
+			const loading = ref(true);
+
+			const chartOption = reactive({
+				color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4",
+					"#ea7ccc"
+				],
+				padding: [15, 10, 0, 15],
+				enableScroll: true,
+				legend: {},
+				xAxis: {
+					disableGrid: true,
+					scrollShow: true,
+					itemCount: 4
+				},
+				yAxis: {
+					gridType: "dash",
+					dashLength: 2
+				},
+				extra: {
+					line: {
+						type: "straight",
+						width: 2
+					}
+				}
+			});
+
+			/**
+			 * chart数据
+			 */
+			const option = reactive({
+				categories: timeList,
+				series: [{
+					name: "销量",
+					data: numList
+				}],
+			});
+
+
 			/**
 			 * 刷新数据
 			 */
@@ -107,6 +160,26 @@
 					'YYYY-MM-DD HH:mm:ss');
 				goodInfo.updateTime = dayjs(res.data.updateTime).format(
 					'YYYY-MM-DD HH:mm:ss');
+			}
+			/**
+			 * 获取商品销量数据
+			 */
+			const getSaleData = async (goodId) => {
+				const res = await request('sale', {
+					type: 'querySale',
+					goodId: goodId
+				});
+				Object.assign(goodSaleInfo, res.data);
+				// const timeList = [];
+				// const numList = [];
+				console.log(res);
+				for (let i = 0; i < res.data.length; i++) {
+					const time = res.data[i][0];
+					const arr = time.split("-");
+					timeList.push(arr[1] + "-" + arr[2]);
+					numList.push(res.data[i][1]);
+				}
+
 			}
 
 			/**
@@ -158,20 +231,26 @@
 				actionList,
 				clickAction,
 				userId,
-				refreshData
+				refreshData,
+				getSaleData,
+				option,
+				chartOption,
+				loading
 			}
 		},
 		async onLoad(option) {
 			await this.refreshData(option.goodId);
-			const ans = await wx.getStorage({
-				key: 'userInfo',
-				encrypt: true,
-			});
-			this.userId = ans.data.openid;
+			await this.getSaleData(option.goodId);
+			// const ans = await wx.getStorage({
+			// 	key: 'userInfo',
+			// 	encrypt: true,
+			// });
+			// this.userId = ans.data.openid;
+			this.loading = false;
 		},
 		async onReady() {
 
-		},
+		}
 	}
 </script>
 
@@ -232,6 +311,7 @@
 				width: 100%;
 				background-color: white;
 				padding: 20rpx;
+				min-height: 300rpx;
 			}
 
 			.last_month_card {

@@ -4,128 +4,99 @@ const cloud = require('wx-server-sdk');
 cloud.init();
 
 const db = cloud.database();
-
+const dayjs = require("dayjs");
 // 云函数入口函数
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
-
-	const openid = wxContext.OPENID;
-	const saleDb = db.collection('sales');
+	
+	const goodDb = db.collection('sales');
 	const _ = db.command;
-
+    const $ = db.command.aggregate;
+	
 	const {
 		goodId
 	} = event;
-
-	let res = {};
-
+ //    const newTime=dayjs(createTime).format('YYYY-MM-DD');
+	// const date = new Date(newTime);
+	// const nowTime = date.getTime();
+	// const date1 = dayjs('2019-01-25');
+	// const date2 = dayjs('2019-01-24');
+	const ttt=dayjs(new Date()).format('YYYY-MM-DD');
+	// console.log(dayjs(new Date()).format('YYYY-MM-DD'));
+	// console.log(date1.diff(date2));// 20214000000 default milliseconds
+ //    console.log(nowTime);
+ //    console.log(date);
+	// console.log(newTime);
+ //    console.log(goodId);
+	// console.log(goodNums);
 	try {
-        const saleDb = db.collection('sales');
-		// doc获取的数据结构 .data就是数据
-		const isAbsent = await orderDb.doc(orderId).get();
-
-		const price = isAbsent.data.price;
-
-		const moneyBalance = await cloud.callFunction({
-			name: 'user',
-			data: {
-				type: 'getMoneyBalance',
-				target_openid: openid
-			}
-		});
-
-		if (price > moneyBalance.result.data) {
-			return {
-				sucess: false,
-				message: "支付失败，余额不足",
-				data: null
-			}
-		}
-
-		// 更新订单状态
-		const temp = await orderDb.doc(orderId).update({
-			data: {
-				updateTime: new Date(),
-				status: 2,
-			}
-		});
-
-		// 扣除用户金额
-		await cloud.callFunction({
-			// 要调用的云函数名称
-			name: 'user',
-			// 传递给云函数的参数
-			data: {
-				type: 'decrementMoney',
-				openid: openid,
-				price: price
-			}
-		});
-
-		// 写入sale表，存好销量数据
-		const goodList = isAbsent.data.goodList;
-		const createTime = isAbsent.data.createTime;
-        for(let i = 0; i < goodList.length; i++){
-			const goodSubList = goodList[i];
-			// console.log("------");
-			// console.log(goodId);
-            const goodId = goodSubList[0];
-			const goodNums = goodSubList[1];
-			const goodPrice = goodSubList[2];
-			const goodTotalPrice = goodPrice*goodNums;
-			console.log(goodId);
-			console.log(goodNums);
-			console.log(goodTotalPrice);
-			await cloud.callFunction({
-				name: 'sale',
-				data: {
-					type: 'addSale',
-					goodId: goodId,
-					createTime: createTime,
-					goodNums: goodNums,
-					goodTotalPrice: goodTotalPrice
-				}
-			})
-			// db.collection('sales').add({
-			// 	  data: {
-			// 	    // _id可选自定义 _id，在此处场景下用数据库自动分配的就可以了
-			// 	    goodId: goodId,
-			// 	    createTime: createTime
-			// 	  }
-			// })
-		}
-
-		const {
-			data
-		} = await orderDb.doc(orderId).get();
-
-
-		// TODO 更新各个子订单的状态,并通知对应的商家
-		for (let i = 0; i < data.goodList.length; i++) {
-			const goodId = data.goodList[i][0];
-			goodOrderDb.where({
-				goodId: _.eq(goodId)
-			}).update({
-				data: {
-					updateTime: new Date(),
-					status: 2,
-				}
-			});
-		}
-
+		const querySales = await goodDb
+		  .aggregate()
+		  .match({
+		    goodId: goodId
+		  })
+		  .group({
+		    _id: '$newTime',
+		    totalNum: $.sum('$goodNums')
+		  })
+		  .end()
+		  let weekSaleDate=[0,0,0,0,0,0,0];
+		  let weekSaleDate1=[[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0]];
+		  for (let j = 0; j < 7; j++) {
+			  const t1 = new Date().getTime();
+			  const t2 = (j+1)*86400000;
+			  const t3 = new Date(t1-t2);
+			  // const t4=t3.getFullYear();
+			  const t4=dayjs(t3).format('YYYY-MM-DD');
+			  weekSaleDate1[6-j][0]=t4;
+			  console.log(j);
+			  console.log(t1);
+			  console.log(t2);
+			  console.log(t3);
+			  console.log(t4);
+		  }
+		  
+		  for (let i = 0; i < querySales.list.length; i++) {
+			  const d=querySales.list[i]._id;
+			  const diff = dayjs(ttt).diff(dayjs(d));
+			  console.log(d);
+			  console.log(ttt);
+			  console.log(diff);
+			  if(diff==86400000){
+				weekSaleDate1[6][1]=querySales.list[i].totalNum;
+			  }
+			  if(diff==172800000){
+			  	weekSaleDate1[5][1]=querySales.list[i].totalNum;
+			  }
+			  if(diff==259200000){
+			  	weekSaleDate1[4][1]=querySales.list[i].totalNum;
+			  }
+			  if(diff==345600000){
+			  	weekSaleDate1[3][1]=querySales.list[i].totalNum;
+			  }
+			  if(diff==432000000){
+			  	weekSaleDate1[2][1]=querySales.list[i].totalNum;
+			  }
+			  if(diff==518400000){
+			  	weekSaleDate1[1][1]=querySales.list[i].totalNum;
+			  }
+			  if(diff==604800000){
+			  	weekSaleDate1[0][1]=querySales.list[i].totalNum;
+			  }
+		  }
+		  console.log(weekSaleDate1);
 		res = {
 			sucess: true,
-			message: "支付成功",
-			data: temp
+			message: "",
+			data: weekSaleDate1
 		}
 	} catch (e) {
 		console.trace(e);
 		res = {
 			sucess: false,
-			message: "支付失败",
+			message: "未知异常",
 			data: e
 		}
 	}
-
 	return res;
 }

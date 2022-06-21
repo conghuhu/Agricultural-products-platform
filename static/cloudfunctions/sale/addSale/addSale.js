@@ -11,14 +11,12 @@ exports.main = async (event, context) => {
 	
 	const goodDb = db.collection('sales');
 	const _ = db.command;
+    const $ = db.command.aggregate;
 	
 	const {
 		goodId,createTime,goodNums,goodTotalPrice
 	} = event;
-    const newTime=dayjs(createTime).format('DD/MM/YYYY');
-	console.log(newTime);
-    console.log(goodId);
-	console.log(goodNums);
+
 	try {
 		const temp = await goodDb.add({
 			data: {
