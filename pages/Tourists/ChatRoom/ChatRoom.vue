@@ -15,11 +15,8 @@
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-<<<<<<< HEAD
 				<view class="cu-item" v-if="item.msgType === 'images'&&item.to==='mTOt'" :id="'msg'+item._id">
-=======
-				<view class="cu-item" v-if="item.msgType === 'images'&&item.to==='mTOt'">
->>>>>>> fd060d2742238468dcfbe1b9499b86d0346d3972
+
 					<view class="cu-avatar radius">
 						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
 					</view>
@@ -40,11 +37,9 @@
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-<<<<<<< HEAD
+
 				<view class="cu-item self" v-if="item.msgType === 'images'&&item.to==='tTOm'" :id="'msg'+item._id">
-=======
-				<view class="cu-item self" v-if="item.msgType === 'images'&&item.to==='tTOm'">
->>>>>>> fd060d2742238468dcfbe1b9499b86d0346d3972
+
 					<view class="main">
 						<image :src="item.content" class="radius" mode="widthFix"></image>
 					</view>
@@ -240,7 +235,7 @@
 				scrollId
 			}
 		},
-		async onShow(value) {
+		async onLoad(value) {
 			console.log(value)
 			this.m_openId = value.m_openId
 			const temp: {

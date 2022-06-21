@@ -60,7 +60,8 @@
 				showMessage
 			}
 		},
-		async onLoad() {
+		async onShow() {
+			this.showMessage.length=0;
 			const res: {
 				data: Array < any >
 			} = await request("message", {

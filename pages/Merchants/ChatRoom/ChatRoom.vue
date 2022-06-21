@@ -230,7 +230,7 @@
 				scrollId
 			}
 		},
-		async onShow(option) {
+		async onLoad(option) {
 			console.log(option)
 			this.openId = option.openId
 			console.log(this.openId)

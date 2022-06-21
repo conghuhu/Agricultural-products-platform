@@ -201,11 +201,9 @@
 				gotoPage,
 				gotoOrder,
 				orderMap,
-<<<<<<< HEAD
-				toMessageList
-=======
+				toMessageList,
 				gotoSet
->>>>>>> fd060d2742238468dcfbe1b9499b86d0346d3972
+
 			}
 		},
 		async onShow() {
