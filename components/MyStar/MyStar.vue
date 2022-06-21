@@ -1,9 +1,7 @@
 <template>
-	<view class="star_group">
-		<image v-if="isStar" style="width: 42rpx;height: 42rpx;" src="/static/images/star.png" mode="aspectFit"
-			@click.stop="clickStar" />
-		<image v-else style="width: 42rpx;height: 42rpx;" src="/static/images/star_none.png" mode="aspectFit"
-			@click.stop="clickStar" />
+	<view class="star_group" @click.stop="clickStar">
+		<image v-if="isStar" style="width: 42rpx;height: 42rpx;" src="/static/images/star.png" mode="aspectFit" />
+		<image v-else style="width: 42rpx;height: 42rpx;" src="/static/images/star_none.png" mode="aspectFit" />
 
 		<view class="star_count">
 			{{starCount}}
@@ -66,7 +64,6 @@
 						type: 'removeStar',
 						shareId: id.value
 					})
-
 				}
 			};
 			onMounted(() => {});
@@ -88,7 +85,7 @@
 
 		.star_count {
 			font-size: 28rpx;
-			margin-left: 6rpx;
+			margin-left: 10rpx;
 			color: #949397;
 		}
 	}

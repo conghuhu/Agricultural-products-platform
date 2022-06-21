@@ -1,98 +1,95 @@
 <template>
 	<view class="fullScreen">
 		<Nav title="详情" isBack></Nav>
-		<view class="swiper_img">
-			<u-swiper :list="shareDetail.imageList" imgMode="aspectFit" :height="1000" :autoplay="false"
-				:borderRadius="0"></u-swiper>
-		</view>
-		<view class="content">
-			<view class="title">
-				{{shareDetail.title}}
-			</view>
-			<view class="desc">
-				{{shareDetail.content}}
-			</view>
-			<view class="tool">
-				<view class="location">
-					<image style="width: 32rpx;height: 32rpx;margin-right: 4rpx;"
-						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/location.png?sign=c1ea39e3c461e32946bed9fa5417d24f&t=1652769718"
-						mode="aspectFit"></image>
-					<Ellipsis :width="260" :content="shareDetail.locationVal" />
-				</view>
-				<view class="date">
-					发布于 {{shareDetail.createTime}}
-				</view>
-			</view>
-			<u-line color="#bdbcc0" />
-			<view class="comments_list">
-				<view class="comment_count">
-					共{{shareDetail.comments}}条评论
-				</view>
-				<view class="comment_action">
-					<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60" :src="avatarUrl"></u-avatar>
 
-					<view class="input_group">
-						<view class="input_contain">
-							<u-input v-model="commentVal" placeholder="留下你的精彩评论吧~" type="text" />
-						</view>
-						<view v-show="commentVal.length != 0" class="btn">
-							<u-button type="primary" :customStyle="sendBtnStyle" @click="sendComments">发送</u-button>
-						</view>
+		<view v-if="loading"
+			style="width: 100%;height: 70vh;display: flex;align-items: center;justify-content: center;">
+			<MyLoading />
+		</view>
+
+		<view v-else>
+			<view class="swiper_img">
+				<u-swiper :list="shareDetail.imageList" imgMode="aspectFit" :height="1000" :autoplay="false"
+					:borderRadius="0"></u-swiper>
+			</view>
+			<view class="content">
+				<view class="title">
+					{{shareDetail.title}}
+				</view>
+				<view class="desc">
+					{{shareDetail.content}}
+				</view>
+				<view class="tool">
+					<view class="location">
+						<image style="width: 32rpx;height: 32rpx;margin-right: 4rpx;"
+							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/location.png?sign=c1ea39e3c461e32946bed9fa5417d24f&t=1652769718"
+							mode="aspectFit"></image>
+						<Ellipsis :width="260" :content="shareDetail.locationVal" />
+					</view>
+					<view class="date">
+						发布于 {{shareDetail.createTime}}
 					</view>
 				</view>
-			</view>
-		</view>
-		<view class="person_comment">
-			<view class="comment_show" v-for="item in commentList" :key="item._id">
-				<view class="show_top">
-					<view class="show_left">
-						<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60"
-							:src="item.author.avatarUrl">
+				<u-line color="#bdbcc0" />
+				<view class="comments_list">
+					<view class="comment_count">
+						共{{shareDetail.comments}}条评论
+					</view>
+					<view class="comment_action">
+						<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60" :src="avatarUrl">
 						</u-avatar>
-					</view>
-					<view class="show_right">
-						<view class="right_top">
-							{{item.createTime}}
-						</view>
-						<view class="right_content">
-							{{item.content}}
-						</view>
-					</view>
-				</view>
-				<view class="show_bottom">
-					<u-line length="720rpx" color="#b9b9b9" />
-				</view>
 
+						<view class="input_group">
+							<view class="input_contain">
+								<u-input v-model="commentVal" placeholder="留下你的精彩评论吧~" type="text" />
+							</view>
+							<view v-show="commentVal.length != 0" class="btn">
+								<u-button type="primary" :customStyle="sendBtnStyle" @click="sendComments">发送</u-button>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="person_comment">
+				<view class="comment_show" v-for="item in commentList" :key="item._id">
+					<view class="show_top">
+						<view class="show_left">
+							<u-avatar style="flex: 1;display: flex;align-items: center;" :size="60"
+								:src="item.author.avatarUrl">
+							</u-avatar>
+						</view>
+						<view class="show_right">
+							<view class="right_top">
+								{{item.createTime}}
+							</view>
+							<view class="right_content">
+								{{item.content}}
+							</view>
+						</view>
+					</view>
+					<view class="show_bottom">
+						<u-line length="720rpx" color="#b9b9b9" />
+					</view>
+
+				</view>
+			</view>
+			<view class="bottom">
+				<view class="comment_input">
+				</view>
+				<view class="item_group">
+					<MyStar :shareId="shareDetail._id" :star="shareDetail.star"
+						@increment="updateStarCount('increment')" @decrement="updateStarCount('decrement')" />
+				</view>
+				<view class="item_group">
+					<image style="width: 42rpx;height: 42rpx;" src="/static/images/comment.png" mode="aspectFit"
+						@click="clickStar" />
+					<view class="count">
+						{{shareDetail.comments}}
+					</view>
+				</view>
 			</view>
 		</view>
-		<view class="bottom">
-			<view class="comment_input">
-			</view>
-			<view class="item_group">
-				<MyStar :shareId="shareDetail._id" :star="shareDetail.star" @increment="updateStarCount('increment')"
-					@decrement="updateStarCount('decrement')" />
-			</view>
-			<view class="item_group">
-				<image v-if="isStar" style="width: 50rpx;height: 50rpx;" src="/static/images/star.png" mode="aspectFit"
-					@click="clickStar" />
-				<image v-else style="width: 50rpx;height: 50rpx;" src="/static/images/star_none.png" mode="aspectFit"
-					@click="clickStar" />
 
-				<view class="count">
-					{{shareDetail.focus}}
-				</view>
-			</view>
-			<view class="item_group">
-				<image v-if="isStar" style="width: 50rpx;height: 50rpx;" src="/static/images/star.png" mode="aspectFit"
-					@click="clickStar" />
-				<image v-else style="width: 50rpx;height: 50rpx;" src="/static/images/star_none.png" mode="aspectFit"
-					@click="clickStar" />
-
-				<view class="count">
-					{{shareDetail.comments}}
-				</view>
-			</view>
-		</view>
 	</view>
 </template>
 
@@ -145,6 +142,9 @@
 				comment_id: "",
 				author: {}
 			})
+
+			const loading = ref(true);
+
 			async function sendComments() {
 				comment.adcode = shareDetail.adcode,
 					comment.content = commentVal.value,
@@ -161,6 +161,7 @@
 			}
 
 			const commentList = reactive([])
+
 			async function getComments() {
 				const result: {
 					data: Array < any >
@@ -174,7 +175,8 @@
 					const time = dayjs(item.createTime).format('YYYY-MM-DD HH:mm');
 					item.createTime = time;
 					commentList.push(item);
-				})
+				});
+				shareDetail.comments = commentList.length;
 			}
 
 
@@ -202,7 +204,8 @@
 				updateStarCount,
 				getComments,
 				commentList,
-				sendComments
+				sendComments,
+				loading
 			}
 		},
 
@@ -217,21 +220,21 @@
 			console.log(res);
 			await this.getComments();
 
+			this.loading = false;
 		},
 	}
 </script>
 
 <style lang="scss" scoped>
 	.fullScreen {
-		height: 100%;
+		height: 100vh;
 		font-size: 32rpx;
-		background-color: #F2F4F7;
+		background-color: $background-color;
 		width: 100%;
-		font-size: 32rpx;
 
 		.person_comment {
 			padding-bottom: 200rpx;
-			background-color: #F2F4F7;
+			background-color: $background-color;
 
 			.comment_show {
 				margin-top: 24rpx;
@@ -372,7 +375,7 @@
 			height: 100rpx;
 
 			.comment_input {
-				flex: 2;
+				flex: 3;
 			}
 
 			.item_group {
@@ -383,6 +386,8 @@
 
 				.count {
 					margin-left: 10rpx;
+					font-size: 28rpx;
+					color: #949397;
 				}
 			}
 		}

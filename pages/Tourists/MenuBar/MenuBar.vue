@@ -103,6 +103,9 @@
 			}
 		},
 		async onLoad() {
+			// await this.init();
+		},
+		async onShow(){
 			await this.init();
 		}
 

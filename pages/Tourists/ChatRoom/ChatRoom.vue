@@ -15,7 +15,7 @@
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='mTOt'">
+				<view class="cu-item" v-if="item.msgType === 'images'&&item.to==='mTOt'">
 					<view class="cu-avatar radius">
 						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
 					</view>
@@ -36,7 +36,7 @@
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='tTOm'">
+				<view class="cu-item self" v-if="item.msgType === 'images'&&item.to==='tTOm'">
 					<view class="main">
 						<image :src="item.content" class="radius" mode="widthFix"></image>
 					</view>

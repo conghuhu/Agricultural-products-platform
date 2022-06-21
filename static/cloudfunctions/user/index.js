@@ -1,6 +1,8 @@
 const getMoneyBalance = require('./money/getMoneyBalance');
 const decrementMoney = require('./money/decrementMoney');
 const userOpenId = require('./userInfo/userOpenId')
+
+const changeStatus = require('./userInfo/changeStatus');
 // 云函数入口函数
 exports.main = async (event, context) => {
 	switch (event.type) {
@@ -10,6 +12,8 @@ exports.main = async (event, context) => {
 			return await decrementMoney.main(event, context);
 		case 'userOpenId':
 			return await userOpenId.main(event, context);
+		case 'changeStatus':
+			return await changeStatus.main(event, context);
 		default:
 			return {
 				success: false,

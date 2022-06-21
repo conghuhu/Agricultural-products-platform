@@ -207,7 +207,10 @@
 						"q": option.keyword, //需要进行商品关键词识别的语句
 					},
 				});
-				console.log('invokeService success', res)
+
+				const preprocessed_text = res.data.preprocessed_text;
+
+				console.log('调用nlp接口成功', res)
 				if (res.data.entities.product) {
 					res.data.entities.product.forEach(item => {
 						this.keywords.push([item[0], item[1]]);
