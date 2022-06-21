@@ -264,6 +264,14 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/Tourists/Love/Love",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+
 		}
 	],
 	"globalStyle": {

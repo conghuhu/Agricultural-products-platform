@@ -5,7 +5,7 @@ cloud.init();
 
 const db = cloud.database();
 
-// 云函数入口函数
+// 获取某人点赞种草信息列表
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
 
@@ -17,16 +17,24 @@ exports.main = async (event, context) => {
 
 	try {
 		const starDb = db.collection('star');
+		const shareDb = db.collection('share');
 		const {
 			data
 		} = await starDb.where({
 			_openid: openid,
 			type: 1
 		}).get();
+
+		const actionList = data.map(item => {
+			return shareDb.doc(item.shareId).get();
+		});
+
+		const temp = await Promise.all(actionList);
+
 		res = {
 			sucess: true,
 			message: "",
-			data: data.map(item => item.shareId),
+			data: temp.map(item => item.data),
 		}
 	} catch (e) {
 		console.trace(e);

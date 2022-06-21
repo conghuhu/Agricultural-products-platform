@@ -143,12 +143,13 @@
 			// 工具菜单
 			const toolList = reactive([{
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%85%B3%E6%B3%A8.png?sign=823e5e8f340f6cf004b527befa4b0b86&t=1653974741',
-					text: '关注'
+					text: '喜欢',
+					url: '/pages/Tourists/Love/Love'
 				},
 				{
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E7%A7%8D%E8%8D%89.png?sign=7734a781e420ca814fc11074939baaae&t=1655528876',
 					text: '种草',
-					url: '/pages/Tourists/Location/Location'
+					url: '/pages/Tourists/Love/Love'
 				}, {
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%9C%B0%E5%9D%80.png?sign=cec3bc5ea67c8dec43c79dabb404e261&t=1653982220',
 					text: '地址',
