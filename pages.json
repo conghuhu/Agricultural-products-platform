@@ -273,7 +273,17 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/Tourists/MessageList/MessageList",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

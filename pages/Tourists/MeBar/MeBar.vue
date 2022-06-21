@@ -13,7 +13,7 @@
 							{{userInfo.nickName}}
 						</view>
 						<view class="right">
-							<view style="position: relative;height: 50rpx;margin-right: 45rpx;">
+							<view style="position: relative;height: 50rpx;margin-right: 45rpx;" @click="toMessageList">
 								<u-image height="50rpx" width="50rpx" mode="aspectFit"
 									src="/static/images/message_me.png">
 								</u-image>
@@ -167,6 +167,12 @@
 					url: url + `?index=${index}`
 				})
 			}
+			//跳转消息列表
+			const toMessageList = async function(){
+				uni.navigateTo({
+					url:"../MessageList/MessageList"
+				})
+			}
 			const gotoPage = async (item) => {
 				if (item.concat) {
 					return;
@@ -196,7 +202,9 @@
 				gotoPage,
 				gotoOrder,
 				orderMap,
+				toMessageList,
 				gotoSet
+
 			}
 		},
 		async onShow() {

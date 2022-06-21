@@ -5,43 +5,39 @@ cloud.init();
 
 const db = cloud.database();
 
+// 云函数入口函数
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
-	const openId = wxContext.OPENID;
+
+	let res = {};
 
 	const {
-		m_openId
+		message
 	} = event;
-	let res = {};
+
 	try {
 		const msgDb = db.collection('chat-msgs');
 		const _ = db.command;
-		const $ = db.command.aggregate;
 
-		const {list} = await msgDb.aggregate().match({
-				m_openId: _.eq(openId),
-				m_read:_.eq("0")
-			}).group({
-				_id:'$openId',
-				num:$.sum(1)
-			})
-			.end();
+		const msgId = message._id;
 
-		
+		const ans = await msgDb.doc(msgId).update({
+			data: {
+				t_read:"1"		
+			}
+		})
+
 		res = {
 			sucess: true,
 			message: "",
-			data: list
+			data: ans
 		}
 	} catch (e) {
-		//TODO handle the exception
-		console.trace(e);
 		res = {
 			sucess: false,
-			message: "获取商品列表失败",
-			data: null
+			message: "未知异常",
+			data: e
 		}
 	}
-
 	return res;
 }

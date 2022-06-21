@@ -1,10 +1,10 @@
 <template>
 	<Nav title="聊天室" :isBack="true"></Nav>
 	<view class="content">
-		<scroll-view class="cu-chat" scroll-y="true">
-			<view v-for="(item,index) in chatList" :key="index">
+		<scroll-view class="cu-chat" scroll-y="true" :scroll-into-view="scrollId" scroll-with-animation="true" style="height: 1400rpx;">
+			<view v-for="(item,index) in chatList" :key="index" >
 				<!--对方发送的信息-->
-				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='mTOt'">
+				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='mTOt'" :id="'msg'+item._id">
 					<view class="cu-avatar radius">
 						<u-avatar size="80" :src="item.m_userInfo.avatarUrl"></u-avatar>
 					</view>
@@ -15,7 +15,8 @@
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-				<view class="cu-item" v-if="item.msgType === 'images'&&item.to==='mTOt'">
+				<view class="cu-item" v-if="item.msgType === 'images'&&item.to==='mTOt'" :id="'msg'+item._id">
+
 					<view class="cu-avatar radius">
 						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
 					</view>
@@ -25,7 +26,7 @@
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
 				<!--自己发送的信息-->
-				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='tTOm'">
+				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='tTOm'" :id="'msg'+item._id">
 					<view class="main">
 						<view class="content bg-green shadow">
 							<text>{{item.content}}</text>
@@ -36,7 +37,9 @@
 					</view>
 					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 				</view>
-				<view class="cu-item self" v-if="item.msgType === 'images'&&item.to==='tTOm'">
+
+				<view class="cu-item self" v-if="item.msgType === 'images'&&item.to==='tTOm'" :id="'msg'+item._id">
+
 					<view class="main">
 						<image :src="item.content" class="radius" mode="widthFix"></image>
 					</view>
@@ -94,6 +97,8 @@
 	import dayjs from 'dayjs';
 	export default {
 		setup() {
+			//定位ID
+			const scrollId = ref("");
 			//聊天列表
 			const chatList = reactive([])
 			//发送消息变量
@@ -165,6 +170,7 @@
 				messageData.m_openId = m_openId.value;
 				messageData.msgType = "text";
 				messageData.content = formData.content;
+				formData.content = ""
 				const time = new Date();
 				messageData._createTime = time;
 				console.log(messageData)
@@ -172,7 +178,7 @@
 					type: "messageAdd",
 					messageData: messageData
 				})
-				formData.content = ""
+				
 			}
 			//消息监听
 			
@@ -192,9 +198,11 @@
 						if(snapshot.docChanges.length!=0){
 							snapshot.docChanges.forEach(item=>{
 								if(item.dataType!="init"){
+									item.t_read="1"
 									chatList.push(item.doc)
 								}
 							})
+							scrollId.value = chatList[chatList.length - 1]._id;
 							console.log(chatList)
 						}
 					},
@@ -223,10 +231,12 @@
 				messageData,
 				chatList,
 				initWatcher,
-				dayjs
+				dayjs,
+				scrollId
 			}
 		},
 		async onLoad(value) {
+			console.log(value)
 			this.m_openId = value.m_openId
 			const temp: {
 				data: Array < any >
@@ -235,9 +245,20 @@
 				m_openId: this.m_openId
 			});
 			this.chatList.length=0;
-			temp.data.forEach(item => {
+			for (let i = 0; i < temp.data.length; i++) {
+				const item = temp.data[i];
+				if(item.t_read=="0"){
+					item.t_read = "1"
+					const res = await request("message", {
+						type: "messageUpdate",
+						message: {
+							...item
+						}
+					})
+				}
 				this.chatList.push(item);
-			});
+			}
+			this.scrollId ="msg"+ this.chatList[this.chatList.length - 1]._id;
 			 this.initWatcher();
 		}
 	};
