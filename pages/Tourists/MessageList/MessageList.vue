@@ -4,8 +4,8 @@
 		<uni-list>
 			<uni-list :border="true" v-for="(item,index) in showMessage">
 				<!-- 右侧带角标 -->
-				<uni-list-chat :clickable="true" :to="`../ChatRoom/ChatRoom?openId=${item.openId}`" :avatar-circle="true"
-					:title="item.o_userInfo.nickName" :avatar="item.o_userInfo.avatarUrl" :note="item.content"
+				<uni-list-chat :clickable="true" :to="`../ChatRoom/ChatRoom?m_openId=${item.m_openId}`" :avatar-circle="true"
+					:title="item.m_userInfo.nickName" :avatar="item.m_userInfo.avatarUrl" :note="item.content"
 					:time="dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')" :badge-text="item.num"
 					:badge-style="{backgroundColor:'#FF80AB'}"></uni-list-chat>
 			</uni-list>
@@ -64,7 +64,7 @@
 			const res: {
 				data: Array < any >
 			} = await request("message", {
-				type: "messageListGet",
+				type: "messageListTouristsGet",
 			});
 			console.log(res)
 			await res.data.forEach(item => {
@@ -73,15 +73,13 @@
 			const temp: {
 				data: Array < any >
 			} = await request("message", {
-				type: "messageListCount"
+				type: "messageListTouristsCount"
 			})
-			console.log(temp)
 			const idMap = reactive<Map<String,String>>(new Map());
 			await temp.data.forEach(item => {
-				console.log(item._id)
 				idMap.set(item._id,"1");
 				for(let i = 0; i<this.messageList.length;i++){
-					if(item._id===this.messageList[i].openId){
+					if(item._id===this.messageList[i].m_openId){
 						this.showMessage.push({
 							...this.messageList[i],
 							num:item.num
@@ -89,15 +87,16 @@
 						break;
 					}
 				}
-			})
-			console.log(this.messageList)
+			});
+			console.log(idMap)
+			
 			for(let i = 0;i<this.messageList.length;i++){
-				if(idMap.get(this.messageList[i].openId)==null){
+				if(idMap.get(this.messageList[i].m_openId)==null){
 					this.showMessage.push({
 						...this.messageList[i],
 					})
 				}
-				idMap.set(this.messageList[i].openId,"1");
+				idMap.set(this.messageList[i].m_openId,"1");
 			}
 			console.log(this.showMessage)
 		}
