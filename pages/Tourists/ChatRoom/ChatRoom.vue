@@ -202,7 +202,7 @@
 									chatList.push(item.doc)
 								}
 							})
-							scrollId.value = chatList[chatList.length - 1]._id;
+							scrollId.value ="msg"+ chatList[chatList.length - 1]._id;
 							console.log(chatList)
 						}
 					},
