@@ -3,11 +3,16 @@
 	import {
 		userStore
 	} from '@/stores/user';
+	import {
+		commonStore
+	} from '@/stores/store';
 	export default {
 		setup() {
 			const user = userStore();
+			const store = commonStore();
 			return {
-				user
+				user,
+				store
 			}
 		},
 		async onLaunch() {
@@ -21,6 +26,28 @@
 				traceUser: true,
 			})
 			console.log('App Launch');
+
+
+
+			const timer = setTimeout(async () => {
+				const mNoRead: {
+					data: Array < any >
+				} = await request("message", {
+					type: "messageListCount"
+				})
+				if (mNoRead.data != null) {
+					store.updatemNoRead(true);
+				}
+
+				const tNoRead: {
+					data: Array < any >
+				} = await request("message", {
+					type: "messageListTouristsCount"
+				})
+				if (tNoRead.data != null) {
+					store.updatetNoRead(true);
+				}
+			}, 3000)
 
 		},
 		async onShow() {

@@ -1,52 +1,59 @@
 <template>
 	<Nav title="聊天室" :isBack="true"></Nav>
 	<view class="content">
-		<scroll-view class="cu-chat" scroll-y="true" :scroll-into-view="scrollId" scroll-with-animation="true" style="height: 1400rpx;">
-			<view v-for="(item,index) in chatList" :key="index">
-				<!--对方发送的信息-->
-				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='tTOm'" :id="'msg'+item._id">
-					<view class="cu-avatar radius">
-						<u-avatar size="80" :src="item.o_userInfo.avatarUrl"></u-avatar>
-					</view>
-					<view class="main">
-						<view class="content bg-cyan shadow">
-							<text>{{item.content}}</text>
+		<block v-if="!loading">
+			<scroll-view class="cu-chat" scroll-y="true" scroll-into-view="msg1111111" scroll-with-animation="true"
+				style="height: 1400rpx;">
+				<view v-for="(item,index) in chatList" :key="index">
+					<!--对方发送的信息-->
+					<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='tTOm'" :id="'msg'+item._id">
+						<view class="cu-avatar radius">
+							<u-avatar size="80" :src="item.o_userInfo.avatarUrl"></u-avatar>
 						</view>
-					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
-				</view>
-				<view class="cu-item" v-if="item.m_openId === openId && item.msgType === 'image'" :id="'msg'+item._id">
-					<view class="cu-avatar radius">
-						<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
-					</view>
-					<view class="main">
-						<image :src="item.content" class="radius" mode="widthFix"></image>
-					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
-				</view>
-				<!--自己发送的信息-->
-				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='mTOt'" :id="'msg'+item._id">
-					<view class="main">
-						<view class="content bg-green shadow">
-							<text>{{item.content}}</text>
+						<view class="main">
+							<view class="content bg-cyan shadow">
+								<text>{{item.content}}</text>
+							</view>
 						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
-					<view class="cu-avatar radius">
-						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
+					<view class="cu-item" v-if="item.m_openId === openId && item.msgType === 'image'"
+						:id="'msg'+item._id">
+						<view class="cu-avatar radius">
+							<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
+						</view>
+						<view class="main">
+							<image :src="item.content" class="radius" mode="widthFix"></image>
+						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+					<!--自己发送的信息-->
+					<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='mTOt'" :id="'msg'+item._id">
+						<view class="main">
+							<view class="content bg-green shadow">
+								<text>{{item.content}}</text>
+							</view>
+						</view>
+						<view class="cu-avatar radius">
+							<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
+						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+					</view>
+					<view class="cu-item self" v-if="item.openId != openId && item.msgType === 'image'"
+						:id="'msg'+item._id">
+						<view class="main">
+							<image :src="item.content" class="radius" mode="widthFix"></image>
+						</view>
+						<view class="cu-avatar radius">
+							<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
+						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+					</view>
 				</view>
-				<view class="cu-item self" v-if="item.openId != openId && item.msgType === 'image'" :id="'msg'+item._id">
-					<view class="main">
-						<image :src="item.content" class="radius" mode="widthFix"></image>
-					</view>
-					<view class="cu-avatar radius">
-						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
-					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
-				</view>
-			</view>
-		</scroll-view>
+				<view style="height: 300rpx; margin-bottom:100rpx;" id="msg1111111"></view>
+			</scroll-view>
+		</block>
+
 		<!-- 底部输入 -->
 		<view class="input-box" :class="{ 'input-box-mpInputMargin': mpInputMargin }">
 			<view class="input-box-flex">
@@ -96,6 +103,8 @@
 		setup() {
 			//定位
 			const scrollId = ref("");
+			//Loading
+			const loading = ref(true)
 			//聊天列表
 			const chatList = reactive([])
 			//发送消息变量
@@ -197,7 +206,7 @@
 									chatList.push(item.doc)
 								}
 							})
-							scrollId.value ="msg"+ chatList[chatList.length - 1]._id;
+							scrollId.value = "msg" + chatList[chatList.length - 1]._id;
 							console.log(chatList)
 						}
 					},
@@ -227,7 +236,8 @@
 				chatList,
 				initWatcher,
 				dayjs,
-				scrollId
+				scrollId,
+				loading
 			}
 		},
 		async onLoad(option) {
@@ -255,9 +265,12 @@
 				}
 				this.chatList.push(item);
 			}
-			this.scrollId ="msg"+ this.chatList[this.chatList.length - 1]._id;
+			this.scrollId = "msg" + this.chatList[this.chatList.length - 1]._id;
 			console.log(this.scrollId)
 			this.initWatcher();
+			this.loading = false
+
+
 		}
 	};
 </script>

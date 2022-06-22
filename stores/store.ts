@@ -19,6 +19,17 @@ export const commonStore = defineStore('store', () => {
 		});
 	};
 
+	const mNoRead = ref(false);
+	const updatemNoRead = (value: boolean) => {
+		mNoRead.value = value;
+	}
 
-	return { currentCategory, updateCurCategory, curSubmitOrderList, clearCurSumbitOrderList, addCurSumbitOrderList };
+	const tNoRead = ref(false);
+	const updatetNoRead = (value: boolean) => {
+		tNoRead.value = value;
+	}
+
+
+	return { currentCategory, updateCurCategory, curSubmitOrderList, clearCurSumbitOrderList, addCurSumbitOrderList,
+	 mNoRead,updatemNoRead,tNoRead,updatetNoRead};
 });

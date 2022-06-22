@@ -1,55 +1,58 @@
 <template>
 	<Nav title="聊天室" :isBack="true"></Nav>
 	<view class="content">
-		<scroll-view class="cu-chat" scroll-y="true" :scroll-into-view="scrollId" scroll-with-animation="true" style="height: 1400rpx;">
-			<view v-for="(item,index) in chatList" :key="index" >
-				<!--对方发送的信息-->
-				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='mTOt'" :id="'msg'+item._id">
-					<view class="cu-avatar radius">
-						<u-avatar size="80" :src="item.m_userInfo.avatarUrl"></u-avatar>
-					</view>
-					<view class="main">
-						<view class="content bg-cyan shadow">
-							<text>{{item.content}}</text>
+		<block v-if="!loading">
+			<scroll-view class="cu-chat" scroll-y="true" :scroll-into-view="scrollId" scroll-with-animation="true" style="height: 1400rpx;">
+				<view v-for="(item,index) in chatList" :key="index" >
+					<!--对方发送的信息-->
+					<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='mTOt'" :id="'msg'+item._id">
+						<view class="cu-avatar radius">
+							<u-avatar size="80" :src="item.m_userInfo.avatarUrl"></u-avatar>
 						</view>
-					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
-				</view>
-				<view class="cu-item" v-if="item.msgType === 'images'&&item.to==='mTOt'" :id="'msg'+item._id">
-
-					<view class="cu-avatar radius">
-						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
-					</view>
-					<view class="main">
-						<image :src="item.content" class="radius" mode="widthFix"></image>
-					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
-				</view>
-				<!--自己发送的信息-->
-				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='tTOm'" :id="'msg'+item._id">
-					<view class="main">
-						<view class="content bg-green shadow">
-							<text>{{item.content}}</text>
+						<view class="main">
+							<view class="content bg-cyan shadow">
+								<text>{{item.content}}</text>
+							</view>
 						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
-					<view class="cu-avatar radius">
-						<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
+					<view class="cu-item" v-if="item.msgType === 'images'&&item.to==='mTOt'" :id="'msg'+item._id">
+			
+						<view class="cu-avatar radius">
+							<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
+						</view>
+						<view class="main">
+							<image :src="item.content" class="radius" mode="widthFix"></image>
+						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+					<!--自己发送的信息-->
+					<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='tTOm'" :id="'msg'+item._id">
+						<view class="main">
+							<view class="content bg-green shadow">
+								<text>{{item.content}}</text>
+							</view>
+						</view>
+						<view class="cu-avatar radius">
+							<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
+						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+					</view>
+			
+					<view class="cu-item self" v-if="item.msgType === 'images'&&item.to==='tTOm'" :id="'msg'+item._id">
+			
+						<view class="main">
+							<image :src="item.content" class="radius" mode="widthFix"></image>
+						</view>
+						<view class="cu-avatar radius">
+							<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
+						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+					</view>
 				</view>
-
-				<view class="cu-item self" v-if="item.msgType === 'images'&&item.to==='tTOm'" :id="'msg'+item._id">
-
-					<view class="main">
-						<image :src="item.content" class="radius" mode="widthFix"></image>
-					</view>
-					<view class="cu-avatar radius">
-						<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
-					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
-				</view>
-			</view>
-		</scroll-view>
+			</scroll-view>
+		</block>
+		
 		<!-- 底部输入 -->
 		<view class="input-box" :class="{ 'input-box-mpInputMargin': mpInputMargin }">
 			<view class="input-box-flex">
@@ -97,6 +100,8 @@
 	import dayjs from 'dayjs';
 	export default {
 		setup() {
+			//加载loading
+			const loading =ref(true)
 			//定位ID
 			const scrollId = ref("");
 			//聊天列表
@@ -232,7 +237,8 @@
 				chatList,
 				initWatcher,
 				dayjs,
-				scrollId
+				scrollId,
+				loading
 			}
 		},
 		async onLoad(value) {
@@ -260,6 +266,7 @@
 			}
 			this.scrollId ="msg"+ this.chatList[this.chatList.length - 1]._id;
 			 this.initWatcher();
+			 this.loading= false;
 		}
 	};
 </script>
