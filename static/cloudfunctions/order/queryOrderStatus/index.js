@@ -23,28 +23,43 @@ exports.main = async (event, context) => {
 	try {
 		const orderDb = db.collection('order');
 
-		const temp = await orderDb.aggregate()
-			.match({
-				_openid: _.eq(openid)
-			})
-			.group({
-				_id: '$status',
-				count: $.sum(1),
-			})
-			.end();
-			
+		const goodDb = db.collection('goods');
+
+		const goodOrderDb = db.collection('good-orders');
+
+		const statusArr = await Promise.all([orderDb.where({
+			_openid: _.eq(openid),
+			status: 1
+		}).get(), goodOrderDb.where({
+			_openid: _.eq(openid),
+			status: 2
+		}).get(), goodOrderDb.where({
+			_openid: _.eq(openid),
+			status: 3
+		}).get(), goodOrderDb.where({
+			_openid: _.eq(openid),
+			status: 4
+		}).get()]);
+
 		log.info({
 			name: 'queryOrderStatus',
 			message: `查询到的openid为${openid}的订单状态`,
-			data: temp.list
+			data: statusArr
 		});
+
+		console.log(statusArr);
 
 		const dataList = [];
 
 		res = {
 			success: true,
 			message: "查询成功",
-			data: temp.list
+			data: statusArr.map((item, index) => {
+				return {
+					_id: index + 1,
+					count: item.data.length
+				}
+			})
 		}
 	} catch (e) {
 		console.trace(e);
