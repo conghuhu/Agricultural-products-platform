@@ -712,18 +712,28 @@
 		flex-direction: column;
 		height: calc(100vh - var(--window-top));
 		width: 100%;
+		position: relative;
+		padding-bottom: 20rpx;
+
+
+		.u-tabs-box {
+			position: fixed;
+			width: 100%;
+			z-index: 99;
+		}
+
+		.swiper-box {
+			flex: 1;
+			height: 100%;
+			width: 100%;
+			margin-top: 80rpx;
+		}
 	}
 
 	.noneWrap {
 		display: none;
 	}
 
-	.swiper-box {
-		flex: 1;
-		height: 100%;
-		margin-bottom: 30rpx;
-
-	}
 
 	.swiper-item {
 		height: 100%;

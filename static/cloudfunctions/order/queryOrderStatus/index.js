@@ -47,8 +47,6 @@ exports.main = async (event, context) => {
 			data: statusArr
 		});
 
-		console.log(statusArr);
-
 		const dataList = [];
 
 		res = {

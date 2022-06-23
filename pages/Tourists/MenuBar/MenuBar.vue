@@ -22,12 +22,12 @@
 				<u-waterfall v-model="shareList">
 					<template v-slot:left="{leftList}">
 						<view v-for="(item, index) in leftList" :key="item._id">
-							<ShareCard :item="item" />
+							<ShareCard :item="item" location="left" />
 						</view>
 					</template>
 					<template v-slot:right="{rightList}">
 						<view v-for="(item, index) in rightList" :key="item._id">
-							<ShareCard :item="item" />
+							<ShareCard :item="item" location="right" />
 						</view>
 					</template>
 				</u-waterfall>
@@ -104,7 +104,7 @@
 		async onLoad() {
 			// await this.init();
 		},
-		async onShow(){
+		async onShow() {
 			await this.init();
 		}
 
