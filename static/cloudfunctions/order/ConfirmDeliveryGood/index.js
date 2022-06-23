@@ -7,50 +7,43 @@ const db = cloud.database();
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-
 	const wxContext = cloud.getWXContext();
 
 	const openid = wxContext.OPENID;
 
-	const log = cloud.logger();
-
 	const _ = db.command;
 
-	const $ = db.command.aggregate
+	const {
+		orderId,
+		goodId
+	} = event;
 
 	let res = {};
 
 	try {
+
+		const goodOrderDb = db.collection('good-orders');
 		const orderDb = db.collection('order');
 
-		const temp = await orderDb.aggregate()
-			.match({
-				_openid: _.eq(openid)
-			})
-			.group({
-				_id: '$status',
-				count: $.sum(1),
-			})
-			.end();
-			
-		log.info({
-			name: 'queryOrderStatus',
-			message: `查询到的openid为${openid}的订单状态`,
-			data: temp.list
+		const temp = await goodOrderDb.where({
+			goodId: goodId,
+			orderId: orderId
+		}).update({
+			data: {
+				status: 3
+			}
 		});
-
-		const dataList = [];
 
 		res = {
 			success: true,
-			message: "查询成功",
-			data: temp.list
+			message: "收货成功",
+			data: temp
 		}
 	} catch (e) {
 		console.trace(e);
 		res = {
 			success: false,
-			message: "查询失败",
+			message: "收货失败",
 			data: e
 		}
 	}

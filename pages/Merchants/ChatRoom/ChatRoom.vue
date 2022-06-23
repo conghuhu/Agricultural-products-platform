@@ -50,7 +50,7 @@
 						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
 				</view>
-				<view style="height: 300rpx; margin-bottom:100rpx;" id="msg1111111"></view>
+				<view style="height: 200rpx; margin-bottom:100rpx;" id="msg1111111"></view>
 			</scroll-view>
 		</block>
 
@@ -197,15 +197,23 @@
 					openId: openId.data,
 					m_openId: m_openId.value
 				}).watch({
-					onChange: function(snapshot) {
+					onChange: async function(snapshot) {
 						console.log(snapshot)
 						if (snapshot.docChanges.length != 0) {
-							snapshot.docChanges.forEach(item => {
-								if (item.dataType != "init") {
-									item.m_read = "1"
-									chatList.push(item.doc)
+							for (let i = 0; i < snapshot.docChanges.length; i++) {
+								if (snapshot.docChanges[i].dataType!= "init") {
+									if (snapshot.docChanges[i].doc.to === "tTOm") {
+										snapshot.docChanges[i].doc.m_read = "1";
+										const res = await request("message", {
+											type: "messageMerchantsUpdate",
+											message: {
+												...snapshot.docChanges[i].doc
+											}
+										})
+									}
+									chatList.push(snapshot.docChanges[i].doc)
 								}
-							})
+							}
 							scrollId.value = "msg" + chatList[chatList.length - 1]._id;
 							console.log(chatList)
 						}
@@ -265,7 +273,9 @@
 				}
 				this.chatList.push(item);
 			}
-			this.scrollId = "msg" + this.chatList[this.chatList.length - 1]._id;
+			if(this.chatList && this.chatList.length!=0){
+				this.scrollId = "msg" + this.chatList[this.chatList.length - 1]._id;
+			}
 			console.log(this.scrollId)
 			this.initWatcher();
 			this.loading = false

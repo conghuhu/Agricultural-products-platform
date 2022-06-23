@@ -17,6 +17,13 @@
 								<u-image height="50rpx" width="50rpx" mode="aspectFit"
 									src="/static/images/message_me.png">
 								</u-image>
+								<view v-if="isRead">
+									<u-badge :offset="[-8,-8]"  :is-dot="true"></u-badge>
+								</view>
+								<view v-else>
+									<u-badge :offset="[-8,-8]"  :is-dot="true" :count="0"></u-badge>
+								</view>
+
 							</view>
 
 							<u-image @click="gotoSet" height="50rpx" width="50rpx" mode="aspectFit"
@@ -109,8 +116,13 @@
 	import {
 		storeToRefs
 	} from 'pinia';
+	import {
+		commonStore
+	} from '@/stores/store';
 	export default {
 		setup() {
+			const isRead = ref(false);
+			const store = commonStore();
 			const user = userStore();
 			const {
 				userInfo,
@@ -199,10 +211,14 @@
 				gotoOrder,
 				orderMap,
 				toMessageList,
-				gotoSet
+				gotoSet,
+				store,
+				isRead
 			}
 		},
 		async onShow() {
+			this.isRead=this.store.mNoRead;
+			console.log(this.isRead)
 			this.orderList.forEach(item => {
 				item.count = 0;
 			});

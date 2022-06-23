@@ -79,16 +79,16 @@
 					<swiper-item class="swiper-item">
 						<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 							<view class="page-box">
-								<OrderEmpty v-if="orderList[1].length == 0" />
-								<view v-else class="order" v-for="(res, index) in  orderList[1]" :key="res._id">
+								<OrderEmpty v-if="waitForGoodList.length == 0" />
+								<view v-else class="order" v-for="(item, index) in waitForGoodList" :key="item._id">
 									<view class="top">
-										<view class="left">
-											<view class="store">{{ dayjs(res.createTime).format('YYYY-MM-DD HH:mm') }}
-											</view>
+										<view>
+
 										</view>
 										<view class="right">待收货</view>
 									</view>
-									<view class="item" v-for="(item, index) in res.goodList" :key="item._id">
+
+									<view class="item">
 										<view class="left">
 											<image :src="item.imageShowList[0]" mode="aspectFill"></image>
 										</view>
@@ -114,40 +114,35 @@
 											<view class="number">x{{ item.count }}</view>
 										</view>
 									</view>
-									<view class="total">
-										共{{ totalNum(res.goodList) }}件商品 合计:
-										<text class="total-price">
-											￥{{ priceInt(totalPrice(res.goodList)) }}.
-											<text class="decimal">{{ priceDecimal(totalPrice(res.goodList)) }}</text>
-										</text>
-									</view>
+
 									<view class="bottom">
 										<view class="more">
 											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
 										</view>
 										<view class="bottom_right">
 											<view class="cancel btn">查看物流</view>
-											<view class="pay btn">确认收货</view>
+											<view class="pay btn" @click="confirmDeliveryGood(item)">确认收货</view>
 										</view>
 									</view>
 								</view>
-								<!-- <u-loadmore :status="loadStatus[1]" bgColor="#f2f2f2"></u-loadmore> -->
 							</view>
 						</scroll-view>
 					</swiper-item>
+					<!-- 待评价 -->
 					<swiper-item class="swiper-item">
 						<scroll-view scroll-y style="height: 100%;width: 100%;">
 							<view class="page-box">
-								<OrderEmpty v-if="orderList[2].length == 0" />
-								<view v-else class="order" v-for="(res, index) in  orderList[2]" :key="res._id">
+								<OrderEmpty v-if="waitEvaluateGoodList.length == 0" />
+								<view v-else class="order" v-for="(item, index) in waitEvaluateGoodList"
+									:key="item._id">
 									<view class="top">
-										<view class="left">
-											<view class="store">{{ dayjs(res.createTime).format('YYYY-MM-DD HH:mm') }}
-											</view>
+										<view>
+
 										</view>
-										<view class="right">已完成</view>
+										<view class="right">待评价</view>
 									</view>
-									<view class="item" v-for="(item, index) in res.goodList" :key="item._id">
+
+									<view class="item">
 										<view class="left">
 											<image :src="item.imageShowList[0]" mode="aspectFill"></image>
 										</view>
@@ -173,20 +168,14 @@
 											<view class="number">x{{ item.count }}</view>
 										</view>
 									</view>
-									<view class="total">
-										共{{ totalNum(res.goodList) }}件商品 合计:
-										<text class="total-price">
-											￥{{ priceInt(totalPrice(res.goodList)) }}.
-											<text class="decimal">{{ priceDecimal(totalPrice(res.goodList)) }}</text>
-										</text>
-									</view>
+
 									<view class="bottom">
 										<view class="more">
 											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
 										</view>
 										<view class="bottom_right">
-											<view class="cancel btn">取消订单</view>
-											<view class="pay btn">立即支付</view>
+											<view class="cancel btn">申请退款</view>
+											<view class="pay btn">去评价</view>
 										</view>
 									</view>
 								</view>
@@ -377,6 +366,7 @@
 					tabs.value.setDx(dx);
 				}
 			};
+
 			const animationfinish = (e) => {
 				const detail = e.detail;
 				if (!initDx.value) {
@@ -437,6 +427,36 @@
 				})
 			}
 
+			/**
+			 * 确认收货
+			 */
+			const confirmDeliveryGood = async (goodInfo) => {
+				console.log(goodInfo);
+				uni.showLoading({
+					title: '确认中'
+				})
+				const res = await request('order', {
+					type: 'confirmDeliveryGood',
+					goodId: goodInfo._id,
+					orderId: goodInfo.orderId
+				})
+				uni.hideLoading();
+				console.log(res);
+				initData(2);
+			}
+
+			/**
+			 * 待收货货物列表
+			 */
+			const waitForGoodList = reactive([]);
+			/**
+			 * 待评价的货物列表
+			 */
+			const waitEvaluateGoodList = reactive([]);
+
+			/**
+			 * 初始化数据
+			 */
 			const initData = async (index) => {
 				loading.value = true;
 				for (let i = 0; i < 4; i++) {
@@ -448,20 +468,41 @@
 				const resArr = await Promise.all([request("order", {
 					type: 'queryUnpaidOrders'
 				}), request("order", {
-					type: 'queryIngOrders'
+					type: 'queryIngGoods'
 				}), request("order", {
-					type: 'queryEvaluateOrder'
+					type: 'queryEvaluateGoods'
 				}), request("order", {
 					type: 'queryCompletedOrders'
 				})]);
-				// console.log(resArr);
+				console.log(resArr);
+
+				waitForGoodList.length = 0;
+				waitEvaluateGoodList.length = 0;
 				// 向四个页面的数组赋值
 				for (let i = 0; i < 4; i++) {
 					const dataList = resArr[i].data;
 					list[i].count = dataList.length;
-					dataList.forEach(item => {
-						orderList[i].push(item);
-					})
+					if (i == 0) {
+						dataList.forEach(item => {
+							orderList[i].push(item);
+						})
+					} else if (i == 1) {
+						// 待收货
+						dataList.forEach(item => {
+							waitForGoodList.push({
+								...item,
+							});
+						})
+					} else if (i == 2) {
+						// 待评价
+						dataList.forEach(item => {
+							waitEvaluateGoodList.push({
+								...item,
+							});
+						})
+					} else if (i == 3) {
+
+					}
 				}
 
 				current.value = index;
@@ -502,7 +543,10 @@
 				loading,
 				cancelOrder,
 				payOrder,
-				initData
+				initData,
+				confirmDeliveryGood,
+				waitForGoodList,
+				waitEvaluateGoodList
 			}
 		},
 		async onLoad(option) {
@@ -677,6 +721,8 @@
 	.swiper-box {
 		flex: 1;
 		height: 100%;
+		margin-bottom: 30rpx;
+
 	}
 
 	.swiper-item {

@@ -48,7 +48,7 @@ exports.main = async (event, context) => {
 				m_userInfo: m_userInfo,
 				_createTime: new Date(),
 				t_read:"0",
-				m_read:"0",
+				m_read:"1",
 				to:"mTOt"
 			}
 		})

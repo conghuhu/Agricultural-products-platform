@@ -1,15 +1,21 @@
 <template>
 	<view class="fullScreen">
 		<Nav title="消息列表" :isBack="true"></Nav>
-		<uni-list>
-			<uni-list :border="true" v-for="(item,index) in showMessage">
-				<!-- 右侧带角标 -->
-				<uni-list-chat :clickable="true" :to="`../ChatRoom/ChatRoom?openId=${item.openId}`" :avatar-circle="true"
-					:title="item.o_userInfo.nickName" :avatar="item.o_userInfo.avatarUrl" :note="item.content"
-					:time="dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')" :badge-text="item.num"
-					:badge-style="{backgroundColor:'#FF80AB'}"></uni-list-chat>
+		<view v-if="loading">
+			<MyLoading></MyLoading>
+		</view>
+		<block v-else>
+			<uni-list>
+				<uni-list :border="true" v-for="(item,index) in showMessage">
+					<!-- 右侧带角标 -->
+					<uni-list-chat :clickable="true" :to="`../ChatRoom/ChatRoom?openId=${item.openId}`" :avatar-circle="true"
+						:title="item.o_userInfo.nickName" :avatar="item.o_userInfo.avatarUrl" :note="item.content"
+						:time="dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')" :badge-text="item.num"
+						:badge-style="{backgroundColor:'#FF80AB'}"></uni-list-chat>
+				</uni-list>
 			</uni-list>
-		</uni-list>
+		</block>
+		
 	</view>
 </template>
 
@@ -22,7 +28,10 @@
 	import dayjs from 'dayjs';
 
 	export default {
+			
 		setup() {
+			//loading
+			const loading = ref(true);
 			//展示消息列表
 			const showMessage = reactive([])
 			//消息列表
@@ -57,10 +66,13 @@
 			return {
 				messageList,
 				dayjs,
-				showMessage
+				showMessage,
+				loading
+				
 			}
 		},
 		async onShow() {
+			this.loading=true
 			this.showMessage.length=0;
 			const res: {
 				data: Array < any >
@@ -68,6 +80,7 @@
 				type: "messageListGet",
 			});
 			console.log(res)
+			this.messageList.length=0;
 			await res.data.forEach(item => {
 				this.messageList.push(item);
 			})
@@ -101,6 +114,7 @@
 				idMap.set(this.messageList[i].openId,"1");
 			}
 			console.log(this.showMessage)
+			this.loading=false
 		}
 	};
 </script>
