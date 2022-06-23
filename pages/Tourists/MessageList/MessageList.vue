@@ -67,7 +67,7 @@
 			} = await request("message", {
 				type: "messageListTouristsGet",
 			});
-			console.log(res)
+			this.messageList.length=0;
 			await res.data.forEach(item => {
 				this.messageList.push(item);
 			})

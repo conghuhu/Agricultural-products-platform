@@ -2,8 +2,9 @@
 	<Nav title="聊天室" :isBack="true"></Nav>
 	<view class="content">
 		<block v-if="!loading">
-			<scroll-view class="cu-chat" scroll-y="true" :scroll-into-view="scrollId" scroll-with-animation="true" style="height: 1400rpx;">
-				<view v-for="(item,index) in chatList" :key="index" >
+			<scroll-view class="cu-chat" scroll-y="true" scroll-into-view="msg1111111" scroll-with-animation="true"
+				style="height: 1400rpx;">
+				<view v-for="(item,index) in chatList" :key="index">
 					<!--对方发送的信息-->
 					<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='mTOt'" :id="'msg'+item._id">
 						<view class="cu-avatar radius">
@@ -17,7 +18,7 @@
 						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
 					<view class="cu-item" v-if="item.msgType === 'images'&&item.to==='mTOt'" :id="'msg'+item._id">
-			
+
 						<view class="cu-avatar radius">
 							<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
 						</view>
@@ -38,9 +39,9 @@
 						</view>
 						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
-			
+
 					<view class="cu-item self" v-if="item.msgType === 'images'&&item.to==='tTOm'" :id="'msg'+item._id">
-			
+
 						<view class="main">
 							<image :src="item.content" class="radius" mode="widthFix"></image>
 						</view>
@@ -50,9 +51,10 @@
 						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
 				</view>
+				<view style="height: 200rpx; margin-bottom:100rpx;" id="msg1111111"></view>
 			</scroll-view>
 		</block>
-		
+
 		<!-- 底部输入 -->
 		<view class="input-box" :class="{ 'input-box-mpInputMargin': mpInputMargin }">
 			<view class="input-box-flex">
@@ -101,7 +103,7 @@
 	export default {
 		setup() {
 			//加载loading
-			const loading =ref(true)
+			const loading = ref(true)
 			//定位ID
 			const scrollId = ref("");
 			//聊天列表
@@ -183,41 +185,49 @@
 					type: "messageAdd",
 					messageData: messageData
 				})
-				
+
 			}
 			//消息监听
-			
-			
-			const initWatcher = async function(){
-				const openId = await request("user",{
-					type:"userOpenId",
+
+
+			const initWatcher = async function() {
+				const openId = await request("user", {
+					type: "userOpenId",
 				})
 				const db = wx.cloud.database();
 				const _ = db.command;
 				const res = db.collection('chat-msgs').where({
-					openId:openId.data,
-					m_openId:m_openId.value
+					openId: openId.data,
+					m_openId: m_openId.value
 				}).watch({
-					onChange:function(snapshot){
+					onChange: async function(snapshot) {
 						console.log(snapshot)
-						if(snapshot.docChanges.length!=0){
-							snapshot.docChanges.forEach(item=>{
-								if(item.dataType!="init"){
-									item.t_read="1"
-									chatList.push(item.doc)
+						if (snapshot.docChanges.length != 0) {
+							for (let i = 0; i < snapshot.docChanges.length; i++) {
+								if (snapshot.docChanges[i].dataType!= "init") {
+									if (snapshot.docChanges[i].doc.to === "mTOt") {
+										snapshot.docChanges[i].doc.t_read = "1";
+										const res = await request("message", {
+											type: "messageUpdate",
+											message: {
+												...snapshot.docChanges[i].doc
+											}
+										})
+									}
+									chatList.push(snapshot.docChanges[i].doc)
 								}
-							})
-							scrollId.value ="msg"+ chatList[chatList.length - 1]._id;
+							}
+							scrollId.value = "msg" + chatList[chatList.length - 1]._id;
 							console.log(chatList)
 						}
 					},
-					onError:function(err) {
+					onError: function(err) {
 						console.error('the watch closed because of error', err)
 					}
 				})
-				
+
 			}
-			
+
 
 			return {
 				emojisList,
@@ -250,10 +260,10 @@
 				type: "messageGet",
 				m_openId: this.m_openId
 			});
-			this.chatList.length=0;
+			this.chatList.length = 0;
 			for (let i = 0; i < temp.data.length; i++) {
 				const item = temp.data[i];
-				if(item.t_read=="0"){
+				if (item.t_read == "0") {
 					item.t_read = "1"
 					const res = await request("message", {
 						type: "messageUpdate",
@@ -264,9 +274,12 @@
 				}
 				this.chatList.push(item);
 			}
-			this.scrollId ="msg"+ this.chatList[this.chatList.length - 1]._id;
-			 this.initWatcher();
-			 this.loading= false;
+			console.log(this.chatList)
+			if(this.chatList && this.chatList.length!=0){
+				this.scrollId = "msg" + this.chatList[this.chatList.length - 1]._id;
+			}
+			this.initWatcher();
+			this.loading = false;
 		}
 	};
 </script>
@@ -281,6 +294,7 @@
 			display: block;
 			background-color: #ffffff;
 		}
+
 		.cu-timeline .cu-time {
 			width: 120upx;
 			text-align: center;
@@ -289,7 +303,7 @@
 			color: #888;
 			display: block;
 		}
-		
+
 		.cu-timeline .cu-time {
 			width: 120upx;
 			text-align: center;
