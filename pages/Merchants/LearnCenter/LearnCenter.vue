@@ -23,6 +23,16 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
+	.fullScreen {
+		height: 100vh;
+		font-size: 32rpx;
+		width: 100%;
+		background-color: $background-color;
 
+		.content {
+			position: relative;
+			background-color: $background-color;
+		}
+	}
 </style>

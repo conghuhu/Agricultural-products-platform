@@ -36,7 +36,7 @@
 					type: "messageListCount"
 				})
 				if (mNoRead.data != null) {
-					store.updatemNoRead(true);
+					this.store.updatemNoRead(true);
 				}
 
 				const tNoRead: {
@@ -45,7 +45,7 @@
 					type: "messageListTouristsCount"
 				})
 				if (tNoRead.data != null) {
-					store.updatetNoRead(true);
+					this.store.updatetNoRead(true);
 				}
 			}, 3000)
 
