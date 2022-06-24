@@ -175,7 +175,7 @@
 										</view>
 										<view class="bottom_right">
 											<view class="cancel btn" @click="applyRefund(item)">申请退款</view>
-											<view class="pay btn">去评价</view>
+											<view class="pay btn" @click="toComments(item)">去评论</view>
 										</view>
 									</view>
 								</view>
@@ -522,6 +522,13 @@
 				});
 				user.setOrderMap(res.data);
 			}
+			//跳转评论结论
+			const toComments = (data) => {
+				uni.navigateTo({
+					url: `../Comments/Comments?id=${data._id}`
+				})
+			}
+
 
 
 			/**
@@ -571,8 +578,15 @@
 				confirmDeliveryGood,
 				waitForGoodList,
 				waitEvaluateGoodList,
+				<<
+				<< << < HEAD
 				applyRefund,
-				refundGoodList
+				refundGoodList ===
+				=== =
+				toComments
+
+				>>>
+				>>> > 02 dd5a1c9db05b234f24be02702829f8a4fc0115
 			}
 		},
 		async onLoad(option) {

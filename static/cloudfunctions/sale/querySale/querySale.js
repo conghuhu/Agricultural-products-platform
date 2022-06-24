@@ -16,19 +16,9 @@ exports.main = async (event, context) => {
 	const {
 		goodId
 	} = event;
- //    const newTime=dayjs(createTime).format('YYYY-MM-DD');
-	// const date = new Date(newTime);
-	// const nowTime = date.getTime();
-	// const date1 = dayjs('2019-01-25');
-	// const date2 = dayjs('2019-01-24');
+
 	const ttt=dayjs(new Date()).format('YYYY-MM-DD');
-	// console.log(dayjs(new Date()).format('YYYY-MM-DD'));
-	// console.log(date1.diff(date2));// 20214000000 default milliseconds
- //    console.log(nowTime);
- //    console.log(date);
-	// console.log(newTime);
- //    console.log(goodId);
-	// console.log(goodNums);
+
 	try {
 		const querySales = await goodDb
 		  .aggregate()
@@ -46,22 +36,14 @@ exports.main = async (event, context) => {
 			  const t1 = new Date().getTime();
 			  const t2 = (j+1)*86400000;
 			  const t3 = new Date(t1-t2);
-			  // const t4=t3.getFullYear();
 			  const t4=dayjs(t3).format('YYYY-MM-DD');
 			  weekSaleDate1[6-j][0]=t4;
-			  console.log(j);
-			  console.log(t1);
-			  console.log(t2);
-			  console.log(t3);
-			  console.log(t4);
+
 		  }
 		  
 		  for (let i = 0; i < querySales.list.length; i++) {
 			  const d=querySales.list[i]._id;
 			  const diff = dayjs(ttt).diff(dayjs(d));
-			  console.log(d);
-			  console.log(ttt);
-			  console.log(diff);
 			  if(diff==86400000){
 				weekSaleDate1[6][1]=querySales.list[i].totalNum;
 			  }
@@ -84,7 +66,6 @@ exports.main = async (event, context) => {
 			  	weekSaleDate1[0][1]=querySales.list[i].totalNum;
 			  }
 		  }
-		  console.log(weekSaleDate1);
 		res = {
 			sucess: true,
 			message: "",

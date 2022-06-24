@@ -1,5 +1,6 @@
 const addComments = require('./commentsCRUD/addComments')
 const getComments = require('./commentsCRUD/getComments')
+const addGoodsComments = require('./commentsCRUD/addGoodComment')
 // 云函数入口函数
 exports.main = async (event, context) => {
 	switch (event.type) {
@@ -7,6 +8,8 @@ exports.main = async (event, context) => {
 			return await addComments.main(event, context);
 		case 'getComments':
 			return await getComments.main(event, context);
+		case 'addGoodsComments':
+			return await addGoodsComments.main(event, context);
 		default:
 			return {
 				success: false,

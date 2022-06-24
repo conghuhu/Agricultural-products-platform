@@ -14,19 +14,20 @@ exports.main = async (event, context) => {
     const $ = db.command.aggregate;
 	
 	const {
-		goodId,createTime,goodNums,goodTotalPrice
+		goodId,openId,createTime,goodNums,goodTotalPrice
 	} = event;
-
+    console.log(dayjs(createTime).format('YYYY-MM-DD'));
 	try {
 		const temp = await goodDb.add({
 			data: {
 				goodId: goodId,
-				newTime: newTime,
+				openId: openId,
+				newTime: dayjs(createTime).format('YYYY-MM-DD'),
 				goodNums: goodNums,
 				goodTotalPrice: goodTotalPrice
 			}
 		})
-		
+		console.log(temp);
 		res = {
 			success: true,
 			message: "",

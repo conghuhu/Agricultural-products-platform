@@ -1,6 +1,7 @@
 // 云函数入口文件
 const addSale = require('./addSale/addSale');
 const querySale = require('./querySale/querySale');
+const querySaleMonth = require('./querySale/querySaleMonth');
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -9,6 +10,8 @@ exports.main = async (event, context) => {
 			return await addSale.main(event, context);
 		case 'querySale':
 			return await querySale.main(event, context);
+		case 'querySaleMonth':
+			return await querySaleMonth.main(event, context);
 		default:
 			return {
 				success: false,
