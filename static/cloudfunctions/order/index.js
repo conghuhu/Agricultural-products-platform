@@ -8,6 +8,10 @@ const queryEvaluateOrder = require('./queryEvaluateOrder/index');
 const queryCompletedOrders = require('./queryCompletedOrders/index');
 const queryOrderStatus = require('./queryOrderStatus/index');
 
+const confirmDeliveryGood = require('./ConfirmDeliveryGood/index');
+const queryIngGoods = require('./queryIngGoods/index');
+const queryEvaluateGoods = require('./queryEvaluateGoods/index');
+
 // 云函数入口函数
 exports.main = async (event, context) => {
 	switch (event.type) {
@@ -27,6 +31,12 @@ exports.main = async (event, context) => {
 			return await queryCompletedOrders.main(event, context);
 		case 'queryOrderStatus':
 			return await queryOrderStatus.main(event, context);
+		case 'confirmDeliveryGood':
+			return await confirmDeliveryGood.main(event, context);
+		case 'queryIngGoods':
+			return await queryIngGoods.main(event, context);
+		case 'queryEvaluateGoods':
+			return await queryEvaluateGoods.main(event, context);
 		default:
 			return {
 				success: false,

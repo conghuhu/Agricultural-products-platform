@@ -28,7 +28,6 @@
 					store.updatemNoRead(true);
 				}
 	
-				
 				const tNoRead: {
 					data: Array < any >
 				} = await request("message", {
@@ -71,7 +70,6 @@
 				traceUser: true,
 			})
 			console.log('App Launch');
-
 		},
 		async onShow() {
 			// this.setTimer();

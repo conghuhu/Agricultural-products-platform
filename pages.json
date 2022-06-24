@@ -293,6 +293,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/Public/Map/Map",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
