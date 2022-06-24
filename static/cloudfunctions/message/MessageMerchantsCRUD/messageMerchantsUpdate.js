@@ -23,7 +23,7 @@ exports.main = async (event, context) => {
 
 		const ans = await msgDb.doc(msgId).update({
 			data: {
-				m_read:"1"		
+				m_read:"1"
 			}
 		})
 

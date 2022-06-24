@@ -72,7 +72,7 @@
 			console.log('App Launch');
 		},
 		async onShow() {
-			this.setTimer();
+			// this.setTimer();
 			const res = await Promise.all([request('wanted', {
 				type: 'getWanted'
 			}), request('star_focus', {

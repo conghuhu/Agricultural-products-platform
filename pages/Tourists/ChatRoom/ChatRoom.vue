@@ -180,7 +180,6 @@
 				formData.content = ""
 				const time = new Date();
 				messageData._createTime = time;
-				console.log(messageData)
 				const res = await request("message", {
 					type: "messageAdd",
 					messageData: messageData
@@ -188,43 +187,50 @@
 
 			}
 			//消息监听
+			const watcher = ref(null);
 
-
-			const initWatcher = async function() {
+			const initWatcher = async function(isClose) {
 				const openId = await request("user", {
 					type: "userOpenId",
 				})
 				const db = wx.cloud.database();
 				const _ = db.command;
-				const res = db.collection('chat-msgs').where({
-					openId: openId.data,
-					m_openId: m_openId.value
-				}).watch({
-					onChange: async function(snapshot) {
-						console.log(snapshot)
-						if (snapshot.docChanges.length != 0) {
-							for (let i = 0; i < snapshot.docChanges.length; i++) {
-								if (snapshot.docChanges[i].dataType!= "init") {
-									if (snapshot.docChanges[i].doc.to === "mTOt") {
-										snapshot.docChanges[i].doc.t_read = "1";
-										const res = await request("message", {
-											type: "messageUpdate",
-											message: {
-												...snapshot.docChanges[i].doc
-											}
-										})
+
+				if (!isClose) {
+					watcher.value = db.collection('chat-msgs').where({
+						openId: openId.data,
+						m_openId: m_openId.value
+					}).watch({
+						onChange: async function(snapshot) {
+							console.log(snapshot)
+							if (snapshot.docChanges.length != 0) {
+								for (let i = 0; i < snapshot.docChanges.length; i++) {
+									if (snapshot.docChanges[i].dataType == "add") {
+										if (snapshot.docChanges[i].doc.to == "mTOt") {
+											console.log(snapshot.docChanges[i].doc)
+											const res = await request("message", {
+												type: "messageUpdate",
+												message: {
+													...snapshot.docChanges[i].doc
+												}
+											})
+										}
+										chatList.push(snapshot.docChanges[i].doc)
 									}
-									chatList.push(snapshot.docChanges[i].doc)
 								}
+								scrollId.value = "msg" + chatList[chatList.length - 1]._id;
+								console.log(chatList)
 							}
-							scrollId.value = "msg" + chatList[chatList.length - 1]._id;
-							console.log(chatList)
+						},
+						onError: function(err) {
+							console.error('the watch closed because of error', err)
 						}
-					},
-					onError: function(err) {
-						console.error('the watch closed because of error', err)
-					}
-				})
+					})
+				} else {
+					console.log("woshi")
+					watcher.value.close();
+				}
+
 
 			}
 
@@ -248,7 +254,8 @@
 				initWatcher,
 				dayjs,
 				scrollId,
-				loading
+				loading,
+				watcher
 			}
 		},
 		async onLoad(value) {
@@ -275,11 +282,14 @@
 				this.chatList.push(item);
 			}
 			console.log(this.chatList)
-			if(this.chatList && this.chatList.length!=0){
+			if (this.chatList && this.chatList.length != 0) {
 				this.scrollId = "msg" + this.chatList[this.chatList.length - 1]._id;
 			}
-			this.initWatcher();
+			this.initWatcher(false);
 			this.loading = false;
+		},
+		onUnload() {
+			this.initWatcher(true)
 		}
 	};
 </script>

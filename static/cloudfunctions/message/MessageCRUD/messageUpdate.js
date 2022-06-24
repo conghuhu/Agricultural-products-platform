@@ -15,12 +15,14 @@ exports.main = async (event, context) => {
 		message
 	} = event;
 
+
 	try {
 		const msgDb = db.collection('chat-msgs');
 		const _ = db.command;
 
 		const msgId = message._id;
 
+		console.log(message)
 		const ans = await msgDb.doc(msgId).update({
 			data: {
 				t_read:"1"		

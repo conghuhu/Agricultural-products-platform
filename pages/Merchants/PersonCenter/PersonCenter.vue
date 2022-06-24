@@ -23,7 +23,6 @@
 								<view v-else>
 									<u-badge :offset="[-8,-8]"  :is-dot="true" :count="0"></u-badge>
 								</view>
-
 							</view>
 
 							<u-image @click="gotoSet" height="50rpx" width="50rpx" mode="aspectFit"
