@@ -13,7 +13,7 @@
 							{{userInfo.nickName}}
 						</view>
 						<view class="right">
-							<view style="position: relative;height: 50rpx;margin-right: 45rpx;">
+							<view style="position: relative;height: 50rpx;margin-right: 45rpx;" @click="toMessageList">
 								<u-image height="50rpx" width="50rpx" mode="aspectFit"
 									src="/static/images/message_me.png">
 								</u-image>
@@ -22,6 +22,12 @@
 							<u-image @click="gotoSet" height="50rpx" width="50rpx" mode="aspectFit"
 								src="/static/images/set.png">
 							</u-image>
+							<view v-if="isRead">
+								<u-badge :offset="[-8,-8]"  :is-dot="true"></u-badge>
+							</view>
+							<view v-else>
+								<u-badge :offset="[-8,-8]"  :is-dot="true" :count="0"></u-badge>
+							</view>
 						</view>
 					</view>
 
@@ -109,8 +115,13 @@
 	import {
 		storeToRefs
 	} from 'pinia';
+	import {
+		commonStore
+	} from '@/stores/store';
 	export default {
 		setup() {
+			const store = commonStore();
+			const isRead = ref(false)
 			const user = userStore();
 			const {
 				userInfo,
@@ -143,12 +154,13 @@
 			// 工具菜单
 			const toolList = reactive([{
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%85%B3%E6%B3%A8.png?sign=823e5e8f340f6cf004b527befa4b0b86&t=1653974741',
-					text: '关注'
+					text: '喜欢',
+					url: '/pages/Tourists/Love/Love'
 				},
 				{
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E7%A7%8D%E8%8D%89.png?sign=7734a781e420ca814fc11074939baaae&t=1655528876',
 					text: '种草',
-					url: '/pages/Tourists/Location/Location'
+					url: '/pages/Tourists/MyRelease/MyRelease'
 				}, {
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%9C%B0%E5%9D%80.png?sign=cec3bc5ea67c8dec43c79dabb404e261&t=1653982220',
 					text: '地址',
@@ -164,6 +176,12 @@
 			const gotoOrder = (url: string, index: number) => {
 				uni.navigateTo({
 					url: url + `?index=${index}`
+				})
+			}
+			//跳转消息列表
+			const toMessageList = async function() {
+				uni.navigateTo({
+					url: "../MessageList/MessageList"
 				})
 			}
 			const gotoPage = async (item) => {
@@ -195,10 +213,16 @@
 				gotoPage,
 				gotoOrder,
 				orderMap,
-				gotoSet
+				toMessageList,
+				gotoSet,
+				isRead,
+				store,
+
 			}
 		},
 		async onShow() {
+			this.isRead = this.store.tNoRead
+			console.log(this.isRead)
 			this.orderList.forEach(item => {
 				item.count = 0;
 			});

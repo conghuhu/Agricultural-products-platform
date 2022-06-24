@@ -5,7 +5,7 @@ cloud.init();
 
 const db = cloud.database();
 
-// 云函数入口函数
+// 查询待评价的货物
 exports.main = async (event, context) => {
 
 	const wxContext = cloud.getWXContext();
@@ -16,8 +16,6 @@ exports.main = async (event, context) => {
 
 	const _ = db.command;
 
-	const $ = db.command.aggregate
-
 	let res = {};
 
 	try {
@@ -27,37 +25,41 @@ exports.main = async (event, context) => {
 
 		const goodOrderDb = db.collection('good-orders');
 
-		const statusArr = await Promise.all([orderDb.where({
-			_openid: _.eq(openid),
-			status: 1
-		}).get(), goodOrderDb.where({
-			_openid: _.eq(openid),
-			status: 2
-		}).get(), goodOrderDb.where({
+		const temp = await goodOrderDb.where({
 			_openid: _.eq(openid),
 			status: 3
-		}).get(), goodOrderDb.where({
-			_openid: _.eq(openid),
-			status: 4
-		}).get()]);
+		}).orderBy('createTime', 'desc').get();
+
 
 		log.info({
-			name: 'queryOrderStatus',
-			message: `查询到的openid为${openid}的订单状态`,
-			data: statusArr
+			name: 'queryIngGoods',
+			message: '查询到的good-orders中为3的结果',
+			data: temp
 		});
 
 		const dataList = [];
+		// 并行任务
+		const tasks = [];
 
+		for (let i = 0; i < temp.data.length; i++) {
+			const item = temp.data[i];
+			const goodId = item.goodId;
+			const promise = goodDb.doc(goodId).get();
+			tasks.push(promise);
+		}
+
+		const goodRes = await Promise.all(tasks);
+
+		for (let i = 0; i < goodRes.length; i++) {
+			const goodInfo = goodRes[i].data;
+			goodInfo.count = temp.data[i].count;
+			goodInfo.orderId = temp.data[i].orderId;
+			dataList.push(goodInfo);
+		}
 		res = {
 			success: true,
 			message: "查询成功",
-			data: statusArr.map((item, index) => {
-				return {
-					_id: index + 1,
-					count: item.data.length
-				}
-			})
+			data: dataList
 		}
 	} catch (e) {
 		console.trace(e);

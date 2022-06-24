@@ -21,7 +21,6 @@ exports.main = async (event, context) => {
 			data
 		} = await msgDb.where({
 				m_openId: _.eq(openId),
-				read:_.eq("0")
 			}).orderBy('_createTime', 'desc')
 			.get();
 

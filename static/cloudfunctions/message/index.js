@@ -4,6 +4,10 @@ const messageListGet = require('./MessageLIst/messageListGet')
 const messageListCount = require('./MessageLIst/messageListCount')
 const messageMerchantsGet = require('./MessageMerchantsCRUD/messageMerchantsGet')
 const messageMerchantsAdd = require('./MessageMerchantsCRUD/messageMerchantsAdd')
+const messageListTouristsGet = require('./MessageListTourists/MessageListTouristsGet')
+const messageListTouristsCount = require('./MessageListTourists/MessageListTouristsCount')
+const messageUpdate = require('./MessageCRUD/messageUpdate')
+const messageMerchantsUpdate = require('./MessageMerchantsCRUD/messageMerchantsUpdate')
 // 云函数入口函数
 exports.main = async (event, context) => {
 	switch (event.type) {
@@ -19,6 +23,14 @@ exports.main = async (event, context) => {
 			return await messageMerchantsGet.main(event, context);
 		case 'messageMerchantsAdd':
 			return await messageMerchantsAdd.main(event, context);
+		case 'messageListTouristsGet':
+			return await messageListTouristsGet.main(event, context);
+		case 'messageListTouristsCount':
+			return await messageListTouristsCount.main(event, context);
+		case 'messageUpdate':
+			return await messageUpdate.main(event, context);
+		case 'messageMerchantsUpdate':
+			return await messageMerchantsUpdate.main(event, context);
 		default:
 			return {
 				success: false,

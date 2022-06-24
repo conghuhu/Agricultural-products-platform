@@ -1,52 +1,59 @@
 <template>
 	<Nav title="聊天室" :isBack="true"></Nav>
 	<view class="content">
-		<scroll-view class="cu-chat" scroll-y="true">
-			<view v-for="(item,index) in chatList" :key="index">
-				<!--对方发送的信息-->
-				<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='tTOm'">
-					<view class="cu-avatar radius">
-						<u-avatar size="80" :src="item.o_userInfo.avatarUrl"></u-avatar>
-					</view>
-					<view class="main">
-						<view class="content bg-cyan shadow">
-							<text>{{item.content}}</text>
+		<block v-if="!loading">
+			<scroll-view class="cu-chat" scroll-y="true" scroll-into-view="msg1111111" scroll-with-animation="true"
+				style="height: 1400rpx;">
+				<view v-for="(item,index) in chatList" :key="index">
+					<!--对方发送的信息-->
+					<view class="cu-item" v-if="item.msgType === 'text'&&item.to==='tTOm'" :id="'msg'+item._id">
+						<view class="cu-avatar radius">
+							<u-avatar size="80" :src="item.o_userInfo.avatarUrl"></u-avatar>
 						</view>
-					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
-				</view>
-				<view class="cu-item" v-if="item.m_openId === openId && item.msgType === 'image'">
-					<view class="cu-avatar radius">
-						<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
-					</view>
-					<view class="main">
-						<image :src="item.content" class="radius" mode="widthFix"></image>
-					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
-				</view>
-				<!--自己发送的信息-->
-				<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='mTOt'">
-					<view class="main">
-						<view class="content bg-green shadow">
-							<text>{{item.content}}</text>
+						<view class="main">
+							<view class="content bg-cyan shadow">
+								<text>{{item.content}}</text>
+							</view>
 						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
-					<view class="cu-avatar radius">
-						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
+					<view class="cu-item" v-if="item.m_openId === openId && item.msgType === 'image'"
+						:id="'msg'+item._id">
+						<view class="cu-avatar radius">
+							<u-avatar :src="item.o_userInfo.avatarUrl"></u-avatar>
+						</view>
+						<view class="main">
+							<image :src="item.content" class="radius" mode="widthFix"></image>
+						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+					<!--自己发送的信息-->
+					<view class="cu-item self" v-if="item.msgType === 'text'&&item.to==='mTOt'" :id="'msg'+item._id">
+						<view class="main">
+							<view class="content bg-green shadow">
+								<text>{{item.content}}</text>
+							</view>
+						</view>
+						<view class="cu-avatar radius">
+							<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
+						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+					</view>
+					<view class="cu-item self" v-if="item.openId != openId && item.msgType === 'image'"
+						:id="'msg'+item._id">
+						<view class="main">
+							<image :src="item.content" class="radius" mode="widthFix"></image>
+						</view>
+						<view class="cu-avatar radius">
+							<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
+						</view>
+						<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+					</view>
 				</view>
-				<view class="cu-item self" v-if="item.openId != openId && item.msgType === 'image'">
-					<view class="main">
-						<image :src="item.content" class="radius" mode="widthFix"></image>
-					</view>
-					<view class="cu-avatar radius">
-						<u-avatar :src="item.m_userInfo.avatarUrl"></u-avatar>
-					</view>
-					<view class="date">{{dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
-				</view>
-			</view>
-		</scroll-view>
+				<view style="height: 200rpx; margin-bottom:100rpx;" id="msg1111111"></view>
+			</scroll-view>
+		</block>
+
 		<!-- 底部输入 -->
 		<view class="input-box" :class="{ 'input-box-mpInputMargin': mpInputMargin }">
 			<view class="input-box-flex">
@@ -94,6 +101,10 @@
 	import dayjs from 'dayjs';
 	export default {
 		setup() {
+			//定位
+			const scrollId = ref("");
+			//Loading
+			const loading = ref(true)
 			//聊天列表
 			const chatList = reactive([])
 			//发送消息变量
@@ -165,6 +176,7 @@
 				messageData.openId = openId.value;
 				messageData.msgType = "text";
 				messageData.content = formData.content;
+				formData.content = ""
 				const time = new Date();
 				messageData._createTime = time;
 				console.log(messageData)
@@ -172,39 +184,55 @@
 					type: "messageMerchantsAdd",
 					messageData: messageData
 				})
-				formData.content = ""
+
 			}
+			const watcher = ref(null);
 			//消息监听
-			
-			
-			const initWatcher = async function(){
-				const m_openId = await request("user",{
-					type:"userOpenId",
+			const initWatcher = async function(isClose) {
+				const m_openId = await request("user", {
+					type: "userOpenId",
 				})
 				const db = wx.cloud.database();
 				const _ = db.command;
-				const res = db.collection('chat-msgs').where({
-					openId:openId.data,
-					m_openId:m_openId.value
-				}).watch({
-					onChange:function(snapshot){
-						console.log(snapshot)
-						if(snapshot.docChanges.length!=0){
-							snapshot.docChanges.forEach(item=>{
-								if(item.dataType!="init"){
-									chatList.push(item.doc)
-								}
-							})
-							console.log(chatList)
-						}
-					},
-					onError:function(err) {
-						console.error('the watch closed because of error', err)
-					}
-				})
 				
+				if (!isClose) {
+					watcher.value = db.collection('chat-msgs').where({
+						openId: openId.data,
+						m_openId: m_openId.value
+					}).watch({
+						onChange: async function(snapshot) {
+							console.log(snapshot)
+							if (snapshot.docChanges.length != 0) {
+								for (let i = 0; i < snapshot.docChanges.length; i++) {
+									if (snapshot.docChanges[i].dataType == "add") {
+										if (snapshot.docChanges[i].doc.to == "tTOm") {
+											snapshot.docChanges[i].doc.m_read = "1";
+											const res = await request("message", {
+												type: "messageMerchantsUpdate",
+												message: {
+													...snapshot.docChanges[i].doc
+												}
+											})
+										}
+										chatList.push(snapshot.docChanges[i].doc)
+									}
+								}
+								scrollId.value = "msg" + chatList[chatList.length - 1]._id;
+								console.log(chatList)
+							}
+						},
+						onError: function(err) {
+							console.error('the watch closed because of error', err)
+						}
+					})
+				} else {
+					console.log("我是国庆")
+					watcher.value.close();
+
+				}
+
 			}
-			
+
 
 			return {
 				emojisList,
@@ -223,7 +251,10 @@
 				messageData,
 				chatList,
 				initWatcher,
-				dayjs
+				dayjs,
+				scrollId,
+				loading,
+				watcher
 			}
 		},
 		async onLoad(option) {
@@ -237,11 +268,32 @@
 				openId: this.openId
 			});
 			console.log(temp)
-			this.chatList.length=0;
-			temp.data.forEach(item => {
+			this.chatList.length = 0;
+			for (let i = 0; i < temp.data.length; i++) {
+				const item = temp.data[i];
+				if (item.m_read == "0") {
+					item.m_read = "1"
+					const res = await request("message", {
+						type: "messageMerchantsUpdate",
+						message: {
+							...item
+						}
+					})
+				}
 				this.chatList.push(item);
-			});
-			 this.initWatcher();
+			}
+			if (this.chatList && this.chatList.length != 0) {
+				this.scrollId = "msg" + this.chatList[this.chatList.length - 1]._id;
+			}
+			console.log(this.scrollId)
+			this.initWatcher(false);
+			this.loading = false
+		},
+		
+		
+		onUnload() {
+			console.log("我是国庆")
+			this.initWatcher(true)
 		}
 	};
 </script>
@@ -256,6 +308,7 @@
 			display: block;
 			background-color: #ffffff;
 		}
+
 		.cu-timeline .cu-time {
 			width: 120upx;
 			text-align: center;
@@ -264,7 +317,7 @@
 			color: #888;
 			display: block;
 		}
-		
+
 		.cu-timeline .cu-time {
 			width: 120upx;
 			text-align: center;
@@ -277,7 +330,7 @@
 		.cu-chat {
 			display: flex;
 			flex-direction: column;
-			padding-bottom: 200rpx;
+			margin-bottom: 200rpx;
 		}
 
 		.cu-chat .cu-item {

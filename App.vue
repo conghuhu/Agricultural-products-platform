@@ -1,16 +1,65 @@
 <script lang="ts">
 	import request from '@/api/request';
 	import {
+		ref
+	} from 'vue'
+	import {
 		userStore
 	} from '@/stores/user';
+	import {
+		commonStore
+	} from '@/stores/store';
 	export default {
 		setup() {
 			const user = userStore();
+			const store = commonStore();
+
+			const timer = ref < NodeJS.Timeout > ();
+			const getRead =async ()=>{
+				const mNoRead: {
+					data: Array < any >
+				} = await request("message", {
+					type: "messageListCount"
+				})
+
+				if (mNoRead.data.length == 0) {
+					store.updatemNoRead(false);
+				} else {
+					store.updatemNoRead(true);
+				}
+	
+				const tNoRead: {
+					data: Array < any >
+				} = await request("message", {
+					type: "messageListTouristsCount"
+				})
+
+				if (tNoRead.data.length == 0) {
+					store.updatetNoRead(false);
+				} else {
+					store.updatetNoRead(true);
+				}
+
+			}
+
+			const setTimer = () => {
+				clearInterval(Number(timer.value))
+				timer.value = setInterval(() => {
+					getRead()
+					
+				}, 3000)
+			}
+
 			return {
-				user
+				user,
+				store,
+				timer,
+				setTimer,
+				getRead
+				
 			}
 		},
-		async onLaunch() {
+		onLaunch() {
 			wx.cloud.init({
 				// env 参数说明：
 				//   env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会默认请求到哪个云环境的资源
@@ -21,9 +70,9 @@
 				traceUser: true,
 			})
 			console.log('App Launch');
-
 		},
 		async onShow() {
+			// this.setTimer();
 			const res = await Promise.all([request('wanted', {
 				type: 'getWanted'
 			}), request('star_focus', {
@@ -54,6 +103,7 @@
 		async onHide() {
 			console.log('App Hide');
 
+			clearTimeout(this.timer)
 		}
 	}
 </script>

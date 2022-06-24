@@ -9,29 +9,23 @@ exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
 	const openId = wxContext.OPENID;
 
-	const {
-		m_openId
-	} = event;
 	let res = {};
 	try {
 		const msgDb = db.collection('chat-msgs');
 		const _ = db.command;
-		const $ = db.command.aggregate;
 
-		const {list} = await msgDb.aggregate().match({
-				m_openId: _.eq(openId),
-				m_read:_.eq("0")
-			}).group({
-				_id:'$openId',
-				num:$.sum(1)
-			})
-			.end();
+		const {
+			data
+		} = await msgDb.where({
+				openId: _.eq(openId),
+			}).orderBy('_createTime', 'desc')
+			.get();
 
-		
+
 		res = {
 			sucess: true,
 			message: "",
-			data: list
+			data: data
 		}
 	} catch (e) {
 		//TODO handle the exception

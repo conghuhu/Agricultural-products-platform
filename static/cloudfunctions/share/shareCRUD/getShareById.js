@@ -19,15 +19,28 @@ exports.main = async (event, context) => {
 
 	try {
 		const shareDb = db.collection('share');
+
 		const {
 			data
 		} = await shareDb.doc(shareId).get();
+
 		const userDb = db.collection('users');
+
+		const goodDb = db.collection('goods');
+
 		const userRes = await userDb.where({
 			_openid: data._openid
 		}).get();
+
 		data.author = userRes.data[0];
 		delete data._openid;
+
+		if (data.goodId) {
+			const goodInfo = await goodDb.doc(data.goodId).get();
+			data.goodInfo = goodInfo.data;
+			delete data.goodId
+		}
+
 		res = {
 			sucess: true,
 			message: "",

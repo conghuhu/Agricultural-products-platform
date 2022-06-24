@@ -1,6 +1,15 @@
 <template>
 	<view class="fullScreen">
-		<Nav title="详情" isBack></Nav>
+		<Nav title="" isBack>
+			<view class="left">
+				<u-avatar style="display: flex;align-items: center;margin-left: 10rpx;" :size="66"
+					:src="shareDetail.author.avatarUrl">
+				</u-avatar>
+				<view class="nickname">
+					<Ellipsis :content="shareDetail.author.nickName" :width="200" />
+				</view>
+			</view>
+		</Nav>
 
 		<view v-if="loading"
 			style="width: 100%;height: 70vh;display: flex;align-items: center;justify-content: center;">
@@ -19,8 +28,18 @@
 				<view class="desc">
 					{{shareDetail.content}}
 				</view>
+
+				<view v-if="shareDetail.goodInfo" class="good" @click="gotoGoodDetail">
+					<u-image height="50rpx" width="50rpx" mode="aspectFit"
+						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/good_icon.png?sign=1a345fd52aba9998de46d671090efe0a&t=1655993500">
+					</u-image>
+					<view class="goodName">
+						{{shareDetail.goodInfo.goodName}}
+					</view>
+				</view>
+
 				<view class="tool">
-					<view class="location">
+					<view class="location" @click="gotoLocation">
 						<image style="width: 32rpx;height: 32rpx;margin-right: 4rpx;"
 							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/location.png?sign=c1ea39e3c461e32946bed9fa5417d24f&t=1652769718"
 							mode="aspectFit"></image>
@@ -133,6 +152,10 @@
 					avatarUrl: '',
 					gender: 0,
 					nickName: ''
+				},
+				goodInfo: {
+					goodName: '',
+					_id: ''
 				}
 			});
 			//评论内容信息
@@ -193,6 +216,20 @@
 				eventChannel.emit('updateStarCount', shareDetail.star);
 			}
 
+			/**
+			 * 跳到地图界面
+			 */
+			const gotoLocation = () => {
+				uni.navigateTo({
+					url: `/pages/Public/Map/Map?longitude=${shareDetail.location[0]}&latitude=${shareDetail.location[1]}`
+				})
+			};
+
+			const gotoGoodDetail = () => {
+				uni.navigateTo({
+					url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${shareDetail.goodInfo._id}`
+				})
+			}
 
 			return {
 				user,
@@ -205,7 +242,9 @@
 				getComments,
 				commentList,
 				sendComments,
-				loading
+				loading,
+				gotoLocation,
+				gotoGoodDetail
 			}
 		},
 
@@ -232,12 +271,24 @@
 		background-color: $background-color;
 		width: 100%;
 
+		.left {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			.nickname {
+				font-size: 30rpx;
+				margin-left: 16rpx;
+				color: #949397;
+			}
+		}
+
 		.person_comment {
 			padding-bottom: 200rpx;
 			background-color: $background-color;
+			padding-top: 20rpx;
 
 			.comment_show {
-				margin-top: 24rpx;
 				width: 100%;
 				display: flex;
 				align-items: center;
@@ -298,7 +349,7 @@
 		.content {
 			padding: 20rpx;
 			padding-bottom: 50rpx;
-			background-color: #F2F4F7;
+			background-color: $background-color;
 
 			.title {
 				font-size: 34rpx;
@@ -308,6 +359,29 @@
 			.desc {
 				margin-top: 20rpx;
 				font-size: 30rpx;
+			}
+
+			.good {
+				display: flex;
+				align-items: center;
+				margin-top: 30rpx;
+				margin-bottom: 20rpx;
+
+				max-width: 300rpx;
+				height: 70rpx;
+
+				padding-left: 24rpx;
+				padding-right: 30rpx;
+
+				border-radius: 0px 30rpx 30rpx 0px;
+				background: rgba(255, 205, 123, 0.3);
+				border: 0.5px solid #FFFFFF;
+
+				.goodName {
+					margin-left: 16rpx;
+					font-size: 30rpx;
+					color: #FFFFFF;
+				}
 			}
 
 			.tool {
