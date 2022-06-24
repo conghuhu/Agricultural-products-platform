@@ -578,15 +578,9 @@
 				confirmDeliveryGood,
 				waitForGoodList,
 				waitEvaluateGoodList,
-				<<
-				<< << < HEAD
 				applyRefund,
-				refundGoodList ===
-				=== =
+				refundGoodList,
 				toComments
-
-				>>>
-				>>> > 02 dd5a1c9db05b234f24be02702829f8a4fc0115
 			}
 		},
 		async onLoad(option) {
