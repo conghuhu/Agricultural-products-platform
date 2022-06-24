@@ -28,6 +28,9 @@ exports.main = async (event, context) => {
 				foreignField: '_id',
 				as: 'goodInfo',
 			})
+			.sort({
+				createTime: -1
+			})
 			.end();
 		res = {
 			sucess: true,

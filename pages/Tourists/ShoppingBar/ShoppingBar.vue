@@ -137,6 +137,7 @@
 				const res = await request('wanted', {
 					type: 'getWanted'
 				});
+				console.log(res);
 				wantList.length = 0;
 				res.data.forEach(item => {
 					wantList.push({
