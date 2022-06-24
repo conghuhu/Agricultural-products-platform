@@ -27,7 +27,8 @@ exports.main = async (event, context) => {
 		const isAbsent = await orderDb.doc(orderId).get();
 
 		const price = isAbsent.data.price;
-
+        console.log(wxContext.OPENID);
+		const openId = wxContext.OPENID;
 		const moneyBalance = await cloud.callFunction({
 			name: 'user',
 			data: {
@@ -79,6 +80,7 @@ exports.main = async (event, context) => {
 				data: {
 					type: 'addSale',
 					goodId: goodId,
+					openId: openId,
 					createTime: createTime,
 					goodNums: goodNums,
 					goodTotalPrice: goodTotalPrice
