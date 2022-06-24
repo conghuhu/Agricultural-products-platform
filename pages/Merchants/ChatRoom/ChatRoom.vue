@@ -186,42 +186,50 @@
 				})
 
 			}
+			const watcher = ref(null);
 			//消息监听
-			const initWatcher = async function() {
+			const initWatcher = async function(isClose) {
 				const m_openId = await request("user", {
 					type: "userOpenId",
 				})
 				const db = wx.cloud.database();
 				const _ = db.command;
-				const res = db.collection('chat-msgs').where({
-					openId: openId.data,
-					m_openId: m_openId.value
-				}).watch({
-					onChange: async function(snapshot) {
-						console.log(snapshot)
-						if (snapshot.docChanges.length != 0) {
-							for (let i = 0; i < snapshot.docChanges.length; i++) {
-								if (snapshot.docChanges[i].dataType!= "init") {
-									if (snapshot.docChanges[i].doc.to === "tTOm") {
-										snapshot.docChanges[i].doc.m_read = "1";
-										const res = await request("message", {
-											type: "messageMerchantsUpdate",
-											message: {
-												...snapshot.docChanges[i].doc
-											}
-										})
+				
+				if (!isClose) {
+					watcher.value = db.collection('chat-msgs').where({
+						openId: openId.data,
+						m_openId: m_openId.value
+					}).watch({
+						onChange: async function(snapshot) {
+							console.log(snapshot)
+							if (snapshot.docChanges.length != 0) {
+								for (let i = 0; i < snapshot.docChanges.length; i++) {
+									if (snapshot.docChanges[i].dataType == "add") {
+										if (snapshot.docChanges[i].doc.to == "tTOm") {
+											snapshot.docChanges[i].doc.m_read = "1";
+											const res = await request("message", {
+												type: "messageMerchantsUpdate",
+												message: {
+													...snapshot.docChanges[i].doc
+												}
+											})
+										}
+										chatList.push(snapshot.docChanges[i].doc)
 									}
-									chatList.push(snapshot.docChanges[i].doc)
 								}
+								scrollId.value = "msg" + chatList[chatList.length - 1]._id;
+								console.log(chatList)
 							}
-							scrollId.value = "msg" + chatList[chatList.length - 1]._id;
-							console.log(chatList)
+						},
+						onError: function(err) {
+							console.error('the watch closed because of error', err)
 						}
-					},
-					onError: function(err) {
-						console.error('the watch closed because of error', err)
-					}
-				})
+					})
+				} else {
+					console.log("我是国庆")
+					watcher.value.close();
+
+				}
 
 			}
 
@@ -245,7 +253,8 @@
 				initWatcher,
 				dayjs,
 				scrollId,
-				loading
+				loading,
+				watcher
 			}
 		},
 		async onLoad(option) {
@@ -273,14 +282,18 @@
 				}
 				this.chatList.push(item);
 			}
-			if(this.chatList && this.chatList.length!=0){
+			if (this.chatList && this.chatList.length != 0) {
 				this.scrollId = "msg" + this.chatList[this.chatList.length - 1]._id;
 			}
 			console.log(this.scrollId)
-			this.initWatcher();
+			this.initWatcher(false);
 			this.loading = false
-
-
+		},
+		
+		
+		onUnload() {
+			console.log("我是国庆")
+			this.initWatcher(true)
 		}
 	};
 </script>
