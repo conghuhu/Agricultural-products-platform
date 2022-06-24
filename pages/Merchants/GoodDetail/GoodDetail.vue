@@ -52,11 +52,21 @@
 						} })" :maxCount="goodInfo.imageShowList.length" :deletable="false"></u-upload>
 					</view>
 				</view>
-				<view class="last_week_card">
+				<view class="last_week_card">					
+					<view class="good_card_top">
+						<view style="font-size: 44rpx;font-weight: 550;">
+							近一周销量统计图
+						</view>
+					</view>
 					<qiun-data-charts type="line" :ontouch="true" :opts="chartOption" :chartData="option" />
 				</view>
 				<view class="last_month_card">
-
+					<view class="good_card_top">
+						<view style="font-size: 44rpx;font-weight: 550;">
+							近一个月销量统计图
+						</view>
+					</view>
+                    <qiun-data-charts type="line" :ontouch="true" :opts="chartOption" :chartData="optionMonth" />
 				</view>
 				<view class="comments_card">
 
@@ -99,6 +109,7 @@
 				updateTime: null
 			});
 			const goodSaleInfo = reactive([]);
+			const goodMonthSaleInfo = reactive([]);
 			const timeList = reactive([]);
 			const numList = reactive([]);
 			const actionSheetShow = ref(false);
@@ -146,7 +157,16 @@
 				}],
 			});
 
-
+			/**
+			 * chartMonth数据
+			 */
+			const optionMonth = reactive({
+				categories: ['前一周','前二周','前三周','前四周'],
+				series: [{
+					name: "销量",
+					data: goodMonthSaleInfo
+				}],
+			});
 			/**
 			 * 刷新数据
 			 */
@@ -170,8 +190,6 @@
 					goodId: goodId
 				});
 				Object.assign(goodSaleInfo, res.data);
-				// const timeList = [];
-				// const numList = [];
 				console.log(res);
 				for (let i = 0; i < res.data.length; i++) {
 					const time = res.data[i][0];
@@ -182,6 +200,23 @@
 
 			}
 
+			/**
+			 * 获取商品月销量数据
+			 */
+			const getMonthSaleData = async (goodId) => {
+				const res = await request('sale', {
+					type: 'querySaleMonth',
+					goodId: goodId
+				});
+
+				console.log(res.data);
+				for (let i = 0; i < res.data.length; i++) {
+					goodMonthSaleInfo.push(res.data[i]);
+				}
+				console.log("-----------------------=====================");
+				console.log(goodMonthSaleInfo);
+
+			}
 			/**
 			 * 操作分发
 			 */
@@ -233,14 +268,17 @@
 				userId,
 				refreshData,
 				getSaleData,
+				getMonthSaleData,
 				option,
 				chartOption,
-				loading
+				loading,
+				optionMonth
 			}
 		},
 		async onLoad(option) {
 			await this.refreshData(option.goodId);
 			await this.getSaleData(option.goodId);
+			await this.getMonthSaleData(option.goodId);
 			// const ans = await wx.getStorage({
 			// 	key: 'userInfo',
 			// 	encrypt: true,
