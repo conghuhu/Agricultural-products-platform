@@ -303,6 +303,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/Tourists/Comments/Comments",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

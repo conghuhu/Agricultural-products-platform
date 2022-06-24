@@ -175,7 +175,7 @@
 										</view>
 										<view class="bottom_right">
 											<view class="cancel btn">申请退款</view>
-											<view class="pay btn">去评价</view>
+											<view class="pay btn" @click="toComments(item)">去评论</view>
 										</view>
 									</view>
 								</view>
@@ -520,6 +520,13 @@
 				});
 				user.setOrderMap(res.data);
 			}
+			//跳转评论结论
+			const toComments = (data)=>{
+				uni.navigateTo({
+					url:`../Comments/Comments?id=${data._id}`
+				})
+			}
+			
 
 			return {
 				orderList,
@@ -546,7 +553,9 @@
 				initData,
 				confirmDeliveryGood,
 				waitForGoodList,
-				waitEvaluateGoodList
+				waitEvaluateGoodList,
+				toComments
+				
 			}
 		},
 		async onLoad(option) {
