@@ -111,6 +111,7 @@
 			 * 提交创建商铺请求
 			 */
 			const submitCreateShop = async () => {
+				subscribe();
 				uni.showLoading({
 					title: '创建中',
 				})
@@ -156,6 +157,44 @@
 						}
 					} else {
 						console.log("验证失败")
+					}
+				})
+			}
+
+			// 订阅消息
+			const subscribe = () => {
+				const templeteList = ['FjniTcotQ5M9gyPI8YQdWlVpmrexOUFZu3O7jHCnE3s'];
+				uni.requestSubscribeMessage({
+					tmplIds: templeteList,
+					success(res) {
+						console.log(res);
+						// 申请订阅成功
+						if (res.errMsg === 'requestSubscribeMessage:ok') {
+						// 	wx.cloud
+						// 		.callFunction({
+						// 			name: 'subscribe',
+						// 			data: {
+						// 				data: item,
+						// 				templateId: templeteList[0],
+						// 			},
+						// 		})
+						// 		.then(() => {
+						// 			uni.showToast({
+						// 				title: '订阅成功',
+						// 				icon: 'success',
+						// 				duration: 2000,
+						// 			});
+						// 		})
+						// 		.catch(() => {
+						// 			uni.showToast({
+						// 				title: '订阅失败',
+						// 				icon: 'success',
+						// 				duration: 2000,
+						// 			});
+						// 		});
+						}else{
+							return false;
+						}
 					}
 				})
 			}

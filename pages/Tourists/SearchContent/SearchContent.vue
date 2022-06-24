@@ -87,7 +87,6 @@
 			 * 切换tab
 			 */
 			const changeTab = (index) => {
-				console.log(index);
 				if (index == 0) {
 					initData();
 				} else if (index == 2) {

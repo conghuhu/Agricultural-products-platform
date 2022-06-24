@@ -117,11 +117,8 @@ export const userStore = defineStore('user', () => {
 		orderMap.clear();
 		let total = 0;
 		arr.forEach(item => {
-			// 略过已完结的订单
-			if (item._id != 4) {
-				orderMap.set(item._id, item.count);
-				total += item.count;
-			}
+			orderMap.set(item._id, item.count);
+			total += item.count;
 		});
 		navList[4].count = total;
 	}

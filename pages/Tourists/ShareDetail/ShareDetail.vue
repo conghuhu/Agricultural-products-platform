@@ -29,12 +29,11 @@
 					{{shareDetail.content}}
 				</view>
 
-				<view v-if="shareDetail.goodInfo" class="good" @click="gotoGoodDetail">
-					<u-image height="50rpx" width="50rpx" mode="aspectFit"
-						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/good_icon.png?sign=1a345fd52aba9998de46d671090efe0a&t=1655993500">
-					</u-image>
+				<view v-if="shareDetail.goodInfo.goodName" class="good" @click="gotoGoodDetail">
+					<text style="flex: 5;">购买</text>
+					<u-line style="height: 30rpx;" color="#fff" direction="col"></u-line>
 					<view class="goodName">
-						{{shareDetail.goodInfo.goodName}}
+						<Ellipsis :content="shareDetail.goodInfo.goodName" :width="150" />
 					</view>
 				</view>
 
@@ -352,13 +351,14 @@
 			background-color: $background-color;
 
 			.title {
-				font-size: 34rpx;
-				font-weight: 550;
+				font-size: 38rpx;
+				font-weight: bold;
+				font-family: SourceHanSansCN-Bold;
 			}
 
 			.desc {
 				margin-top: 20rpx;
-				font-size: 30rpx;
+				font-size: 32rpx;
 			}
 
 			.good {
@@ -367,20 +367,27 @@
 				margin-top: 30rpx;
 				margin-bottom: 20rpx;
 
-				max-width: 300rpx;
-				height: 70rpx;
+				max-width: 280rpx;
 
-				padding-left: 24rpx;
-				padding-right: 30rpx;
+				padding-left: 16rpx;
+				padding-right: 16rpx;
+				padding-top: 8rpx;
+				padding-bottom: 8rpx;
 
-				border-radius: 0px 30rpx 30rpx 0px;
-				background: rgba(255, 205, 123, 0.3);
-				border: 0.5px solid #FFFFFF;
+				border-radius: 8rpx;
+
+				background: linear-gradient(270deg, #F5B05F 1%, #F5B05F 1%, rgba(245, 176, 95, 0.68) 99%, rgba(245, 176, 95, 0.68) 99%);
+				box-shadow: 0px 3px 6px 0px rgba(212, 198, 119, 0.6);
+
+				color: #FFFFFF;
+
+				font-size: 30rpx;
+				line-height: 40rpx;
 
 				.goodName {
 					margin-left: 16rpx;
-					font-size: 30rpx;
-					color: #FFFFFF;
+					flex: 10;
+					text-align: center;
 				}
 			}
 
@@ -388,7 +395,7 @@
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				font-size: 26rpx;
+				font-size: 30rpx;
 				margin-top: 30rpx;
 				color: #949397;
 				margin-bottom: 40rpx;

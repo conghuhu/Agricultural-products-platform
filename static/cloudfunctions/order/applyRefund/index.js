@@ -4,41 +4,47 @@ const cloud = require('wx-server-sdk');
 cloud.init();
 
 const db = cloud.database();
-const dayjs = require("dayjs");
-// 云函数入口函数
+
+// 申请商品退款
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
-	
-	const goodDb = db.collection('sales');
+
+	const openid = wxContext.OPENID;
+
 	const _ = db.command;
-    const $ = db.command.aggregate;
-	
+
 	const {
-		goodId,createTime,goodNums,goodTotalPrice
+		orderId,
+		goodId
 	} = event;
 
+	let res = {};
+
 	try {
-		const temp = await goodDb.add({
+		const goodOrderDb = db.collection('good-orders');
+
+		const temp = await goodOrderDb.where({
+			orderId: orderId,
+			goodId: goodId
+		}).update({
 			data: {
-				goodId: goodId,
-				newTime: newTime,
-				goodNums: goodNums,
-				goodTotalPrice: goodTotalPrice
+				status: 4
 			}
-		})
-		
+		});
+
 		res = {
 			success: true,
-			message: "",
+			message: "申请退款成功",
 			data: temp
 		}
 	} catch (e) {
 		console.trace(e);
 		res = {
 			success: false,
-			message: "未知异常",
+			message: "申请退款失败",
 			data: e
 		}
 	}
+
 	return res;
 }

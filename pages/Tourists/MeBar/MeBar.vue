@@ -23,10 +23,10 @@
 								src="/static/images/set.png">
 							</u-image>
 							<view v-if="isRead">
-								<u-badge :offset="[-8,-8]"  :is-dot="true"></u-badge>
+								<u-badge :offset="[-8,-8]" :is-dot="true"></u-badge>
 							</view>
 							<view v-else>
-								<u-badge :offset="[-8,-8]"  :is-dot="true" :count="0"></u-badge>
+								<u-badge :offset="[-8,-8]" :is-dot="true" :count="0"></u-badge>
 							</view>
 						</view>
 					</view>
@@ -147,7 +147,7 @@
 				count: 0
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%B7%B2%E5%AE%8C%E6%88%90.png?sign=c2f487d81efb16d2d9144f6e18eefe96&t=1653974124',
-				text: '已完成',
+				text: '售后',
 				url: "/pages/Tourists/Order/Order",
 				count: 0
 			}]);
@@ -222,13 +222,13 @@
 		},
 		async onShow() {
 			this.isRead = this.store.tNoRead
-			console.log(this.isRead)
 			this.orderList.forEach(item => {
 				item.count = 0;
 			});
 			this.orderMap.forEach((value, key) => {
 				this.orderList[key - 1].count = value;
 			});
+			console.log(this.orderList)
 			const res = await request('user', {
 				type: 'getMoneyBalance'
 			});

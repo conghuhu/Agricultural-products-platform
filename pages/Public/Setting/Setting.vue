@@ -4,7 +4,9 @@
 		<view class="content">
 			<u-cell-group>
 				<u-cell-item icon="man-add" title="切换身份" @click="changeStatus"></u-cell-item>
-				<u-cell-item icon="integral-fill" title="会员等级" value="新版本"></u-cell-item>
+				<u-cell-item style="position: relative;" icon="home" title="授权管理">
+					<button style="opacity: 0;position: absolute;top: 0;left: 0;width: 700rpx;height: 90rpx;" open-type="openSetting">999</button>
+				</u-cell-item>
 			</u-cell-group>
 		</view>
 	</view>

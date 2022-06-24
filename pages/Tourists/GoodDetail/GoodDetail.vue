@@ -58,103 +58,124 @@
 					</view>
 				</view>
 			</view>
-			<view class="tab">
-				<view class="tab_top">评价</view>
-				<view class="tab_mid">相关介绍</view>
-				<view class="tab_end">规格参数</view>
-			</view>
-			<view class="pingfen">
-				<view class="pingfen_content">
-					<view class="content_number">4.2</view>
-					<view class="content_xingxing">
-						<view class="xingxing_image">
-							<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
-							</u-image>
-						</view>
-						<view class="xingxing_image">
-							<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
-							</u-image>
-						</view>
-						<view class="xingxing_image">
-							<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
-							</u-image>
-						</view>
-						<view class="xingxing_image">
-							<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
-							</u-image>
-						</view>
-						<view class="xingxing_image">
-							<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
-							</u-image>
 
+			<view class="body">
+				<view style="margin-bottom: 16rpx;margin-top: 6rpx;">
+					<u-tabs activeColor="#4CC818" :showBar="false" :list="tabList" :is-scroll="false"
+						v-model="currentTab" @change="changeTab" :clickChange="true" />
+				</view>
+				<view class="body_content" v-if="currentTab == 0">
+					<view class="comment_card">
+						<view class="pingfen">
+							<view class="pingfen_content">
+								<view class="content_number">4.2</view>
+								<view class="content_xingxing">
+									<view class="xingxing_image">
+										<u-image width="100%" height="16px" mode="aspectFit"
+											src="./static/images/xingxing.png">
+										</u-image>
+									</view>
+									<view class="xingxing_image">
+										<u-image width="100%" height="16px" mode="aspectFit"
+											src="./static/images/xingxing.png">
+										</u-image>
+									</view>
+									<view class="xingxing_image">
+										<u-image width="100%" height="16px" mode="aspectFit"
+											src="./static/images/xingxing.png">
+										</u-image>
+									</view>
+									<view class="xingxing_image">
+										<u-image width="100%" height="16px" mode="aspectFit"
+											src="./static/images/xingxing.png">
+										</u-image>
+									</view>
+									<view class="xingxing_image">
+										<u-image width="100%" height="16px" mode="aspectFit"
+											src="./static/images/xingxing.png">
+										</u-image>
+
+									</view>
+								</view>
+							</view>
+							<view class="pingfen_card">
+								<view class="card_top">
+									<u-tag text="全部" mode="dark" size="mini" shape="circle" type="info" />
+									<u-tag text="最新" mode="dark" size="mini" shape="circle" type="info" />
+									<u-tag text="好评" mode="dark" size="mini" shape="circle" type="info" />
+									<u-tag text="差评" mode="dark" size="mini" shape="circle" type="info" />
+								</view>
+								<view class="card_bottom">
+									<u-tag text="非常新鲜" mode="dark" shape="circle" type="info" />
+									<u-tag text="物超所值" mode="dark" shape="circle" type="info" />
+								</view>
+							</view>
 						</view>
+						<view class="user_card">
+							<view class="user_touxiang">
+								<u-image width="100%" height="100rpx" mode="heightFix"
+									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/categoryItem/%E9%B8%A1%E9%B8%AD%E7%A6%BD.png?sign=bb359dfca20a987b356e2d4a4415573b&t=1653984717">
+								</u-image>
+							</view>
+							<view class="user_info">
+								<view class="user_name">小王同学</view>
+								<view class="user_time">2022.5.1</view>
+							</view>
+							<view class="user_pingfen">5.0</view>
+							<view class="user_xingxing">
+								<view class="xingxing">
+									<u-image width="100%" height="16px" mode="aspectFit"
+										src="./static/images/xingxing.png">
+									</u-image>
+								</view>
+								<view class="xingxing">
+									<u-image width="100%" height="16px" mode="aspectFit"
+										src="./static/images/xingxing.png">
+									</u-image>
+								</view>
+								<view class="xingxing">
+									<u-image width="100%" height="16px" mode="aspectFit"
+										src="./static/images/xingxing.png">
+									</u-image>
+								</view>
+								<view class="xingxing">
+									<u-image width="100%" height="16px" mode="aspectFit"
+										src="./static/images/xingxing.png">
+									</u-image>
+								</view>
+								<view class="xingxing">
+									<u-image width="100%" height="16px" mode="aspectFit"
+										src="./static/images/xingxing.png">
+									</u-image>
+								</view>
+							</view>
+						</view>
+						<view class="pinglun_content">
+							评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容
+						</view>
+						<view class="pinglun_image">
+							<view class="image_info">
+								<u-image width="100%" height="70px"
+									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
+								</u-image>
+							</view>
+							<view class="image_info">
+								<u-image width="100%" height="70px"
+									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
+								</u-image>
+							</view>
+							<view class="image_info">
+								<u-image width="100%" height="70px"
+									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
+								</u-image>
+							</view>
+						</view>
+						<u-line color="#606266" />
 					</view>
 				</view>
-				<view class="pingfen_card">
-					<view class="card_top">
-						<u-tag text="全部" mode="dark" size="mini" shape="circle" type="info" />
-						<u-tag text="最新" mode="dark" size="mini" shape="circle" type="info" />
-						<u-tag text="好评" mode="dark" size="mini" shape="circle" type="info" />
-						<u-tag text="差评" mode="dark" size="mini" shape="circle" type="info" />
-					</view>
-					<view class="card_bottom">
-						<u-tag text="非常新鲜" mode="dark" shape="circle" type="info" />
-						<u-tag text="物超所值" mode="dark" shape="circle" type="info" />
-					</view>
-				</view>
-			</view>
-			<view class="user_card">
-				<view class="user_touxiang">
-					<u-image width="100%" height="100rpx" mode="heightFix"
-						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/categoryItem/%E9%B8%A1%E9%B8%AD%E7%A6%BD.png?sign=bb359dfca20a987b356e2d4a4415573b&t=1653984717">
-					</u-image>
-				</view>
-				<view class="user_info">
-					<view class="user_name">小王同学</view>
-					<view class="user_time">2022.5.1</view>
-				</view>
-				<view class="user_pingfen">5.0</view>
-				<view class="user_xingxing">
-					<view class="xingxing">
-						<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
-						</u-image>
-					</view>
-					<view class="xingxing">
-						<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
-						</u-image>
-					</view>
-					<view class="xingxing">
-						<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
-						</u-image>
-					</view>
-					<view class="xingxing">
-						<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
-						</u-image>
-					</view>
-					<view class="xingxing">
-						<u-image width="100%" height="16px" mode="aspectFit" src="./static/images/xingxing.png">
-						</u-image>
-					</view>
-				</view>
-			</view>
-			<view class="pinglun_content">
-				评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容
-			</view>
-			<view class="pinglun_image">
-				<view class="image_info">
-					<u-image width="100%" height="70px"
-						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
-					</u-image>
-				</view>
-				<view class="image_info">
-					<u-image width="100%" height="70px"
-						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
-					</u-image>
-				</view>
-				<view class="image_info">
-					<u-image width="100%" height="70px"
-						src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
-					</u-image>
+
+				<view class="body_content" v-else-if="currentTab == 1">
+					<GoodDescription :goodInfo="goodInfo" />
 				</view>
 			</view>
 		</view>
@@ -162,7 +183,8 @@
 		<view class="bottom_info">
 			<view class="info_left">
 				<view class="item" @click="gotoShop">
-					<u-image width="100%" mode="aspectFit" height="50rpx" src="./static/images/dianpu.png"></u-image>
+					<u-image width="100%" mode="aspectFit" height="50rpx" src="./static/images/dianpu.png">
+					</u-image>
 				</view>
 				<view class="item" @click="tokefu">
 					<u-image width="100%" mode="aspectFit" height="50rpx" src="./static/images/kefu.png"></u-image>
@@ -226,7 +248,10 @@
 				_id: "",
 				description: "",
 				_openid: ""
-			})
+			});
+
+			const currentTab = ref(0);
+
 			const count = computed(() => {
 				const exist = wantingGoods.value.has(goodInfo._id);
 				if (exist) {
@@ -264,6 +289,17 @@
 					url: '/pages/Tourists/ShoppingBar/ShoppingBar'
 				})
 			};
+
+			const tabList = reactive([{
+				name: '评价'
+			}, {
+				name: '规格参数'
+			}]);
+
+			const changeTab = (index) => {
+				console.log(index);
+			}
+
 			return {
 				goodId,
 				goodInfo,
@@ -271,7 +307,10 @@
 				addToWant,
 				navList,
 				gotoShoppingBar,
-				gotoShop
+				gotoShop,
+				tabList,
+				currentTab,
+				changeTab
 			}
 		},
 		async onLoad(option) {
@@ -484,168 +523,158 @@
 				}
 			}
 
-			.tab {
+			.body {
 				display: flex;
-				align-items: center;
-				justify-content: center;
-				display: flex;
-				align-items: center;
-				justify-content: space-around;
-				margin-top: 40rpx;
+				flex-direction: column;
+				margin-left: 40rpx;
+				margin-right: 40rpx;
+				border-radius: 8rpx;
+				background: #FFFFFF;
+				box-shadow: 0rpx 20rpx 40rpx 0rpx rgba(0, 0, 0, 0.03);
 
-				.tab_top {
-					font-family: SourceHanSansCN-ExtraLight;
-					font-size: 16px;
-					font-weight: 250;
-					line-height: 16px;
-					letter-spacing: 0px;
-					font-weight: bold;
-					color: #F5B05F;
-				}
+				margin-top: 30rpx;
+				padding-bottom: 20rpx;
 
-				.tab_mid {
-					font-family: SourceHanSansCN-Bold;
-					font-size: 16px;
-					font-weight: bold;
-					line-height: 16px;
-					letter-spacing: 0px;
-					color: #999999;
-				}
+				.body_content {
+					padding-left: 16rpx;
+					padding-right: 16rpx;
+					padding-bottom: 20rpx;
 
-				.tab_end {
-					font-family: SourceHanSansCN-Bold;
-					font-size: 16px;
-					font-weight: bold;
-					line-height: 16px;
-					letter-spacing: 0px;
-					color: #999999;
-				}
-			}
+					.comment_card {
 
-			.pingfen {
-				margin-top: 40rpx;
-				display: flex;
-				align-items: center;
+						.pingfen {
+							margin-top: 16rpx;
+							display: flex;
+							align-items: center;
 
-				.pingfen_content {
-					margin-left: 40rpx;
-					display: flex;
-					flex-direction: column;
+							.pingfen_content {
+								margin-left: 40rpx;
+								display: flex;
+								flex-direction: column;
 
-					.content_number {
-						padding-left: 30rpx;
-						width: 20vw;
-						font-family: SourceHanSansCN-ExtraLight;
-						font-size: 28px;
-						font-weight: 250;
-						line-height: 28px;
-						letter-spacing: 0px;
-						color: #F5B05F;
-					}
+								.content_number {
+									padding-left: 30rpx;
+									width: 20vw;
+									font-family: SourceHanSansCN-ExtraLight;
+									font-size: 28px;
+									font-weight: 250;
+									line-height: 28px;
+									letter-spacing: 0px;
+									color: #F5B05F;
+								}
 
-					.content_xingxing {
-						display: flex;
-						width: 20vw;
+								.content_xingxing {
+									display: flex;
+									width: 20vw;
 
-						.xingxing_image {
-							margin-left: 6rpx;
-							width: 100%;
+									.xingxing_image {
+										margin-left: 6rpx;
+										width: 100%;
+									}
+								}
+
+							}
+
+							.pingfen_card {
+								display: flex;
+								align-items: center;
+								flex-direction: column;
+								margin-left: 100rpx;
+
+								.card_top {}
+
+								.card_bottom {}
+							}
+						}
+
+						.user_card {
+							display: flex;
+							align-items: center;
+							margin-top: 30rpx;
+							margin-left: 40rpx;
+
+							.user_touxiang {}
+
+							.user_info {
+								margin-left: 20rpx;
+								display: flex;
+								flex-direction: column;
+								align-items: center;
+
+								.user_name {
+									font-family: SourceHanSansCN-ExtraLight;
+									font-size: 16px;
+									font-weight: 300;
+									line-height: 13px;
+									letter-spacing: 0px;
+									color: rgba(0, 0, 0, 0.8);
+								}
+
+								.user_time {
+									margin-top: 10rpx;
+									font-family: SourceHanSansCN-ExtraLight;
+									font-size: 11px;
+									font-weight: 250;
+									line-height: 11px;
+									letter-spacing: 0px;
+									color: rgba(0, 0, 0, 0.35);
+								}
+							}
+
+							.user_pingfen {
+								margin-left: 20rpx;
+								font-family: SourceHanSansCN-ExtraLight;
+								font-size: 13px;
+								font-weight: 250;
+								line-height: 11px;
+								letter-spacing: 0px;
+								color: rgba(0, 0, 0, 0.35);
+							}
+
+							.user_xingxing {
+								margin-left: 30rpx;
+								display: flex;
+								align-items: center;
+								width: 20vw;
+
+								.xingxing {
+									width: 100%;
+								}
+							}
+						}
+
+						.pinglun_content {
+							margin-left: 40rpx;
+							margin-right: 40rpx;
+							font-family: SourceHanSansCN-ExtraLight;
+							font-size: 13px;
+							font-weight: 250;
+							letter-spacing: 0px;
+							color: rgba(0, 0, 0, 0.8);
+						}
+
+						.pinglun_image {
+							display: flex;
+							align-items: center;
+							margin-left: 40rpx;
+							margin-right: 40rpx;
+
+							.image_info {
+								margin-left: 26rpx;
+								width: 25vw;
+								height: 25vw;
+							}
 						}
 					}
 
 				}
 
-				.pingfen_card {
-					display: flex;
-					align-items: center;
-					flex-direction: column;
-					margin-left: 100rpx;
 
-					.card_top {}
 
-					.card_bottom {}
-				}
-			}
-
-			.user_card {
-				display: flex;
-				align-items: center;
-				margin-top: 30rpx;
-				margin-left: 40rpx;
-
-				.user_touxiang {}
-
-				.user_info {
-					margin-left: 20rpx;
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-
-					.user_name {
-						font-family: SourceHanSansCN-ExtraLight;
-						font-size: 16px;
-						font-weight: 300;
-						line-height: 13px;
-						letter-spacing: 0px;
-						color: rgba(0, 0, 0, 0.8);
-					}
-
-					.user_time {
-						margin-top: 10rpx;
-						font-family: SourceHanSansCN-ExtraLight;
-						font-size: 11px;
-						font-weight: 250;
-						line-height: 11px;
-						letter-spacing: 0px;
-						color: rgba(0, 0, 0, 0.35);
-					}
-				}
-
-				.user_pingfen {
-					margin-left: 20rpx;
-					font-family: SourceHanSansCN-ExtraLight;
-					font-size: 13px;
-					font-weight: 250;
-					line-height: 11px;
-					letter-spacing: 0px;
-					color: rgba(0, 0, 0, 0.35);
-				}
-
-				.user_xingxing {
-					margin-left: 30rpx;
-					display: flex;
-					align-items: center;
-					width: 20vw;
-
-					.xingxing {
-						width: 100%;
-					}
-				}
-			}
-
-			.pinglun_content {
-				margin-left: 40rpx;
-				margin-right: 40rpx;
-				font-family: SourceHanSansCN-ExtraLight;
-				font-size: 13px;
-				font-weight: 250;
-				letter-spacing: 0px;
-				color: rgba(0, 0, 0, 0.8);
-			}
-
-			.pinglun_image {
-				display: flex;
-				align-items: center;
-				margin-left: 40rpx;
-				margin-right: 40rpx;
-
-				.image_info {
-					margin-left: 26rpx;
-					width: 25vw;
-					height: 25vw;
-				}
 			}
 		}
+
+
 
 		.bottom_info {
 			position: fixed;
