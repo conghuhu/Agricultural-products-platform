@@ -46,7 +46,7 @@ exports.main = async (event, context) => {
 				description,
 				shopAvatar
 			}
-		})
+		});
 		res = {
 			success: true,
 			message: "创建成功",

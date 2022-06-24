@@ -1,7 +1,7 @@
 <template>
 	<view class="fullScreen">
-		<view class="content" v-if="isNew">
-		<!-- <view class="content" v-if="true"> -->
+		<!-- <view class="content" v-if="isNew"> -->
+		<view class="content" v-if="true">
 			<Nav title="我的店铺" />
 			<view class="empty">
 				<u-empty text="还没有个人商铺" mode="list">
