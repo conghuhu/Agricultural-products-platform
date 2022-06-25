@@ -21,7 +21,8 @@ exports.main = async (event, context) => {
 			data
 		} = await goodDb
 			.where({
-				secondCategoryId: _.eq(secondCategoryId)
+				secondCategoryId: _.eq(secondCategoryId),
+				status: true
 			})
 			.get();
 		res = {

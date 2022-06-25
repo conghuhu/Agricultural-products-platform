@@ -42,13 +42,14 @@
 					</view>
 					<view class="right">
 						<view class="consumer">
-							本月消费: ￥2230
+							<text style="font-weight: bold;">本月消费:￥</text>
+							<Ellipsis :content="monthSale" :width="100" />
 						</view>
 						<view class="total">
-							<view>
-								余额：￥
-							</view>
-							<Ellipsis :content="money" :width="90" />
+							<text style="font-weight: bold;">
+								余额:￥
+							</text>
+							<Ellipsis :content="money" :width="120" />
 						</view>
 					</view>
 				</view>
@@ -129,6 +130,7 @@
 			} = storeToRefs(user);
 			const list = reactive(navList);
 			const money = ref(0);
+			const monthSale = ref(0);
 			// 订单菜单
 			const orderList = reactive([{
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%BE%85%E5%AE%8C%E6%88%90.png?sign=746d960471d02df9efbc111f2ce19e21&t=1653972109',
@@ -203,7 +205,9 @@
 				})
 			}
 
-			onMounted(() => {});
+			onMounted(() => {
+
+			});
 			return {
 				list,
 				userInfo,
@@ -217,7 +221,7 @@
 				gotoSet,
 				isRead,
 				store,
-
+				monthSale
 			}
 		},
 		async onShow() {
@@ -228,11 +232,15 @@
 			this.orderMap.forEach((value, key) => {
 				this.orderList[key - 1].count = value;
 			});
-			console.log(this.orderList)
-			const res = await request('user', {
+
+			const res = await Promise.all([request('user', {
 				type: 'getMoneyBalance'
-			});
-			this.money = res.data || 0;
+			}), request('sale', {
+				type: 'queryConsumerMonth'
+			})]);
+
+			this.money = res[0].data || 0;
+			this.monthSale = res[1].data.totalSale;
 		}
 	}
 </script>
@@ -347,7 +355,9 @@
 						height: 100%;
 
 						.consumer {
-							margin-right: 40rpx;
+							display: flex;
+							align-items: center;
+							margin-right: 30rpx;
 						}
 
 						.total {

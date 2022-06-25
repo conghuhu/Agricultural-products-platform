@@ -136,7 +136,8 @@
 				username: "",
 				_id: "",
 				_openid: "",
-				shopAvatar: ''
+				shopAvatar: '',
+				totalSale: 0
 			});
 
 			const star = computed(() => {

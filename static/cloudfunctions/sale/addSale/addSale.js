@@ -5,29 +5,35 @@ cloud.init();
 
 const db = cloud.database();
 const dayjs = require("dayjs");
-// 云函数入口函数
+
+// 产生销量数据
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
-	
+
 	const goodDb = db.collection('sales');
 	const _ = db.command;
-    const $ = db.command.aggregate;
-	
+	const $ = db.command.aggregate;
+
 	const {
-		goodId,openId,createTime,goodNums,goodTotalPrice
+		goodId,
+		openId,
+		createTime,
+		goodNums,
+		goodTotalPrice
 	} = event;
-    console.log(dayjs(createTime).format('YYYY-MM-DD'));
+
 	try {
 		const temp = await goodDb.add({
 			data: {
 				goodId: goodId,
-				openId: openId,
-				newTime: dayjs(createTime).format('YYYY-MM-DD'),
+				_openid: openId,
+				newTime: dayjs(new Date()).format('YYYY-MM-DD'),
+				createTime: db.serverDate(),
 				goodNums: goodNums,
 				goodTotalPrice: goodTotalPrice
 			}
 		})
-		console.log(temp);
+
 		res = {
 			success: true,
 			message: "",

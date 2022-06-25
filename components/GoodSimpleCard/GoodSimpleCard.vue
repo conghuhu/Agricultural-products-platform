@@ -9,13 +9,13 @@
 				</view>
 				<view class="goodDetail">
 					<view>
-						单价：{{item.goodPrice}}
+						单价:<text style="margin-left: 4rpx;">{{item.goodPrice}}</text>
 					</view>
 					<view>
-						已售：0
+						已售:<text style="margin-left: 4rpx;">{{item.totalSale}}</text>
 					</view>
 					<view>
-						评论：0
+						评论:<text style="margin-left: 4rpx;">0</text>
 					</view>
 				</view>
 			</view>
