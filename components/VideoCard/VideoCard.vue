@@ -1,6 +1,6 @@
 <template>
-	<view class="card" v-if="videoInfo.url">
-		<video class="video_back" objectFit="cover" :controls="false" :autoplay="true" :loop="true" :muted="true"
+	<view class="card" v-if="JSON.stringify(videoInfo) != '{}'" @click="gotoDetail">
+		<video class=" video_back" objectFit="cover" :controls="false" :autoplay="true" :loop="true" :muted="true"
 			@loadedmetadata="loadedmetadata" :src="videoInfo.url"></video>
 		<view class="title">
 			<Ellipsis :content="videoInfo.title" :width="260" />
@@ -21,21 +21,25 @@
 			videoInfo: {
 				type: Object,
 				default: () => {},
-				required: true,
+				required: false,
 			},
 		},
-		setup() {
+		setup(props) {
 			const loadedmetadata = (e) => {
 				console.log(e.detail);
+			}
+			const gotoDetail = () => {
+				uni.navigateTo({
+					url: `/pages/Merchants/VideoDetail/VideoDetail?videoId=${props.videoInfo._id}`
+				});
 			}
 			onMounted(() => {});
 			return {
 				loadedmetadata,
+				gotoDetail
 			}
 		},
-		onReady() {
-			// console.log(this.current);
-		}
+		onReady() {}
 	}
 </script>
 

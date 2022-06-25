@@ -1,7 +1,7 @@
 <template>
 	<view class="fullScreen">
 		<view class="content" v-if="isNew">
-		<!-- <view class="content" v-if="true"> -->
+			<!-- <view class="content" v-if="true"> -->
 			<Nav title="我的店铺" />
 			<view class="empty">
 				<u-empty text="还没有个人商铺" mode="list">
@@ -16,7 +16,10 @@
 			<view class="shopBack" />
 			<view class="shopContent">
 				<view class="shopTitle">
-					<view class="shopAvatar" :style="`background-image:url(${shopInfo.shopAvatar});`" />
+					<view class="shopAvatar">
+						<u-image width="100%" height="100%" :src="shopInfo.shopAvatar"></u-image>
+					</view>
+
 					<view class="shop_name">
 						{{shopInfo.shopName}}
 					</view>
@@ -41,7 +44,7 @@
 					</view>
 					<view class="shopDataItem">
 						<view class="shopDataItem_data">
-							{{shopInfo.profile || 0}}
+							{{totalSale || 0}}
 						</view>
 						<view class="shopDataItem_desc">
 							收入金额
@@ -110,6 +113,7 @@
 			const user = userStore();
 			const list = reactive(navList);
 			const isNew = ref(false);
+			const totalSale = ref(0);
 
 			const searchVal = ref('');
 
@@ -174,9 +178,16 @@
 				});
 				const temp = res.data.length == 0;
 				if (!temp) {
+					console.log(res);
 					Object.assign(shopInfo, res.data[0]);
 				}
 				isNew.value = temp;
+
+				const total = await request('sale', {
+					type: 'queryShopTotalSale',
+					shopId: shopInfo._id
+				})
+				totalSale.value = total.data.totalSale
 
 				await getGoodList();
 			}
@@ -221,7 +232,8 @@
 				getGoodList,
 				goodList,
 				goToAddGood,
-				goodListLoading
+				goodListLoading,
+				totalSale
 			}
 		},
 		async onLoad() {},
@@ -278,9 +290,6 @@
 						height: 42vw;
 						border-radius: 24rpx;
 						border: 15rpx solid white;
-						// background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/shopAvatar.jpg?sign=86737ed47c27d68c83cba096cbd8aaaa&t=1652501346');
-						background-size: cover;
-						background-repeat: no-repeat;
 					}
 
 					.shop_name {
