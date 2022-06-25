@@ -52,9 +52,9 @@
 						} })" :maxCount="goodInfo.imageShowList.length" :deletable="false"></u-upload>
 					</view>
 				</view>
-				<view class="last_week_card">					
+				<view class="last_week_card">
 					<view class="good_card_top">
-						<view style="font-size: 44rpx;font-weight: 550;">
+						<view style="font-size: 44rpx;font-weight: 550;margin-bottom: 20rpx;">
 							近一周销量统计图
 						</view>
 					</view>
@@ -62,11 +62,11 @@
 				</view>
 				<view class="last_month_card">
 					<view class="good_card_top">
-						<view style="font-size: 44rpx;font-weight: 550;">
+						<view style="font-size: 44rpx;font-weight: 550;margin-bottom: 20rpx;">
 							近一个月销量统计图
 						</view>
 					</view>
-                    <qiun-data-charts type="line" :ontouch="true" :opts="chartOption" :chartData="optionMonth" />
+					<qiun-data-charts type="line" :ontouch="true" :opts="chartOption" :chartData="optionMonth" />
 				</view>
 				<view class="comments_card">
 
@@ -161,7 +161,7 @@
 			 * chartMonth数据
 			 */
 			const optionMonth = reactive({
-				categories: ['前一周','前二周','前三周','前四周'],
+				categories: ['前一周', '前二周', '前三周', '前四周'],
 				series: [{
 					name: "销量",
 					data: goodMonthSaleInfo
@@ -209,11 +209,10 @@
 					goodId: goodId
 				});
 
-				console.log(res.data);
+				console.log(res);
 				for (let i = 0; i < res.data.length; i++) {
 					goodMonthSaleInfo.push(res.data[i]);
 				}
-				console.log("-----------------------=====================");
 				console.log(goodMonthSaleInfo);
 
 			}
@@ -297,7 +296,7 @@
 		height: 100vh;
 		font-size: 32rpx;
 		color: #333333;
-		background-color: #E6E6E6;
+		background-color: $background-color;
 
 		.content {
 			position: relative;
@@ -306,6 +305,7 @@
 			align-items: center;
 			padding: 20rpx;
 			width: 100%;
+			background-color: $background-color;
 
 			.good_card {
 				border-radius: 16rpx;
@@ -336,7 +336,7 @@
 					.item {
 						margin-right: 20rpx;
 						margin-bottom: 10rpx;
-						color: #999999;
+						color: $u-content-color;
 						font-size: 30rpx;
 					}
 				}

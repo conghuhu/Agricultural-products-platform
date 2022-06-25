@@ -10,6 +10,8 @@ exports.main = async (event, context) => {
 
 	const wxContext = cloud.getWXContext();
 
+	const log = cloud.logger();
+
 	const {
 		createShopForm
 	} = event;
@@ -47,6 +49,12 @@ exports.main = async (event, context) => {
 				shopAvatar
 			}
 		});
+		log.info({
+			name: 'createShop',
+			message: ``,
+			res: content,
+			data: createShopForm
+		})
 		res = {
 			success: true,
 			message: "创建成功",
