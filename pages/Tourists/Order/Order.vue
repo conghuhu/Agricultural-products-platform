@@ -522,8 +522,9 @@
 			}
 			//跳转评论结论
 			const toComments = (data)=>{
+				console.log(data)
 				uni.navigateTo({
-					url:`../Comments/Comments?id=${data._id}`
+					url:`../Comments/Comments?id=${data._id}&orderId=${data.orderId}`
 				})
 			}
 			

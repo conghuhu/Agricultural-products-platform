@@ -54,6 +54,8 @@
 	import getUUID from '@/utils/getUUID';
 	export default {
 		setup() {
+			
+			const orderId = ref("");
 			const color = ref("");
 			//产品ID
 			const goodId = ref("");
@@ -161,7 +163,16 @@
 						...form
 					}
 				})
-				
+				const goodItem =ref({
+					orderId:orderId.value,
+					goodId:goodId.value
+				})
+			    console.log(goodItem.value)
+				const temp = await request("order",{
+					type:"completeOrderComment",
+					goodItem:goodItem.value
+				})
+				console.log(temp)
 				await wx.showToast({
 					title: '发表评论成功',
 					duration: 1000
@@ -183,11 +194,14 @@
 				goodId,
 				clickTag,
 				color,
-				tagMap
+				tagMap,
+				orderId
 			}
 		},
 		async onLoad(data) {
 			this.goodId = data.id;
+			this.orderId = data.orderId;
+			console.log(this.orderId)
 			const res = await request("goods", {
 				type: "getGoodById",
 				goodId: data.id

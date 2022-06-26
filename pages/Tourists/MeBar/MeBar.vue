@@ -226,6 +226,7 @@
 			this.orderList.forEach(item => {
 				item.count = 0;
 			});
+			console.log(this.orderMap)
 			this.orderMap.forEach((value, key) => {
 				this.orderList[key - 1].count = value;
 			});
