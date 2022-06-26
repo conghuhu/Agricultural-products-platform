@@ -11,6 +11,7 @@ const queryOrderStatus = require('./queryOrderStatus/index');
 const confirmDeliveryGood = require('./ConfirmDeliveryGood/index');
 const queryIngGoods = require('./queryIngGoods/index');
 const queryEvaluateGoods = require('./queryEvaluateGoods/index');
+const completeOrderComment = require('./completeOrderComment/index')
 const applyRefund = require('./applyRefund/index');
 const queryRefundGood = require('./queryRefundGood/index');
 
@@ -42,6 +43,8 @@ exports.main = async (event, context) => {
 			return await queryIngGoods.main(event, context);
 		case 'queryEvaluateGoods':
 			return await queryEvaluateGoods.main(event, context);
+		case 'completeOrderComment':
+			return await completeOrderComment.main(event, context);
 		case 'applyRefund':
 			return await applyRefund.main(event, context);
 		case 'queryRefundGood':
