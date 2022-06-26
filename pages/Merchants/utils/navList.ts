@@ -1,5 +1,6 @@
+import { reactive } from 'vue';
 
-const list = [{
+const list = reactive([{
 	iconPath: "/static/images/shop.png",
 	selectedIconPath: "/static/images/shop_fill.png",
 	text: '店铺',
@@ -45,6 +46,6 @@ const list = [{
 	custom: true,
 	pagePath: "/pages/Merchants/PersonCenter/PersonCenter"
 },
-];
+]);
 
 export default list;

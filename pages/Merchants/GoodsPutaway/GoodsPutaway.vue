@@ -4,17 +4,17 @@
 		<view class="content">
 			<u-form :model="form" ref="formRef" :label-width="150">
 				<u-form-item label="商品名称" prop="goodName">
-					<u-input v-model="form.goodName" />
+					<u-input v-model="form.goodName" placeholder="(必填)请输入商品名称" />
 				</u-form-item>
 				<u-form-item label="单价" prop="goodPrice">
-					<u-input type="digit" placeholder="请输入单价" v-model="form.goodPrice" />
+					<u-input type="digit" placeholder="(必填)请输入单价" v-model="form.goodPrice" />
 				</u-form-item>
 				<u-form-item label="单位" prop="unit">
-					<u-input v-model="form.unit" />
+					<u-input v-model="form.unit" placeholder="(必填)请输入单位,如斤" />
 				</u-form-item>
 				<u-form-item label="展示图片" prop="imageShowList">
 					<u-upload @on-choose-complete="chooseComplete" @on-remove="removeImg" :auto-upload="false"
-						:max-size="5 * 1024 * 1024" max-count="6"></u-upload>
+						:max-size="5 * 1024 * 1024" max-count="6" uploadText="(必填)上传"></u-upload>
 				</u-form-item>
 				<u-form-item label="描述" prop="description">
 					<u-input type="textarea" auto-height v-model="form.description" />
@@ -29,7 +29,7 @@
 				</u-form-item>
 				<u-form-item label="类别" prop="firstCategoryId">
 					<view style="display: flex;align-items: center;justify-content: space-between;">
-						<u-input placeholder="请选第一类别" type="select" v-model="selectFirstCategoryVal"
+						<u-input placeholder="(必选)第一类别" type="select" v-model="selectFirstCategoryVal"
 							@click="firstCategoryListShow = true" />
 						<u-select v-model="firstCategoryListShow" :list="firstCategoryList"
 							@confirm="selectFirstCategory">
@@ -37,7 +37,7 @@
 						<view style="margin-left: 15px;margin-right: 15px;">
 							—
 						</view>
-						<u-input placeholder="请选第二类别" type="select" v-model="selectSecondCategoryVal"
+						<u-input placeholder="第二类别" type="select" v-model="selectSecondCategoryVal"
 							@click="secondCategoryListShow = true" />
 						<u-select v-model="secondCategoryListShow" :list="secondCategoryList"
 							@confirm="selectSecondCategory">
@@ -45,16 +45,16 @@
 					</view>
 				</u-form-item>
 				<u-form-item label="位置" prop="location">
-					<u-input v-model="locationVal" placeholder="请选择位置" type="select" @click="chooseLocation" />
+					<u-input v-model="locationVal" placeholder="(必填)请选择位置" type="select" @click="chooseLocation" />
 				</u-form-item>
 				<u-form-item label="产地" prop="originPlace">
-					<u-input v-model="form.originPlace" />
+					<u-input v-model="form.originPlace" placeholder="(必填)请输入产地,如山东济南" />
 				</u-form-item>
 				<u-form-item label="规格" prop="specification">
-					<u-input v-model="form.specification" />
+					<u-input v-model="form.specification" placeholder="(必填)请输入规格,如350g一个" />
 				</u-form-item>
 				<u-form-item label="有效期" prop="expirationDate">
-					<u-input placeholder="请输入有效天数" v-model="form.expirationDate" />
+					<u-input type="number" placeholder="(必填)请输入有效天数(天)" v-model="form.expirationDate" />
 				</u-form-item>
 			</u-form>
 			<view class="top_action">

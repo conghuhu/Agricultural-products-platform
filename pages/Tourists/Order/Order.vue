@@ -593,7 +593,7 @@
 	/* #ifndef H5 */
 	page {
 		height: 100%;
-		background-color: #f2f2f2;
+		background-color: $background-color;
 	}
 
 	/* #endif */
@@ -603,7 +603,7 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F3F3F3;
+		background-color: $background-color;
 		position: relative;
 		font-size: 32rpx;
 	}
@@ -748,6 +748,7 @@
 		width: 100%;
 		position: relative;
 		padding-bottom: 20rpx;
+		background-color: $background-color;
 
 
 		.u-tabs-box {

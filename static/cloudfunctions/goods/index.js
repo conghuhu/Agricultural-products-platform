@@ -10,6 +10,7 @@ const getAllCategory = require('./category/getAllCategory')
 const getGoodsByLocation = require('./goodsCRUD/getGoodsByLocation');
 const getGoodsByScdCategoryId = require('./goodsCRUD/getGoodsByScdCategoryId');
 const getGoodsByKeyword = require('./goodsCRUD/getGoodsByKeyword');
+const downGood = require('./goodsCRUD/downGood');
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -36,6 +37,8 @@ exports.main = async (event, context) => {
 			return await getGoodsByScdCategoryId.main(event, context);
 		case 'getGoodsByKeyword':
 			return await getGoodsByKeyword.main(event,context);
+		case 'downGood':
+			return await downGood.main(event,context);
 		default:
 			return {
 				success: false,

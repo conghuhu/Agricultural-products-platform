@@ -14,6 +14,9 @@ const queryEvaluateGoods = require('./queryEvaluateGoods/index');
 const applyRefund = require('./applyRefund/index');
 const queryRefundGood = require('./queryRefundGood/index');
 
+// 商家端
+const queryUnpaidOrdersMerchant = require('./merchantsOrder/queryUnpaidOrders');
+
 // 云函数入口函数
 exports.main = async (event, context) => {
 	switch (event.type) {
@@ -43,6 +46,8 @@ exports.main = async (event, context) => {
 			return await applyRefund.main(event, context);
 		case 'queryRefundGood':
 			return await queryRefundGood.main(event, context);
+		case 'queryUnpaidOrdersMerchant':
+			return await queryUnpaidOrdersMerchant.main(event,context);
 		default:
 			return {
 				success: false,

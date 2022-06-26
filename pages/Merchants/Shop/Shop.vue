@@ -107,10 +107,15 @@
 	import {
 		userStore
 	} from '@/stores/user';
+	import {
+		merchantStore
+	} from '@/stores/merchant';
 
 	export default {
 		setup() {
 			const user = userStore();
+			const merchant = merchantStore();
+
 			const list = reactive(navList);
 			const isNew = ref(false);
 			const totalSale = ref(0);
@@ -181,6 +186,8 @@
 				if (!temp) {
 					console.log(res);
 					Object.assign(shopInfo, res.data[0]);
+					// 初始化shopInfo状态
+					merchant.initShopInfo(res.data[0]);
 				}
 				isNew.value = temp;
 
