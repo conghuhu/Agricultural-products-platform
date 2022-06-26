@@ -1,7 +1,10 @@
 <template>
-	<view>
+	<view class="fullScreen">
 		<Nav title="订单中心" />
-		<u-tabbar v-model="current" :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
+		<view class="content">
+
+		</view>
+		<u-tabbar :list="list" :mid-button="true" :hideTabBar="false"></u-tabbar>
 	</view>
 </template>
 
@@ -14,15 +17,26 @@
 	export default {
 		setup() {
 			const list = reactive(navList);
-			const current = ref(0);
 			return {
-				list,
-				current
+				list
 			}
 		}
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
+	.fullScreen {
+		height: 100vh;
+		font-size: 32rpx;
+		width: 100%;
+		background-color: $background-color;
 
+		.content {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background-color: $background-color;
+		}
+	}
 </style>

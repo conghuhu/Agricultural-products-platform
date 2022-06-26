@@ -17,28 +17,29 @@ exports.main = async (event, context) => {
 		latitude,
 		longitude
 	} = event;
-	
+
 	let res = {};
-	
-	try{
+
+	try {
 		const goodDb = db.collection('goods');
 		const _ = db.command;
-		
+
 		const {
 			data
 		} = await goodDb.where({
 			location: _.geoNear({
 				geometry: db.Geo.Point(longitude, latitude)
-			})
+			}),
+			status: true
 		}).get();
-		
-		
+
+
 		res = {
 			sucess: true,
 			message: "",
 			data: data
 		}
-	}catch(e){
+	} catch (e) {
 		//TODO handle the exception
 		console.trace(e);
 		res = {

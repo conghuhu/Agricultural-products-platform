@@ -5,7 +5,9 @@
 			<view class="shopBack" />
 			<view class="shopContent">
 				<view class="shopTitle">
-					<view class="shopAvatar" />
+					<view class="shopAvatar">
+						<u-image width="100%" height="100%" :src="shopInfo.shopAvatar"></u-image>
+					</view>
 					<view class="shop_name">
 						{{shopInfo.shopName}}
 					</view>
@@ -30,7 +32,7 @@
 					</view>
 					<view class="shopDataItem">
 						<view class="shopDataItem_data">
-							{{shopInfo.profile || 0}}
+							{{totalSale || 0}}
 						</view>
 						<view class="shopDataItem_desc">
 							收入金额
@@ -98,6 +100,7 @@
 	export default {
 		setup() {
 			const searchVal = ref('');
+			const totalSale = ref(0);
 
 			const buttonStyle = reactive({
 				margin: '15px'
@@ -114,7 +117,9 @@
 				star: 0,
 				username: "",
 				_id: "",
-				_openid: ""
+				_openid: "",
+				shopAvatar: '',
+				totalSale: 0
 			});
 			const star = computed(() => {
 				console.log(shopInfo)
@@ -168,6 +173,12 @@
 
 				Object.assign(shopInfo, res.data);
 
+				const total = await request('sale', {
+					type: 'queryShopTotalSale',
+					shopId: shopInfo._id
+				})
+				totalSale.value = total.data.totalSale;
+
 				await getGoodList();
 			}
 
@@ -182,6 +193,7 @@
 				getGoodList,
 				getShopInfo,
 				goodListLoading,
+				totalSale
 			}
 		},
 		async onLoad(option) {
@@ -235,9 +247,6 @@
 						height: 42vw;
 						border-radius: 24rpx;
 						border: 15rpx solid white;
-						background-image: url('https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/shopAvatar.jpg?sign=86737ed47c27d68c83cba096cbd8aaaa&t=1652501346');
-						background-size: cover;
-						background-repeat: no-repeat;
 					}
 
 					.shop_name {

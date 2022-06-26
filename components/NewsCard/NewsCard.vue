@@ -1,5 +1,5 @@
 <template>
-	<view class="card" :style="`background-image:url(${newsInfo.background});`">
+	<view class="card" :style="`background-image:url(${newsInfo.background});`" @click="gotoNewsDeatil">
 		<view class="author">
 			{{newsInfo.author}}
 		</view>
@@ -24,8 +24,15 @@
 				required: true,
 			},
 		},
-		setup() {
-
+		setup(props) {
+			const gotoNewsDeatil = () => {
+				uni.navigateTo({
+					url: `/pages/Merchants/NewDetail/NewDetail?newsId=${props.newsInfo._id}`
+				})
+			}
+			return {
+				gotoNewsDeatil
+			}
 		}
 	}
 </script>
@@ -41,14 +48,18 @@
 		background-size: cover;
 		background-repeat: no-repeat;
 		color: #fff;
-		
+
 		padding: 20rpx;
-		
+
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
 		
-		.title{
+		.author{
+			margin-bottom: 10rpx;
+		}
+
+		.title {
 			font-weight: 550;
 			font-size: 34rpx;
 		}

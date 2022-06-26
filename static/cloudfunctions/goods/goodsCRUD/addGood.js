@@ -9,7 +9,6 @@ const db = cloud.database();
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
 
-
 	const _ = db.command;
 
 	const {

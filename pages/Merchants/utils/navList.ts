@@ -3,7 +3,6 @@ const list = [{
 	iconPath: "/static/images/shop.png",
 	selectedIconPath: "/static/images/shop_fill.png",
 	text: '店铺',
-	count: 2,
 	isDot: true,
 	customIcon: false,
 	custom: true,

@@ -15,7 +15,7 @@
 			const store = commonStore();
 
 			const timer = ref < NodeJS.Timeout > ();
-			const getRead =async ()=>{
+			const getRead = async () => {
 				const mNoRead: {
 					data: Array < any >
 				} = await request("message", {
@@ -27,7 +27,7 @@
 				} else {
 					store.updatemNoRead(true);
 				}
-	
+
 				const tNoRead: {
 					data: Array < any >
 				} = await request("message", {
@@ -46,7 +46,7 @@
 				clearInterval(Number(timer.value))
 				timer.value = setInterval(() => {
 					getRead()
-					
+
 				}, 3000)
 			}
 
@@ -56,7 +56,7 @@
 				timer,
 				setTimer,
 				getRead
-				
+
 			}
 		},
 		onLaunch() {

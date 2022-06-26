@@ -111,11 +111,7 @@
 			 * 提交创建商铺请求
 			 */
 			const submitCreateShop = async () => {
-				uni.showLoading({
-					title: '创建中',
-				})
 				await createShopFormRef.value.validate(async (valid) => {
-					console.log(createShopForm);
 					if (valid) {
 						if (createShopForm.shopAvatar == "") {
 							uni.showToast({
@@ -124,36 +120,76 @@
 							});
 							return;
 						}
-						try {
-							const file = await wx.cloud.uploadFile({
-								cloudPath: 'shop/' + new Date().getTime() +
-									getUUID() + 'img.jpg',
-								filePath: createShopForm.shopAvatar,
-							});
 
-							createShopForm.shopAvatar = file.fileID;
+						const templeteList = ['FjniTcotQ5M9gyPI8YQdWlVpmrexOUFZu3O7jHCnE3s'];
+						uni.requestSubscribeMessage({
+							tmplIds: templeteList,
+							async success(res) {
+								console.log(res);
+								// 申请订阅成功
+								if (res.errMsg === 'requestSubscribeMessage:ok') {
+									// 	wx.cloud
+									// 		.callFunction({
+									// 			name: 'subscribe',
+									// 			data: {
+									// 				data: item,
+									// 				templateId: templeteList[0],
+									// 			},
+									// 		})
+									// 		.then(() => {
+									// 			uni.showToast({
+									// 				title: '订阅成功',
+									// 				icon: 'success',
+									// 				duration: 2000,
+									// 			});
+									// 		})
+									// 		.catch(() => {
+									// 			uni.showToast({
+									// 				title: '订阅失败',
+									// 				icon: 'success',
+									// 				duration: 2000,
+									// 			});
+									// 		});
 
-							const res = await request("shop", {
-								type: "createShop",
-								createShopForm
-							})
-							uni.hideLoading();
+								} else {
 
-							uni.showToast({
-								icon: res.success ? 'success' : 'error',
-								title: res.message
-							})
+								}
 
-							setTimeout(() => {
-								uni.navigateBack();
-							}, 1500);
-						} catch (e) {
-							console.trace(e);
-							uni.showToast({
-								icon: 'error',
-								title: "创建失败"
-							})
-						}
+								uni.showLoading({
+									title: '创建中',
+								});
+								try {
+									const file = await wx.cloud.uploadFile({
+										cloudPath: 'shop/' + new Date().getTime() +
+											getUUID() + 'img.jpg',
+										filePath: createShopForm.shopAvatar,
+									});
+
+									createShopForm.shopAvatar = file.fileID;
+
+									const res = await request("shop", {
+										type: "createShop",
+										createShopForm
+									})
+									uni.hideLoading();
+
+									uni.showToast({
+										icon: res.success ? 'success' : 'error',
+										title: res.message
+									})
+
+									setTimeout(() => {
+										uni.navigateBack();
+									}, 1500);
+								} catch (e) {
+									console.trace(e);
+									uni.showToast({
+										icon: 'error',
+										title: "创建失败"
+									})
+								}
+							}
+						})
 					} else {
 						console.log("验证失败")
 					}

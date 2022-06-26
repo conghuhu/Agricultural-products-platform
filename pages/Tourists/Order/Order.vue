@@ -174,7 +174,7 @@
 											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
 										</view>
 										<view class="bottom_right">
-											<view class="cancel btn">申请退款</view>
+											<view class="cancel btn" @click="applyRefund(item)">申请退款</view>
 											<view class="pay btn" @click="toComments(item)">去评论</view>
 										</view>
 									</view>
@@ -187,16 +187,16 @@
 					<swiper-item class="swiper-item">
 						<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 							<view class="page-box">
-								<OrderEmpty v-if="orderList[3].length == 0" />
-								<view v-else class="order" v-for="(res, index) in  orderList[3]" :key="res._id">
+								<OrderEmpty v-if="refundGoodList.length == 0" />
+								<view v-else class="order" v-for="(item, index) in refundGoodList" :key="item._id">
 									<view class="top">
-										<view class="left">
-											<view class="store">{{ dayjs(res.createTime).format('YYYY-MM-DD HH:mm') }}
-											</view>
+										<view>
+
 										</view>
-										<view class="right">已完成</view>
+										<view class="right">退款中</view>
 									</view>
-									<view class="item" v-for="(item, index) in res.goodList" :key="item._id">
+
+									<view class="item">
 										<view class="left">
 											<image :src="item.imageShowList[0]" mode="aspectFill"></image>
 										</view>
@@ -222,20 +222,14 @@
 											<view class="number">x{{ item.count }}</view>
 										</view>
 									</view>
-									<view class="total">
-										共{{ totalNum(res.goodList) }}件商品 合计:
-										<text class="total-price">
-											￥{{ priceInt(totalPrice(res.goodList)) }}.
-											<text class="decimal">{{ priceDecimal(totalPrice(res.goodList)) }}</text>
-										</text>
-									</view>
+
 									<view class="bottom">
 										<view class="more">
 											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
 										</view>
 										<view class="bottom_right">
-											<view class="cancel btn">取消订单</view>
-											<view class="pay btn">立即支付</view>
+											<view class="cancel btn">查看详情</view>
+											<view class="pay btn">售后评价</view>
 										</view>
 									</view>
 								</view>
@@ -287,7 +281,7 @@
 					count: 0
 				},
 				{
-					name: '已完成',
+					name: '退款/售后',
 					count: 0
 				}
 			]);
@@ -453,6 +447,10 @@
 			 * 待评价的货物列表
 			 */
 			const waitEvaluateGoodList = reactive([]);
+			/**
+			 * 退款中的货物列表
+			 */
+			const refundGoodList = reactive([]);
 
 			/**
 			 * 初始化数据
@@ -472,12 +470,13 @@
 				}), request("order", {
 					type: 'queryEvaluateGoods'
 				}), request("order", {
-					type: 'queryCompletedOrders'
+					type: 'queryRefundGood'
 				})]);
 				console.log(resArr);
 
 				waitForGoodList.length = 0;
 				waitEvaluateGoodList.length = 0;
+				refundGoodList.length = 0;
 				// 向四个页面的数组赋值
 				for (let i = 0; i < 4; i++) {
 					const dataList = resArr[i].data;
@@ -501,13 +500,16 @@
 							});
 						})
 					} else if (i == 3) {
-
+						dataList.forEach(item => {
+							refundGoodList.push({
+								...item,
+							});
+						})
 					}
 				}
 
 				current.value = index;
 				change(index);
-
 				loading.value = false;
 			};
 
@@ -521,13 +523,34 @@
 				user.setOrderMap(res.data);
 			}
 			//跳转评论结论
-			const toComments = (data)=>{
+			const toComments = (data) => {
 				console.log(data)
 				uni.navigateTo({
-					url:`../Comments/Comments?id=${data._id}&orderId=${data.orderId}`
-				})
+					url: `../Comments/Comments?id=${data._id}&orderId=${data.orderId}`
+				});
 			}
-			
+
+
+			/**
+			 * 申请退款
+			 */
+			const applyRefund = async (goodInfo) => {
+				console.log(goodInfo);
+				uni.showLoading({
+					title: '发送申请'
+				})
+				const res = await request('order', {
+					type: 'applyRefund',
+					goodId: goodInfo._id,
+					orderId: goodInfo.orderId
+				});
+				uni.hideLoading();
+				uni.showToast({
+					title: '申请成功'
+				})
+				console.log(res)
+				initData(3);
+			}
 
 			return {
 				orderList,
@@ -555,8 +578,9 @@
 				confirmDeliveryGood,
 				waitForGoodList,
 				waitEvaluateGoodList,
+				applyRefund,
+				refundGoodList,
 				toComments
-				
 			}
 		},
 		async onLoad(option) {
