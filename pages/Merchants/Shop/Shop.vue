@@ -184,7 +184,6 @@
 				});
 				const temp = res.data.length == 0;
 				if (!temp) {
-					console.log(res);
 					Object.assign(shopInfo, res.data[0]);
 					// 初始化shopInfo状态
 					merchant.initShopInfo(res.data[0]);

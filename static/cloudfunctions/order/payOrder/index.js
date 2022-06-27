@@ -13,6 +13,8 @@ exports.main = async (event, context) => {
 
 	const _ = db.command;
 
+	const log = cloud.logger();
+
 	const {
 		orderId
 	} = event;
@@ -23,11 +25,12 @@ exports.main = async (event, context) => {
 		const orderDb = db.collection('order');
 		const goodOrderDb = db.collection('good-orders');
 		const saleDb = db.collection('sales');
+
 		// doc获取的数据结构 .data就是数据
 		const isAbsent = await orderDb.doc(orderId).get();
 
 		const price = isAbsent.data.price;
-        console.log(wxContext.OPENID);
+
 		const openId = wxContext.OPENID;
 		const moneyBalance = await cloud.callFunction({
 			name: 'user',
@@ -58,6 +61,12 @@ exports.main = async (event, context) => {
 			}
 		});
 
+		log.info({
+			name: 'payOrder',
+			message: `${openid} 用户支付了${price}元: 订单${orderId}`,
+			data: null
+		});
+
 		// 更新订单状态
 		const temp = await orderDb.doc(orderId).update({
 			data: {
@@ -68,7 +77,6 @@ exports.main = async (event, context) => {
 
 		// 写入sale表，存好销量数据
 		const goodList = isAbsent.data.goodList;
-		const createTime = isAbsent.data.createTime;
 		for (let i = 0; i < goodList.length; i++) {
 			const goodSubList = goodList[i];
 			const goodId = goodSubList[0];
@@ -81,11 +89,10 @@ exports.main = async (event, context) => {
 					type: 'addSale',
 					goodId: goodId,
 					openId: openId,
-					createTime: createTime,
 					goodNums: goodNums,
 					goodTotalPrice: goodTotalPrice
 				}
-			})
+			});
 		}
 
 		const {
@@ -96,15 +103,25 @@ exports.main = async (event, context) => {
 		// TODO 更新各个子订单的状态,并通知对应的商家
 		for (let i = 0; i < data.goodList.length; i++) {
 			const goodId = data.goodList[i][0];
-			goodOrderDb.where({
-				goodId: _.eq(goodId)
-			}).update({
-				data: {
-					updateTime: new Date(),
-					status: 2,
-				}
-			});
-
+			try {
+				goodOrderDb.where({
+					goodId: _.eq(goodId)
+				}).update({
+					data: {
+						updateTime: new Date(),
+						status: 2,
+					}
+				});
+			} catch (e) {
+				log.error({
+					name: 'payOrder',
+					message: `更新${goodId}商品的订单失败：所属订单号${orderId}`,
+					data: e
+				});
+				continue;
+			}
+			// 通知商家
+			
 		}
 
 		res = {

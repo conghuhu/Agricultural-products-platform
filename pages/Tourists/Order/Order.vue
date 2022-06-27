@@ -85,7 +85,7 @@
 										<view>
 
 										</view>
-										<view class="right">待收货</view>
+										<view class="right">{{item.send ? '运送中':'待发货'}}</view>
 									</view>
 
 									<view class="item">

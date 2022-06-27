@@ -1,6 +1,6 @@
 <template>
 	<view class="fullScreen">
-		<Nav title="我的购物车"></Nav>
+		<Nav title="我的菜篮子"></Nav>
 		<view class="content">
 			<view v-if="loading" style="height: 70vh;display: flex;align-items: center;">
 				<MyLoading />

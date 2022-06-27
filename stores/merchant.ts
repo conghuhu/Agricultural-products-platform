@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, reactive } from 'vue';
 
-export const merchantStore = defineStore('store', () => {
+export const merchantStore = defineStore('merchant', () => {
 
 	const shopInfo = reactive({
 		createTime: "",
@@ -16,12 +16,12 @@ export const merchantStore = defineStore('store', () => {
 		totalSale: 0
 	});
 
-	const initShopInfo = (info) => {
+	function initShopInfo(info) {
 		Object.assign(shopInfo, info);
 	}
 
 	return {
 		shopInfo,
 		initShopInfo
-	}
+	};
 });

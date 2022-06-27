@@ -18,74 +18,15 @@
 					<swiper-item class="swiper-item">
 						<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 							<view class="page-box">
-								<OrderEmpty v-if="orderList[0].length == 0" />
-								<view v-else class="order" v-for="(res, index) in orderList[0]" :key="res._id">
-									<view class="top">
-										<view class="left">
-											<view class="store">{{ dayjs(res.createTime).format('YYYY-MM-DD HH:mm') }}
-											</view>
-										</view>
-										<view class="right">待支付</view>
-									</view>
-									<view class="item" v-for="(item, index) in res.goodList" :key="item._id">
-										<view class="left">
-											<image :src="item.imageShowList[0]" mode="aspectFill"></image>
-										</view>
-										<view class="content">
-											<view class="title u-line-2">
-												<Ellipsis :content="item.goodName" :width="270" />
-											</view>
-											<view class="type">
-												<Ellipsis :content="item.description" :width="270" />
-											</view>
-											<view class="delivery-time">
-												<view style="margin-right: 10rpx;">
-													产地
-												</view>
-												<Ellipsis :content="item.originPlace" :width="270" />
-											</view>
-										</view>
-										<view class="right">
-											<view class="price">
-												￥{{ priceInt(item.goodPrice) }}
-												<text class="decimal">.{{ priceDecimal(item.goodPrice) }}</text>
-											</view>
-											<view class="number">x{{ item.count }}</view>
-										</view>
-									</view>
-									<view class="total">
-										共{{ totalNum(res.goodList) }}件商品 合计:
-										<text class="total-price">
-											￥{{ priceInt(totalPrice(res.goodList)) }}.
-											<text class="decimal">{{ priceDecimal(totalPrice(res.goodList)) }}</text>
-										</text>
-									</view>
-									<view class="bottom">
-										<view class="more">
-											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
-										</view>
-										<view class="bottom_right">
-											<view class="cancel btn" @click="cancelOrder(res)">取消订单</view>
-											<view class="pay btn" @click="payOrder(res)">立即支付</view>
-										</view>
-									</view>
-								</view>
-								<!-- <u-loadmore :status="loadStatus[0]" bgColor="#f2f2f2"></u-loadmore> -->
-							</view>
-						</scroll-view>
-					</swiper-item>
-
-					<!-- 待收货 -->
-					<swiper-item class="swiper-item">
-						<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
-							<view class="page-box">
-								<OrderEmpty v-if="waitForGoodList.length == 0" />
-								<view v-else class="order" v-for="(item, index) in waitForGoodList" :key="item._id">
+								<OrderEmpty v-if="waitPayGoodList.length == 0" tips="去上架商品,吸引更多游客吧"
+									page="/pages/Merchants/GoodsPutaway/GoodsPutaway" gotoText="上架商品"
+									:isTarbar="false" />
+								<view v-else class="order" v-for="(item, index) in waitPayGoodList" :key="item._id">
 									<view class="top">
 										<view>
 
 										</view>
-										<view class="right">待收货</view>
+										<view class="right">用户待付款</view>
 									</view>
 
 									<view class="item">
@@ -128,18 +69,76 @@
 							</view>
 						</scroll-view>
 					</swiper-item>
+
+					<!-- 待收货 -->
+					<swiper-item class="swiper-item">
+						<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
+							<view class="page-box">
+								<OrderEmpty v-if="waitForGoodList.length == 0" tips="暂无待发货订单"
+									page="/pages/Merchants/GoodsPutaway/GoodsPutaway" gotoText="上架商品"
+									:isTarbar="false" />
+								<view v-else class="order" v-for="(item, index) in waitForGoodList" :key="item._id">
+									<view class="top">
+										<view>
+
+										</view>
+										<view class="right">{{item.send ? '运送中':'待发货'}}</view>
+									</view>
+
+									<view class="item">
+										<view class="left">
+											<image :src="item.imageShowList[0]" mode="aspectFill"></image>
+										</view>
+										<view class="content">
+											<view class="title u-line-2">
+												<Ellipsis :content="item.goodName" :width="270" />
+											</view>
+											<view class="type">
+												<Ellipsis :content="item.description" :width="270" />
+											</view>
+											<view class="delivery-time">
+												<view style="margin-right: 10rpx;">
+													产地
+												</view>
+												<Ellipsis :content="item.originPlace" :width="270" />
+											</view>
+										</view>
+										<view class="right">
+											<view class="price">
+												￥{{ priceInt(item.goodPrice) }}
+												<text class="decimal">.{{ priceDecimal(item.goodPrice) }}</text>
+											</view>
+											<view class="number">x{{ item.count }}</view>
+										</view>
+									</view>
+
+									<view class="bottom">
+										<view class="more">
+											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+										</view>
+										<view class="bottom_right">
+											<view class="cancel btn">查看物流</view>
+											<view class="pay btn">去发货</view>
+										</view>
+									</view>
+								</view>
+							</view>
+						</scroll-view>
+					</swiper-item>
 					<!-- 待评价 -->
 					<swiper-item class="swiper-item">
 						<scroll-view scroll-y style="height: 100%;width: 100%;">
 							<view class="page-box">
-								<OrderEmpty v-if="waitEvaluateGoodList.length == 0" />
+								<OrderEmpty v-if="waitEvaluateGoodList.length == 0" tips="暂无用户待评价订单"
+									page="/pages/Merchants/GoodsPutaway/GoodsPutaway" gotoText="上架商品"
+									:isTarbar="false" />
 								<view v-else class="order" v-for="(item, index) in waitEvaluateGoodList"
 									:key="item._id">
 									<view class="top">
 										<view>
 
 										</view>
-										<view class="right">待评价</view>
+										<view class="right">用户待评价</view>
 									</view>
 
 									<view class="item">
@@ -187,7 +186,9 @@
 					<swiper-item class="swiper-item">
 						<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 							<view class="page-box">
-								<OrderEmpty v-if="refundGoodList.length == 0" />
+								<OrderEmpty v-if="refundGoodList.length == 0" tips="暂无退款/售后"
+									page="/pages/Merchants/GoodsPutaway/GoodsPutaway" gotoText="上架商品"
+									:isTarbar="false" />
 								<view v-else class="order" v-for="(item, index) in refundGoodList" :key="item._id">
 									<view class="top">
 										<view>
@@ -275,12 +276,6 @@
 			} = storeToRefs(merchant);
 
 			const loading = ref(true);
-			const orderList = reactive([
-				[],
-				[],
-				[],
-				[]
-			]);
 			const list = reactive([{
 					name: '待付款',
 					count: 0
@@ -435,6 +430,10 @@
 			}
 
 			/**
+			 * 用户待支付的列表
+			 */
+			const waitPayGoodList = reactive([]);
+			/**
 			 * 待收货货物列表
 			 */
 			const waitForGoodList = reactive([]);
@@ -452,28 +451,29 @@
 			 */
 			const initData = async (index) => {
 				loading.value = true;
-				for (let i = 0; i < 4; i++) {
-					orderList[i].length = 0;
-				}
 				refreshOrderStatus();
 
-				if (shopInfo._id === '') {
+				if (shopInfo.value._id === '') {
 					return;
 				}
 
 				// index 1：待支付  2：已付款，但未收到货  3：已收到货，待评价 4：彻底完成
 				const resArr = await Promise.all([request("order", {
 					type: 'queryUnpaidOrdersMerchant',
-					shopId: shopInfo._id
+					shopId: shopInfo.value._id
 				}), request("order", {
-					type: 'queryIngGoods'
+					type: 'queryIngGoodsMerchant',
+					shopId: shopInfo.value._id
 				}), request("order", {
-					type: 'queryEvaluateGoods'
+					type: 'queryEvaluateGoodsMerchant',
+					shopId: shopInfo.value._id
 				}), request("order", {
-					type: 'queryRefundGood'
+					type: 'queryRefundGoodMerchant',
+					shopId: shopInfo.value._id
 				})]);
 				console.log(resArr);
 
+				waitPayGoodList.length = 0;
 				waitForGoodList.length = 0;
 				waitEvaluateGoodList.length = 0;
 				refundGoodList.length = 0;
@@ -483,7 +483,9 @@
 					list[i].count = dataList.length;
 					if (i == 0) {
 						dataList.forEach(item => {
-							orderList[i].push(item);
+							waitPayGoodList.push({
+								...item
+							});
 						})
 					} else if (i == 1) {
 						// 待收货
@@ -531,7 +533,6 @@
 
 
 			return {
-				orderList,
 				list,
 				current,
 				swiperCurrent,
@@ -557,7 +558,9 @@
 				waitEvaluateGoodList,
 				refundGoodList,
 				toComments,
-				navList
+				navList,
+				shopInfo,
+				waitPayGoodList
 			}
 		},
 		async onLoad(option) {
@@ -721,7 +724,7 @@
 	.wrap {
 		display: flex;
 		flex-direction: column;
-		height: calc(100vh - var(--window-top));
+		height: calc(100vh - calc(100rpx + calc(var(--window-top) + env(safe-area-inset-bottom))));
 		width: 100%;
 		position: relative;
 		padding-bottom: 20rpx;

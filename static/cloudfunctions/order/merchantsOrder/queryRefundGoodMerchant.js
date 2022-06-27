@@ -5,7 +5,7 @@ cloud.init();
 
 const db = cloud.database();
 
-// 查询商铺未支付的订单
+// 查询退款中的货物
 exports.main = async (event, context) => {
 
 	const wxContext = cloud.getWXContext();
@@ -23,19 +23,21 @@ exports.main = async (event, context) => {
 	let res = {};
 
 	try {
-		const orderDb = db.collection('good-orders');
+		const orderDb = db.collection('order');
 
 		const goodDb = db.collection('goods');
 
-		const temp = await orderDb.where({
-				shopId: _.eq(shopId),
-				status: 1
-			}).orderBy('createTime', 'desc')
-			.get();
+		const goodOrderDb = db.collection('good-orders');
+
+		const temp = await goodOrderDb.where({
+			shopId: _.eq(shopId),
+			status: 4
+		}).orderBy('createTime', 'desc').get();
+
 
 		log.info({
-			name: 'queryUnpaidOrdersMerchant',
-			message: `${shopId}商铺查询到的good-orders中为1的结果`,
+			name: 'queryIngGoods',
+			message: `${shopId}商铺查询到的good-orders中为4的结果`,
 			data: temp
 		});
 

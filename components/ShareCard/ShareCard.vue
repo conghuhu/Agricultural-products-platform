@@ -8,7 +8,7 @@
 				<view v-if="shareInfo.goodInfo.length != 0" :class="location == 'left' ? 'left_good':'right_good'">
 					<block v-if="location == 'left'">
 						<view class="goodName">
-							{{shareInfo.goodInfo[0].goodName}}
+							<Ellipsis :content="shareInfo.goodInfo[0].goodName" width="140" />
 						</view>
 						<u-image height="50rpx" width="50rpx" mode="aspectFit"
 							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/good_icon.png?sign=1a345fd52aba9998de46d671090efe0a&t=1655993500">
@@ -19,7 +19,7 @@
 							src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/good_icon.png?sign=1a345fd52aba9998de46d671090efe0a&t=1655993500">
 						</u-image>
 						<view class="goodName">
-							{{shareInfo.goodInfo[0].goodName}}
+							<Ellipsis :content="shareInfo.goodInfo[0].goodName" width="140" />
 						</view>
 					</block>
 				</view>
