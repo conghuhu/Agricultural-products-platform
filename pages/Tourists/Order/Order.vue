@@ -526,7 +526,12 @@
 			const toComments = (data) => {
 				console.log(data)
 				uni.navigateTo({
-					url: `../Comments/Comments?id=${data._id}&orderId=${data.orderId}`
+					url: `../Comments/Comments?id=${data._id}&orderId=${data.orderId}`,
+					events: {
+						refresh: function(data) {
+							initData(2);
+						}
+					}
 				});
 			}
 
