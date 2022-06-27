@@ -35,7 +35,6 @@ const controllerMap = new Map([
 exports.main = async (event, context) => {
 	const type = event.type;
 	if (controllerMap.has(type)) {
-		console.log(controllerMap.get(type))
 		return await controllerMap.get(type).main(event, context);
 	} else {
 		return {

@@ -80,7 +80,8 @@
 						<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 							<view class="page-box">
 								<OrderEmpty v-if="waitForGoodList.length == 0" />
-								<view v-else class="order" v-for="(item, index) in waitForGoodList" :key="item._id">
+								<view v-else class="order" v-for="(item, index) in waitForGoodList" :key="item._id"
+									@click="gotoGoodDetail(item)">
 									<view class="top">
 										<view>
 
@@ -121,7 +122,7 @@
 										</view>
 										<view class="bottom_right">
 											<view class="cancel btn">查看物流</view>
-											<view class="pay btn" @click="confirmDeliveryGood(item)">确认收货</view>
+											<view class="pay btn" @click.stop="confirmDeliveryGood(item)">确认收货</view>
 										</view>
 									</view>
 								</view>
@@ -133,8 +134,8 @@
 						<scroll-view scroll-y style="height: 100%;width: 100%;">
 							<view class="page-box">
 								<OrderEmpty v-if="waitEvaluateGoodList.length == 0" />
-								<view v-else class="order" v-for="(item, index) in waitEvaluateGoodList"
-									:key="item._id">
+								<view v-else class="order" v-for="(item, index) in waitEvaluateGoodList" :key="item._id"
+									@click="gotoGoodDetail(item)">
 									<view class="top">
 										<view>
 
@@ -174,8 +175,8 @@
 											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
 										</view>
 										<view class="bottom_right">
-											<view class="cancel btn" @click="applyRefund(item)">申请退款</view>
-											<view class="pay btn" @click="toComments(item)">去评论</view>
+											<view class="cancel btn" @click.stop="applyRefund(item)">申请退款</view>
+											<view class="pay btn" @click.stop="toComments(item)">去评论</view>
 										</view>
 									</view>
 								</view>
@@ -188,7 +189,8 @@
 						<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 							<view class="page-box">
 								<OrderEmpty v-if="refundGoodList.length == 0" />
-								<view v-else class="order" v-for="(item, index) in refundGoodList" :key="item._id">
+								<view v-else class="order" v-for="(item, index) in refundGoodList" :key="item._id"
+									@click="gotoGoodDetail(item)">
 									<view class="top">
 										<view>
 
@@ -520,7 +522,7 @@
 				const res = await request('order', {
 					type: 'queryOrderStatus'
 				});
-				user.setOrderMap(res.data);
+				user.setOrderMap(res.data, 1);
 			}
 			//跳转评论结论
 			const toComments = (data) => {
@@ -556,6 +558,15 @@
 				console.log(res)
 				initData(3);
 			}
+			/**
+			 * 跳至商品详情页
+			 */
+			const gotoGoodDetail = (goodinfo) => {
+				console.log(goodinfo);
+				uni.navigateTo({
+					url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodinfo._id}`
+				})
+			}
 
 			return {
 				orderList,
@@ -585,7 +596,8 @@
 				waitEvaluateGoodList,
 				applyRefund,
 				refundGoodList,
-				toComments
+				toComments,
+				gotoGoodDetail
 			}
 		},
 		async onLoad(option) {

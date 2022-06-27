@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, reactive } from 'vue';
 import navList from '@/pages/Tourists/utils/navList';
+import merchantNavList from '@/pages/Merchants/utils/navList';
 
 export const userStore = defineStore('user', () => {
 	// 用户基本信息
@@ -112,15 +113,22 @@ export const userStore = defineStore('user', () => {
 
 	/**
 	 * 设置订单map
+	 * type:类型 0 商家；1 游客
 	 */
-	function setOrderMap(arr: { _id: number; count: number }[]) {
+	function setOrderMap(arr: { _id: number; count: number }[], type: string) {
 		orderMap.clear();
 		let total = 0;
 		arr.forEach(item => {
 			orderMap.set(item._id, item.count);
 			total += item.count;
 		});
-		navList[4].count = total;
+		if (type === 0) {
+			merchantNavList[3].count = total;
+		} else if (type === 1) {
+			navList[4].count = total;
+		} else {
+			throw new Error('未知的type类型，请检查');
+		}
 	}
 
 

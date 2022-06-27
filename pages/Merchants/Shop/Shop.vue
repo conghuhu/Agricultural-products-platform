@@ -190,13 +190,20 @@
 				}
 				isNew.value = temp;
 
+				getShopTotalSale();
+
+				await getGoodList();
+			}
+
+			/**
+			 * 查询商铺收入金额
+			 */
+			const getShopTotalSale = async () => {
 				const total = await request('sale', {
 					type: 'queryShopTotalSale',
 					shopId: shopInfo._id
 				})
 				totalSale.value = total.data.totalSale
-
-				await getGoodList();
 			}
 
 			const goodListLoading = ref(true);

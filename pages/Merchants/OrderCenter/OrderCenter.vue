@@ -21,7 +21,8 @@
 								<OrderEmpty v-if="waitPayGoodList.length == 0" tips="去上架商品,吸引更多游客吧"
 									page="/pages/Merchants/GoodsPutaway/GoodsPutaway" gotoText="上架商品"
 									:isTarbar="false" />
-								<view v-else class="order" v-for="(item, index) in waitPayGoodList" :key="item._id">
+								<view v-else class="order" v-for="(item, index) in waitPayGoodList" :key="item._id"
+									@click="gotoGoodDetail(item)">
 									<view class="top">
 										<view>
 
@@ -58,11 +59,10 @@
 
 									<view class="bottom">
 										<view class="more">
-											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+											<!-- <u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon> -->
 										</view>
 										<view class="bottom_right">
-											<view class="cancel btn">查看物流</view>
-											<view class="pay btn">确认收货</view>
+											<view class="concat btn" @click.stop="concatTourist(item)">联系客户</view>
 										</view>
 									</view>
 								</view>
@@ -77,7 +77,8 @@
 								<OrderEmpty v-if="waitForGoodList.length == 0" tips="暂无待发货订单"
 									page="/pages/Merchants/GoodsPutaway/GoodsPutaway" gotoText="上架商品"
 									:isTarbar="false" />
-								<view v-else class="order" v-for="(item, index) in waitForGoodList" :key="item._id">
+								<view v-else class="order" v-for="(item, index) in waitForGoodList" :key="item._id"
+									@click="gotoGoodDetail(item)">
 									<view class="top">
 										<view>
 
@@ -114,10 +115,11 @@
 
 									<view class="bottom">
 										<view class="more">
-											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+											<!-- 											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon> -->
 										</view>
 										<view class="bottom_right">
 											<view class="cancel btn">查看物流</view>
+											<view class="concat btn" @click.stop="concatTourist(item)">联系客户</view>
 											<view class="pay btn">去发货</view>
 										</view>
 									</view>
@@ -132,8 +134,8 @@
 								<OrderEmpty v-if="waitEvaluateGoodList.length == 0" tips="暂无用户待评价订单"
 									page="/pages/Merchants/GoodsPutaway/GoodsPutaway" gotoText="上架商品"
 									:isTarbar="false" />
-								<view v-else class="order" v-for="(item, index) in waitEvaluateGoodList"
-									:key="item._id">
+								<view v-else class="order" v-for="(item, index) in waitEvaluateGoodList" :key="item._id"
+									@click="gotoGoodDetail(item)">
 									<view class="top">
 										<view>
 
@@ -170,11 +172,10 @@
 
 									<view class="bottom">
 										<view class="more">
-											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+											<!-- <u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon> -->
 										</view>
 										<view class="bottom_right">
-											<view class="cancel btn">申请退款</view>
-											<view class="pay btn" @click="toComments(item)">去评论</view>
+											<view class="concat btn" @click.stop="concatTourist(item)">联系客户</view>
 										</view>
 									</view>
 								</view>
@@ -189,7 +190,8 @@
 								<OrderEmpty v-if="refundGoodList.length == 0" tips="暂无退款/售后"
 									page="/pages/Merchants/GoodsPutaway/GoodsPutaway" gotoText="上架商品"
 									:isTarbar="false" />
-								<view v-else class="order" v-for="(item, index) in refundGoodList" :key="item._id">
+								<view v-else class="order" v-for="(item, index) in refundGoodList" :key="item._id"
+									@click="gotoGoodDetail(item)">
 									<view class="top">
 										<view>
 
@@ -226,11 +228,12 @@
 
 									<view class="bottom">
 										<view class="more">
-											<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+											<!-- <u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon> -->
 										</view>
 										<view class="bottom_right">
 											<view class="cancel btn">查看详情</view>
-											<view class="pay btn">售后评价</view>
+											<view class="concat btn" @click.stop="concatTourist(item)">联系客户</view>
+											<view class="pay btn">查看评价</view>
 										</view>
 									</view>
 								</view>
@@ -429,6 +432,13 @@
 				})
 			}
 
+			const concatTourist = async function(item) {
+				// 游客的openid
+				uni.navigateTo({
+					url: `/pages/Merchants/ChatRoom/ChatRoom?openId=${item._openid}`
+				})
+			}
+
 			/**
 			 * 用户待支付的列表
 			 */
@@ -522,15 +532,18 @@
 				const res = await request('order', {
 					type: 'queryOrderStatus'
 				});
-				user.setOrderMap(res.data);
-			}
-			//跳转评论结论
-			const toComments = (data) => {
-				uni.navigateTo({
-					url: `../Comments/Comments?id=${data._id}`
-				})
+				user.setOrderMap(res.data, 0);
 			}
 
+			/**
+			 * 跳至商品详情页
+			 */
+			const gotoGoodDetail = (goodinfo) => {
+				console.log(goodinfo);
+				uni.navigateTo({
+					url: `/pages/Merchants/GoodDetail/GoodDetail?goodId=${goodinfo._id}`
+				})
+			}
 
 			return {
 				list,
@@ -557,10 +570,11 @@
 				waitForGoodList,
 				waitEvaluateGoodList,
 				refundGoodList,
-				toComments,
 				navList,
 				shopInfo,
-				waitPayGoodList
+				waitPayGoodList,
+				concatTourist,
+				gotoGoodDetail
 			}
 		},
 		async onLoad(option) {
@@ -708,12 +722,18 @@
 				}
 
 				.cancel {
-					margin-right: 30rpx;
+					margin-right: 25rpx;
 				}
 
 				.pay {
 					color: $u-type-success-dark;
 					border-color: $u-type-success-dark;
+				}
+
+				.concat {
+					color: $u-type-success-dark;
+					border-color: $u-type-success-dark;
+					margin-right: 25rpx;
 				}
 			}
 

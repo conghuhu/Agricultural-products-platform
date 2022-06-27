@@ -292,8 +292,7 @@
 		
 		
 		onUnload() {
-			console.log("我是国庆")
-			this.initWatcher(true)
+			this.initWatcher(true);
 		}
 	};
 </script>

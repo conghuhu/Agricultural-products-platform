@@ -10,12 +10,12 @@ exports.main = async (event, context) => {
 	
 	const wxContext = cloud.getWXContext();
 
-	const userDb = db.collection('shops');
+	const shopDb = db.collection('shops');
 	const _ = db.command;
 
 	const openId = wxContext.OPENID;
 
-	const record = await userDb.where({
+	const record = await shopDb.where({
 		_openid: _.eq(openId)
 	}).get();
 

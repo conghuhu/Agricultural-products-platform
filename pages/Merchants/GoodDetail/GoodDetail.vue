@@ -207,13 +207,9 @@
 					type: 'querySaleMonth',
 					goodId: goodId
 				});
-
-				console.log(res);
 				for (let i = 0; i < res.data.length; i++) {
 					goodMonthSaleInfo.push(res.data[i]);
 				}
-				console.log(goodMonthSaleInfo);
-
 			}
 			/**
 			 * 操作分发
@@ -277,9 +273,8 @@
 			}
 		},
 		async onLoad(option) {
-			await this.refreshData(option.goodId);
-			await this.getSaleData(option.goodId);
-			await this.getMonthSaleData(option.goodId);
+			await Promise.all([this.refreshData(option.goodId), this.getSaleData(option.goodId), this.getMonthSaleData(
+				option.goodId)]);
 			this.loading = false;
 		},
 		async onReady() {

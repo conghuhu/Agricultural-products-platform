@@ -58,6 +58,7 @@ exports.main = async (event, context) => {
 			const goodInfo = goodRes[i].data;
 			goodInfo.count = temp.data[i].count;
 			goodInfo.orderId = temp.data[i].orderId;
+			goodInfo._openid = temp.data[i]._openid;
 			dataList.push(goodInfo);
 		}
 		res = {
