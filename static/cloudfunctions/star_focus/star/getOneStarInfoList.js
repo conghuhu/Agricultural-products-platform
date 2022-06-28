@@ -37,6 +37,12 @@ exports.main = async (event, context) => {
 					foreignField: '_openid',
 					as: 'author',
 				})
+				.lookup({
+					from: 'goods',
+					localField: 'goodId',
+					foreignField: '_id',
+					as: 'goodInfo',
+				})
 				.sort({
 					createTime: -1
 				})

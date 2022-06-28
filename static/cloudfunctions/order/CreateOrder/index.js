@@ -28,6 +28,7 @@ exports.main = async (event, context) => {
 	try {
 		const orderDb = db.collection('order');
 		const goodOrderDb = db.collection('good-orders');
+		const shopDb = db.collection('shops');
 		// 1.将订单入库
 		const addRes = await orderDb.add({
 			data: {
@@ -89,6 +90,12 @@ exports.main = async (event, context) => {
 				}
 			});
 			goodOrderIdList.push(goodOrderRes._id);
+
+			sendMsgToShopUser(item.shopId, shopDb, {
+				orderId: addRes._id,
+				goodName: item.goodName,
+				remarkVal: remarkVal
+			});
 		}
 
 		log.info({
@@ -124,4 +131,43 @@ exports.main = async (event, context) => {
 	}
 
 	return res;
+}
+
+async function sendMsgToShopUser(shopId, shopDb, info) {
+	const shopInfo = await shopDb.doc(shopId).get();
+	console.log(shopInfo);
+
+	cloud.callFunction({
+		// 要调用的云函数名称
+		name: 'subcribe',
+		// 传递给云函数的参数
+		data: {
+			type: 'sendMessage',
+			touserId: shopInfo.data._openid,
+			page: 'pages/Merchants/OrderCenter/OrderCenter?index=0',
+			templateId: 'Ig-MJxCd_nD9sYiext0EmxdDq0pQIJV2LgwUoZmB5Wg',
+			templateData: {
+				// 订单号
+				character_string1: {
+					"value": info.orderId
+				},
+				// 产品名称
+				thing6: {
+					"value": info.goodName
+				},
+				// 订单状态
+				phrase2: {
+					"value": '下单成功'
+				},
+				// 备注
+				thing10: {
+					"value": info.remarkVal || '无'
+				},
+				// 操作提示
+				thing4: {
+					"value": '用户已下单，但未支付'
+				}
+			}
+		}
+	});
 }

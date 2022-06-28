@@ -46,7 +46,6 @@
 							<view style="color: red;">
 								<Ellipsis :content="totalSale" :width="120" />
 							</view>
-							
 						</view>
 					</view>
 				</view>
@@ -156,11 +155,12 @@
 				url: "/pages/Merchants/OrderCenter/OrderCenter",
 				count: 0
 			}]);
-			
+
 			// 工具菜单
 			const toolList = reactive([{
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%85%B3%E6%B3%A8.png?sign=823e5e8f340f6cf004b527befa4b0b86&t=1653974741',
-					text: '关注'
+					text: '订阅',
+					type: 'subscribe',
 				},
 				{
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E7%A7%8D%E8%8D%89.png?sign=7734a781e420ca814fc11074939baaae&t=1655528876',
@@ -184,13 +184,65 @@
 				})
 			}
 			const gotoPage = async (item) => {
+				console.log(item);
 				if (item.concat) {
 					return;
 				}
-				console.log(item);
-				uni.navigateTo({
-					url: item.url
-				})
+				if (item.type === 'subscribe') {
+					const templeteList = ['Ig-MJxCd_nD9sYiext0EmxdDq0pQIJV2LgwUoZmB5Wg'];
+					uni.requestSubscribeMessage({
+						tmplIds: templeteList,
+						async success(res) {
+							console.log(res);
+							// 申请订阅成功
+							if (res.errMsg === 'requestSubscribeMessage:ok') {
+								uni.showLoading({
+									title: '订阅中'
+								});
+								const res = await request('subcribe', {
+									type: 'subcribeOrderMessage',
+									templateId: templeteList[0]
+								});
+
+								console.log(res);
+
+								// 	wx.cloud
+								// 		.callFunction({
+								// 			name: 'subscribe',
+								// 			data: {
+								// 				data: item,
+								// 				templateId: templeteList[0],
+								// 			},
+								// 		})
+								// 		.then(() => {
+								// 			uni.showToast({
+								// 				title: '订阅成功',
+								// 				icon: 'success',
+								// 				duration: 2000,
+								// 			});
+								// 		})
+								// 		.catch(() => {
+								// 			uni.showToast({
+								// 				title: '订阅失败',
+								// 				icon: 'success',
+								// 				duration: 2000,
+								// 			});
+								// 		});
+								uni.hideLoading();
+							} else {
+								uni.showToast({
+									icon: 'error',
+									title: '订阅失败'
+								});
+								uni.hideLoading();
+							}
+						}
+					})
+				} else {
+					uni.navigateTo({
+						url: item.url
+					})
+				}
 			};
 			//消息列表界面
 			const toMessageList = async function() {

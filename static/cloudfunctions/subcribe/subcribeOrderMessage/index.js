@@ -2,8 +2,10 @@ const cloud = require('wx-server-sdk');
 cloud.init();
 const db = cloud.database();
 
+// 商家端订阅消息
 exports.main = async (event, context) => {
 	const log = cloud.logger();
+
 	try {
 		const {
 			OPENID
@@ -18,11 +20,15 @@ exports.main = async (event, context) => {
 			data: {
 				_openid: OPENID, // 订阅者的openid
 				page: 'index', // 订阅消息卡片点击后会打开小程序的哪个页面
-				data: event.data, // 订阅消息的数据
 				templateId: templateId, // 订阅消息模板ID
 				done: false, // 消息发送状态设置为 false
 			}
 		});
+		log.error({
+			name: 'subcribeOrderMessage',
+			message: `商家 ${OPENID} 订阅订单消息成功`,
+			time: new Date()
+		})
 		return {
 			success: true,
 			message: "",
