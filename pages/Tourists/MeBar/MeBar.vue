@@ -17,17 +17,18 @@
 								<u-image height="50rpx" width="50rpx" mode="aspectFit"
 									src="/static/images/message_me.png">
 								</u-image>
+								<view v-if="isRead">
+									<u-badge :offset="[-8,-8]" :is-dot="true"></u-badge>
+								</view>
+								<view v-else>
+									<u-badge :offset="[-8,-8]" :is-dot="true" :count="0"></u-badge>
+								</view>
 							</view>
 
 							<u-image @click="gotoSet" height="50rpx" width="50rpx" mode="aspectFit"
 								src="/static/images/set.png">
 							</u-image>
-							<view v-if="isRead">
-								<u-badge :offset="[-8,-8]" :is-dot="true"></u-badge>
-							</view>
-							<view v-else>
-								<u-badge :offset="[-8,-8]" :is-dot="true" :count="0"></u-badge>
-							</view>
+							
 						</view>
 					</view>
 

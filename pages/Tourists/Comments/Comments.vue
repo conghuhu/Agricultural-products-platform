@@ -139,10 +139,10 @@
 			}
 			//提交评论
 			const sentComment = async () => {
-				console.log(tagMap)
 				form.goodId = goodId.value;
 				form.startCount = startCount.value;
 				form.content = content.value;
+				form.createTime = new Date();
 				for (let tag of tagMap.keys()) {
 					form.tagContent.push(tag)
 				}

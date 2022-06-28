@@ -65,61 +65,31 @@
 						v-model="currentTab" @change="changeTab" :clickChange="true" />
 				</view>
 				<view class="body_content" v-if="currentTab == 0">
-					<view class="comment_card">
+					<view class="comment_card" v-for="(item,index) in comments">
 						<view class="pingfen">
 							<view class="pingfen_content">
 								<view class="content_number">4.2</view>
 								<view class="content_xingxing">
 									<view class="xingxing_image">
-										<u-image width="100%" height="16px" mode="aspectFit"
-											src="./static/images/xingxing.png">
-										</u-image>
-									</view>
-									<view class="xingxing_image">
-										<u-image width="100%" height="16px" mode="aspectFit"
-											src="./static/images/xingxing.png">
-										</u-image>
-									</view>
-									<view class="xingxing_image">
-										<u-image width="100%" height="16px" mode="aspectFit"
-											src="./static/images/xingxing.png">
-										</u-image>
-									</view>
-									<view class="xingxing_image">
-										<u-image width="100%" height="16px" mode="aspectFit"
-											src="./static/images/xingxing.png">
-										</u-image>
-									</view>
-									<view class="xingxing_image">
-										<u-image width="100%" height="16px" mode="aspectFit"
-											src="./static/images/xingxing.png">
-										</u-image>
-
+										<u-rate :count="5" size="38" gutter="16" v-model="item.startCount"></u-rate>
 									</view>
 								</view>
 							</view>
 							<view class="pingfen_card">
-								<view class="card_top">
-									<u-tag text="全部" mode="dark" size="mini" shape="circle" type="info" />
-									<u-tag text="最新" mode="dark" size="mini" shape="circle" type="info" />
-									<u-tag text="好评" mode="dark" size="mini" shape="circle" type="info" />
-									<u-tag text="差评" mode="dark" size="mini" shape="circle" type="info" />
-								</view>
-								<view class="card_bottom">
-									<u-tag text="非常新鲜" mode="dark" shape="circle" type="info" />
-									<u-tag text="物超所值" mode="dark" shape="circle" type="info" />
+								<view class="card_bottom" v-for="data in item.tagContent">
+									<u-tag :text="data" mode="dark" shape="circle" type="info" />
 								</view>
 							</view>
 						</view>
 						<view class="user_card">
 							<view class="user_touxiang">
 								<u-image width="100%" height="100rpx" mode="heightFix"
-									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/categoryItem/%E9%B8%A1%E9%B8%AD%E7%A6%BD.png?sign=bb359dfca20a987b356e2d4a4415573b&t=1653984717">
+									:src="item.userInfo.avatarUrl">
 								</u-image>
 							</view>
 							<view class="user_info">
-								<view class="user_name">小王同学</view>
-								<view class="user_time">2022.5.1</view>
+								<view class="user_name">{{item.userInfo.nickName}}</view>
+								<view class="user_time">{{dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 							</view>
 							<view class="user_pingfen">5.0</view>
 							<view class="user_xingxing">
@@ -216,13 +186,14 @@
 		storeToRefs
 	} from 'pinia';
 	import navList from '@/pages/Tourists/utils/navList';
+	import dayjs from 'dayjs';
 	export default {
 		setup() {
+			const comments = reactive({});
 			const user = userStore();
 			const {
 				wantingGoods
 			} = storeToRefs(user);
-
 			const goodId = ref('');
 			// 货物信息
 			const goodInfo = reactive({
@@ -310,7 +281,9 @@
 				gotoShop,
 				tabList,
 				currentTab,
-				changeTab
+				changeTab,
+				comments,
+				dayjs
 			}
 		},
 		async onLoad(option) {
@@ -320,6 +293,12 @@
 				type: 'getGoodById',
 				goodId: goodIdRes
 			})
+			const temp = await request('comments', {
+				type: "getGoodsComment",
+				goodId: goodIdRes
+			})
+			console.log(temp.data)
+			Object.assign(this.comments,temp.data);
 			Object.assign(this.goodInfo, res.data);
 			console.log(res);
 		}
@@ -604,7 +583,7 @@
 								.user_name {
 									font-family: SourceHanSansCN-ExtraLight;
 									font-size: 16px;
-									font-weight: 300;
+									font-weight: 500;
 									line-height: 13px;
 									letter-spacing: 0px;
 									color: rgba(0, 0, 0, 0.8);
@@ -614,7 +593,7 @@
 									margin-top: 10rpx;
 									font-family: SourceHanSansCN-ExtraLight;
 									font-size: 11px;
-									font-weight: 250;
+									font-weight: 500;
 									line-height: 11px;
 									letter-spacing: 0px;
 									color: rgba(0, 0, 0, 0.35);
