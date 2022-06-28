@@ -133,9 +133,14 @@ exports.main = async (event, context) => {
 	return res;
 }
 
+/**
+ * 发送用户成功下单消息给商家
+ * @param {String} shopId 
+ * @param {*} shopDb 
+ * @param {*} info 
+ */
 async function sendMsgToShopUser(shopId, shopDb, info) {
 	const shopInfo = await shopDb.doc(shopId).get();
-	console.log(shopInfo);
 
 	cloud.callFunction({
 		// 要调用的云函数名称

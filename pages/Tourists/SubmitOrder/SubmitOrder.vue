@@ -220,6 +220,39 @@
 					});
 					return;
 				}
+				const templeteList = ['Ig-MJxCd_nD9sYiext0EmxdDq0pQIJV2LgwUoZmB5Wg'];
+				uni.requestSubscribeMessage({
+					tmplIds: templeteList,
+					async success(res) {
+						console.log(res);
+						// 申请订阅成功
+						if (res.errMsg === 'requestSubscribeMessage:ok') {
+							uni.showLoading({
+								title: '订阅中'
+							});
+							const res = await request('subcribe', {
+								type: 'subcribeOrderMessage',
+								templateId: templeteList[0]
+							});
+							console.log(res);
+							uni.hideLoading();
+							uni.showToast({
+								title: '订阅成功'
+							});
+							await createOrder();
+						} else {
+							uni.showToast({
+								icon: 'error',
+								title: '订阅失败'
+							});
+							uni.hideLoading();
+							await createOrder();
+						}
+					}
+				})
+			}
+
+			const createOrder = async () => {
 				uni.showLoading({
 					title: "去支付"
 				})
@@ -236,13 +269,14 @@
 					wantList: wantList.map(item => item._id),
 					price: totalPrice.value
 				});
-				
+
 				user.removeWantedGood(wantList.map(item => item.goodId));
-				
+
 				uni.hideLoading();
 
 				pay(res.data);
 			}
+
 			/**
 			 * 支付
 			 */

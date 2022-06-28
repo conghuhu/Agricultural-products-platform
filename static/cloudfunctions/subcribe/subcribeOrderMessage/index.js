@@ -24,7 +24,7 @@ exports.main = async (event, context) => {
 				done: false, // 消息发送状态设置为 false
 			}
 		});
-		log.error({
+		log.info({
 			name: 'subcribeOrderMessage',
 			message: `商家 ${OPENID} 订阅订单消息成功`,
 			time: new Date()

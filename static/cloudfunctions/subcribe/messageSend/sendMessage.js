@@ -26,26 +26,6 @@ exports.main = async (event, context) => {
 	try {
 		const orderMsgDb = db.collection('order-message');
 
-		// {  
-		//   "touser": "OPENID",  
-		//   "template_id": "TEMPLATE_ID",  
-		//   "page": "index",  
-		//   "data": {  
-		//       "number01": {  
-		//           "value": "339208499"  
-		//       },  
-		//       "date01": {  
-		//           "value": "2015年01月05日"  
-		//       },  
-		//       "site01": {  
-		//           "value": "TIT创意园"  
-		//       } ,  
-		//       "site02": {  
-		//           "value": "广州市新港中路397号"  
-		//       }  
-		//   }  
-		// }
-
 		// 发送订阅消息
 		const res = await cloud.openapi.subscribeMessage.send({
 			"touser": touserId,
@@ -83,7 +63,7 @@ exports.main = async (event, context) => {
 		return {
 			sucess: false,
 			message: '',
-			data: null
+			data: e
 		};
 	}
 }
