@@ -236,10 +236,12 @@
 					wantList: wantList.map(item => item._id),
 					price: totalPrice.value
 				});
+				
 				user.removeWantedGood(wantList.map(item => item.goodId));
+				
 				uni.hideLoading();
+
 				pay(res.data);
-				// console.log(res)
 			}
 			/**
 			 * 支付
@@ -261,7 +263,7 @@
 							if (!temp.success) {
 								uni.hideLoading();
 								uni.showToast({
-									title: "支付失败",
+									title: temp.message,
 									duration: 1500,
 								});
 								return;
@@ -290,7 +292,7 @@
 				const res = await request('order', {
 					type: 'queryOrderStatus'
 				});
-				user.setOrderMap(res.data,1);
+				user.setOrderMap(res.data, 1);
 			}
 
 			onMounted(async () => {
