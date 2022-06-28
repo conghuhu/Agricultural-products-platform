@@ -68,8 +68,16 @@
 					</view>
 					<qiun-data-charts type="line" :ontouch="true" :opts="chartOption" :chartData="optionMonth" />
 				</view>
-				<view class="comments_card">
+<!-- 				<view class="comments_card">
 
+				</view> -->
+				<view class="last_week_card">
+					<view class="good_card_top">
+						<view style="font-size: 44rpx;font-weight: 550;margin-bottom: 20rpx;">
+							近一周商品访问量统计图
+						</view>
+					</view>
+					<qiun-data-charts type="line" :ontouch="true" :opts="chartOption" :chartData="optionView" />
 				</view>
 			</block>
 
@@ -108,9 +116,12 @@
 				updateTime: null
 			});
 			const goodSaleInfo = reactive([]);
+			const goodViewInfo = reactive([]);
 			const goodMonthSaleInfo = reactive([]);
 			const timeList = reactive([]);
 			const numList = reactive([]);
+			const timeViewList = reactive([]);
+			const numViewList = reactive([]);
 			const actionSheetShow = ref(false);
 			const actionList = reactive([{
 				text: '编辑商品',
@@ -153,6 +164,17 @@
 				series: [{
 					name: "销量",
 					data: numList
+				}],
+			});
+			/**
+			 * chart埋点数据
+			 */
+			
+			const optionView = reactive({
+				categories: timeViewList,
+				series: [{
+					name: "商品访问量",
+					data: numViewList
 				}],
 			});
 
@@ -199,6 +221,24 @@
 
 			}
 
+			/**
+			 * 获取埋点数据
+			 */
+			const getViewData = async (goodId) => {
+				const resView = await request('page_view', {
+					type: 'queryView',
+					goodId: goodId
+				});
+				Object.assign(goodViewInfo, resView.data);
+				console.log(resView);
+				for (let i = 0; i < resView.data.length; i++) {
+					const timeView = resView.data[i][0];
+					const arrView = timeView.split("-");
+					timeViewList.push(arrView[1] + "-" + arrView[2]);
+					numViewList.push(resView.data[i][1]);
+				}
+
+			}
 			/**
 			 * 获取商品月销量数据
 			 */
@@ -265,15 +305,17 @@
 				clickAction,
 				refreshData,
 				getSaleData,
+				getViewData,
 				getMonthSaleData,
 				option,
+				optionView,
 				chartOption,
 				loading,
 				optionMonth
 			}
 		},
 		async onLoad(option) {
-			await Promise.all([this.refreshData(option.goodId), this.getSaleData(option.goodId), this.getMonthSaleData(
+			await Promise.all([this.refreshData(option.goodId), this.getSaleData(option.goodId),this.getViewData(option.goodId), this.getMonthSaleData(
 				option.goodId)]);
 			this.loading = false;
 		},

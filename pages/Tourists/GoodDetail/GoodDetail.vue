@@ -322,6 +322,13 @@
 			})
 			Object.assign(this.goodInfo, res.data);
 			console.log(res);
+			
+			//埋点---访问量
+			const resView = await request('page_view', {
+				type: 'addView',
+				goodId: goodIdRes
+			})
+			console.log(resView);
 		}
 	}
 </script>
