@@ -65,112 +65,44 @@
 						v-model="currentTab" @change="changeTab" :clickChange="true" />
 				</view>
 				<view class="body_content" v-if="currentTab == 0">
-					<view class="comment_card">
-						<view class="pingfen">
-							<view class="pingfen_content">
-								<view class="content_number">4.2</view>
-								<view class="content_xingxing">
-									<view class="xingxing_image">
-										<u-image width="100%" height="16px" mode="aspectFit"
-											src="./static/images/xingxing.png">
-										</u-image>
-									</view>
-									<view class="xingxing_image">
-										<u-image width="100%" height="16px" mode="aspectFit"
-											src="./static/images/xingxing.png">
-										</u-image>
-									</view>
-									<view class="xingxing_image">
-										<u-image width="100%" height="16px" mode="aspectFit"
-											src="./static/images/xingxing.png">
-										</u-image>
-									</view>
-									<view class="xingxing_image">
-										<u-image width="100%" height="16px" mode="aspectFit"
-											src="./static/images/xingxing.png">
-										</u-image>
-									</view>
-									<view class="xingxing_image">
-										<u-image width="100%" height="16px" mode="aspectFit"
-											src="./static/images/xingxing.png">
-										</u-image>
-
-									</view>
-								</view>
-							</view>
-							<view class="pingfen_card">
-								<view class="card_top">
-									<u-tag text="全部" mode="dark" size="mini" shape="circle" type="info" />
-									<u-tag text="最新" mode="dark" size="mini" shape="circle" type="info" />
-									<u-tag text="好评" mode="dark" size="mini" shape="circle" type="info" />
-									<u-tag text="差评" mode="dark" size="mini" shape="circle" type="info" />
-								</view>
-								<view class="card_bottom">
-									<u-tag text="非常新鲜" mode="dark" shape="circle" type="info" />
-									<u-tag text="物超所值" mode="dark" shape="circle" type="info" />
-								</view>
-							</view>
-						</view>
+					<view class="comment_card" v-for="(item,index) in comments">
 						<view class="user_card">
 							<view class="user_touxiang">
-								<u-image width="100%" height="100rpx" mode="heightFix"
-									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/categoryItem/%E9%B8%A1%E9%B8%AD%E7%A6%BD.png?sign=bb359dfca20a987b356e2d4a4415573b&t=1653984717">
+								<u-image width="100%" shape="circle" height="80rpx" mode="heightFix" :src="item.userInfo.avatarUrl">
 								</u-image>
 							</view>
 							<view class="user_info">
-								<view class="user_name">小王同学</view>
-								<view class="user_time">2022.5.1</view>
+								<view class="user_name">{{item.userInfo.nickName}}</view>
+
 							</view>
-							<view class="user_pingfen">5.0</view>
 							<view class="user_xingxing">
-								<view class="xingxing">
-									<u-image width="100%" height="16px" mode="aspectFit"
-										src="./static/images/xingxing.png">
-									</u-image>
-								</view>
-								<view class="xingxing">
-									<u-image width="100%" height="16px" mode="aspectFit"
-										src="./static/images/xingxing.png">
-									</u-image>
-								</view>
-								<view class="xingxing">
-									<u-image width="100%" height="16px" mode="aspectFit"
-										src="./static/images/xingxing.png">
-									</u-image>
-								</view>
-								<view class="xingxing">
-									<u-image width="100%" height="16px" mode="aspectFit"
-										src="./static/images/xingxing.png">
-									</u-image>
-								</view>
-								<view class="xingxing">
-									<u-image width="100%" height="16px" mode="aspectFit"
-										src="./static/images/xingxing.png">
-									</u-image>
+								<u-rate active-color="#ffaa00" :count="5" size="28" gutter="10"
+									v-model="item.startCount"></u-rate> 
+							</view>
+						</view>
+						<view class="mid">
+							<view class="time">{{dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+							<view class="tag" >
+								<view class="tagContent"  v-for="data in item.tagContent">
+									<u-tag :text="data" shape="circle" type="info" />
 								</view>
 							</view>
+							
 						</view>
 						<view class="pinglun_content">
-							评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容
+							{{item.content}}
 						</view>
 						<view class="pinglun_image">
-							<view class="image_info">
-								<u-image width="100%" height="70px"
-									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
-								</u-image>
-							</view>
-							<view class="image_info">
-								<u-image width="100%" height="70px"
-									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
-								</u-image>
-							</view>
-							<view class="image_info">
-								<u-image width="100%" height="70px"
-									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/3.png?sign=8f729fbad4e530b1ca32a3156e633933&t=1652588964">
+							<view class="image_info" v-for="image in item.imageList">
+								<u-image width="100%" height="70px" :src="image">
 								</u-image>
 							</view>
 						</view>
-						<u-line color="#606266" />
+						<view v-if="index!=countLine">
+							<u-line color="#606266" />
+						</view>
+						<view v-else></view>
+						
 					</view>
 				</view>
 
@@ -216,13 +148,15 @@
 		storeToRefs
 	} from 'pinia';
 	import navList from '@/pages/Tourists/utils/navList';
+	import dayjs from 'dayjs';
 	export default {
 		setup() {
+			const countLine = ref(0);
+			const comments = reactive([]);
 			const user = userStore();
 			const {
 				wantingGoods
 			} = storeToRefs(user);
-
 			const goodId = ref('');
 			// 货物信息
 			const goodInfo = reactive({
@@ -310,7 +244,10 @@
 				gotoShop,
 				tabList,
 				currentTab,
-				changeTab
+				changeTab,
+				comments,
+				dayjs,
+				countLine
 			}
 		},
 		async onLoad(option) {
@@ -320,8 +257,19 @@
 				type: 'getGoodById',
 				goodId: goodIdRes
 			})
+			const temp:{data:Array<any>} = await request('comments', {
+				type: "getGoodsComment",
+				goodId: goodIdRes
+			})
+			console.log(temp.data)
+			temp.data.forEach(item=>{
+				this.comments.push(item)
+			})
 			Object.assign(this.goodInfo, res.data);
 			console.log(res);
+<<<<<<< HEAD
+			this.countLine=this.comments.length-1;
+=======
 			
 			//埋点---访问量
 			const resView = await request('page_view', {
@@ -329,6 +277,7 @@
 				goodId: goodIdRes
 			})
 			console.log(resView);
+>>>>>>> ee817c5fa539882b4b46fb0d46ade0bd2090eb90
 		}
 	}
 </script>
@@ -590,17 +539,46 @@
 
 								.card_top {}
 
-								.card_bottom {}
+								.card_bottom {
+									display: flex;
+									flex-direction: column;
+								}
 							}
 						}
+
+						.mid {
+							display: flex;
+							.tag{
+								flex: 2;
+								display: flex;
+								flex-wrap: wrap;
+								.tagContent{
+									align-items: center;
+								}
+							}
+							.time {
+								align-items: center;
+								margin-right: 10rpx;
+								margin-left: 32rpx;
+								margin-top: 14rpx;
+								font-family: SourceHanSansCN-ExtraLight;
+								font-size: 13px;
+								font-weight: 500;
+								line-height: 11px;
+								letter-spacing: 0px;
+								color: $u-content-color;
+							}
+						}
+
 
 						.user_card {
 							display: flex;
 							align-items: center;
-							margin-top: 30rpx;
+							margin-top: 20rpx;
 							margin-left: 40rpx;
 
 							.user_touxiang {}
+
 
 							.user_info {
 								margin-left: 20rpx;
@@ -609,22 +587,23 @@
 								align-items: center;
 
 								.user_name {
+									margin-top: 6rpx;
 									font-family: SourceHanSansCN-ExtraLight;
 									font-size: 16px;
-									font-weight: 300;
+									font-weight: 500;
 									line-height: 13px;
 									letter-spacing: 0px;
 									color: rgba(0, 0, 0, 0.8);
 								}
 
 								.user_time {
-									margin-top: 10rpx;
+									margin-top: 34rpx;
 									font-family: SourceHanSansCN-ExtraLight;
 									font-size: 11px;
-									font-weight: 250;
+									font-weight: 500;
 									line-height: 11px;
 									letter-spacing: 0px;
-									color: rgba(0, 0, 0, 0.35);
+									color: rgba(0, 0, 0, 0.8);
 								}
 							}
 
@@ -632,14 +611,14 @@
 								margin-left: 20rpx;
 								font-family: SourceHanSansCN-ExtraLight;
 								font-size: 13px;
-								font-weight: 250;
+								font-weight: 500;
 								line-height: 11px;
 								letter-spacing: 0px;
-								color: rgba(0, 0, 0, 0.35);
+								color: rgba(0, 0, 0, 0.8);
 							}
 
 							.user_xingxing {
-								margin-left: 30rpx;
+								margin-left: 16rpx;
 								display: flex;
 								align-items: center;
 								width: 20vw;
@@ -651,16 +630,18 @@
 						}
 
 						.pinglun_content {
+							margin-top: 20rpx;
 							margin-left: 40rpx;
 							margin-right: 40rpx;
 							font-family: SourceHanSansCN-ExtraLight;
-							font-size: 13px;
-							font-weight: 250;
+							font-size: 15px;
+							font-weight: 500;
 							letter-spacing: 0px;
-							color: rgba(0, 0, 0, 0.8);
+							color: $u-content-color;
 						}
 
 						.pinglun_image {
+							margin-top: 20rpx;
 							display: flex;
 							align-items: center;
 							margin-left: 40rpx;
