@@ -105,7 +105,8 @@ exports.main = async (event, context) => {
 			const goodId = data.goodList[i][0];
 			try {
 				goodOrderDb.where({
-					goodId: _.eq(goodId)
+					goodId: _.eq(goodId),
+					orderId: _.eq(orderId)
 				}).update({
 					data: {
 						updateTime: new Date(),
@@ -121,7 +122,7 @@ exports.main = async (event, context) => {
 				continue;
 			}
 			// 通知商家
-			
+
 		}
 
 		res = {
