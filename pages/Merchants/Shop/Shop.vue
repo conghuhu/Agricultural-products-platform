@@ -177,9 +177,7 @@
 			 * 获取商铺信息
 			 */
 			const getShopInfo = async () => {
-				const {
-					res
-				} = await request("shop", {
+				const res = await request("shop", {
 					type: "checkCreatedShop"
 				});
 				const temp = res.data.length == 0;

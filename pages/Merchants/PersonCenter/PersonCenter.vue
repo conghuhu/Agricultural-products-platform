@@ -18,10 +18,10 @@
 									src="/static/images/message_me.png">
 								</u-image>
 								<view v-if="isRead">
-									<u-badge :offset="[-8,-8]"  :is-dot="true"></u-badge>
+									<u-badge :offset="[-8,-8]" :is-dot="true"></u-badge>
 								</view>
 								<view v-else>
-									<u-badge :offset="[-8,-8]"  :is-dot="true" :count="0"></u-badge>
+									<u-badge :offset="[-8,-8]" :is-dot="true" :count="0"></u-badge>
 								</view>
 							</view>
 
@@ -42,13 +42,11 @@
 					</view>
 					<view class="right">
 						<view class="consumer">
-							本月消费: ￥2230
-						</view>
-						<view class="total">
-							<view>
-								余额：￥
+							<text style="font-weight: bold;">累计收入: ￥</text>
+							<view style="color: red;">
+								<Ellipsis :content="totalSale" :width="120" />
 							</view>
-							<Ellipsis :content="money" :width="90" />
+							
 						</view>
 					</view>
 				</view>
@@ -118,39 +116,47 @@
 	import {
 		commonStore
 	} from '@/stores/store';
+	import {
+		merchantStore
+	} from '@/stores/merchant';
 	export default {
 		setup() {
 			const isRead = ref(false);
 			const store = commonStore();
+			const merchant = merchantStore();
 			const user = userStore();
 			const {
 				userInfo,
 				orderMap
 			} = storeToRefs(user);
+			const {
+				shopInfo
+			} = storeToRefs(merchant);
 			const list = reactive(navList);
 			const money = ref(0);
 			// 订单菜单
 			const orderList = reactive([{
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%BE%85%E5%AE%8C%E6%88%90.png?sign=746d960471d02df9efbc111f2ce19e21&t=1653972109',
 				text: '待支付',
-				url: "/pages/Tourists/Order/Order",
+				url: "/pages/Merchants/OrderCenter/OrderCenter",
 				count: 0
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%BE%85%E6%94%B6%E8%B4%A7.png?sign=e737ce0a901b7541237a98e097478f3b&t=1655528862',
-				text: '待收货',
-				url: "/pages/Tourists/Order/Order",
+				text: '待发货',
+				url: "/pages/Merchants/OrderCenter/OrderCenter",
 				count: 0
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E8%BF%9B%E8%A1%8C%E4%B8%AD.png?sign=a65bd977bb15616d00af63ac7571e698&t=1653974111',
 				text: '待评价',
-				url: "/pages/Tourists/Order/Order",
+				url: "/pages/Merchants/OrderCenter/OrderCenter",
 				count: 0
 			}, {
 				icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%B7%B2%E5%AE%8C%E6%88%90.png?sign=c2f487d81efb16d2d9144f6e18eefe96&t=1653974124',
-				text: '已完成',
-				url: "/pages/Tourists/Order/Order",
+				text: '售后',
+				url: "/pages/Merchants/OrderCenter/OrderCenter",
 				count: 0
 			}]);
+			
 			// 工具菜单
 			const toolList = reactive([{
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%85%B3%E6%B3%A8.png?sign=823e5e8f340f6cf004b527befa4b0b86&t=1653974741',
@@ -199,6 +205,21 @@
 				})
 			}
 
+			const totalSale = ref(0);
+
+			/**
+			 * 查询商铺收入金额
+			 */
+			const getShopTotalSale = async () => {
+				console.log(shopInfo.value);
+				const total = await request('sale', {
+					type: 'queryShopTotalSale',
+					shopId: shopInfo.value._id
+				});
+				console.log(total);
+				totalSale.value = total.data.totalSale;
+			}
+
 			onMounted(() => {});
 			return {
 				list,
@@ -212,18 +233,21 @@
 				toMessageList,
 				gotoSet,
 				store,
-				isRead
+				isRead,
+				totalSale,
+				getShopTotalSale
 			}
 		},
 		async onShow() {
-			this.isRead=this.store.mNoRead;
-			console.log(this.isRead)
+			this.isRead = this.store.mNoRead;
+
 			this.orderList.forEach(item => {
 				item.count = 0;
 			});
 			this.orderMap.forEach((value, key) => {
 				this.orderList[key - 1].count = value;
 			});
+			this.getShopTotalSale();
 			const res = await request('user', {
 				type: 'getMoneyBalance'
 			});
@@ -338,11 +362,13 @@
 						display: flex;
 						justify-content: flex-start;
 						align-items: center;
-						transform: translateX(-42rpx);
+						transform: translateX(-20rpx);
 						height: 100%;
 
 						.consumer {
 							margin-right: 40rpx;
+							display: flex;
+							align-items: center;
 						}
 
 						.total {

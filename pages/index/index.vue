@@ -28,9 +28,14 @@
 	import {
 		userStore
 	} from '@/stores/user';
+	import {
+		merchantStore
+	} from '@/stores/merchant';
 	export default {
 		setup() {
 			const user = userStore();
+			const merchant = merchantStore();
+
 			const loading = ref(true);
 			const videoLoading = ref(true);
 			const mask = ref(false);
@@ -58,6 +63,7 @@
 					status: 0, // 商家
 					type: 'merChantLogin'
 				});
+				user.updateUserInfo(result);
 				await wx.setStorage({
 					key: "userInfo",
 					data: Object.assign(res.userInfo, result),
@@ -83,11 +89,12 @@
 					status: 1, // 游客
 					type: 'touristLogin'
 				});
+				user.updateUserInfo(result);
 				await wx.setStorage({
 					key: "userInfo",
 					data: Object.assign(res.userInfo, result),
 					encrypt: true,
-				})
+				});
 				wx.hideLoading();
 				uni.switchTab({
 					url: "/pages/Tourists/HomeBar/HomeBar"
@@ -97,16 +104,19 @@
 			const loadedmetadata = (e) => {
 				videoLoading.value = false;
 			};
-			
+
 			/**
 			 * 初始化商家数据
 			 */
 			const initMerchantData = async () => {
 				const allRes = await Promise.all([request('order', {
 					type: 'queryOrderStatusMerchant'
+				}), request("shop", {
+					type: "checkCreatedShop"
 				})]);
 				console.log(allRes);
 				user.setOrderMap(allRes[0].data, 0);
+				merchant.initShopInfo(allRes[1].data[0]);
 			}
 
 			/**

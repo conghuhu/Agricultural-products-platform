@@ -32,6 +32,7 @@ const list = reactive([{
 	iconPath: "/static/images/order.png",
 	selectedIconPath: "/static/images/order_fill.png",
 	text: '订单',
+	count: 0,
 	customIcon: false,
 	custom: true,
 	pagePath: "/pages/Merchants/OrderCenter/OrderCenter"
@@ -40,7 +41,7 @@ const list = reactive([{
 	iconPath: "/static/images/me.png",
 	selectedIconPath: "/static/images/me_fill.png",
 	text: '我的',
-	count: 23,
+	count: 0,
 	isDot: false,
 	customIcon: false,
 	custom: true,

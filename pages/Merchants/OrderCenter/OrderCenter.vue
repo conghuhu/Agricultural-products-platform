@@ -530,7 +530,7 @@
 			 */
 			const refreshOrderStatus = async () => {
 				const res = await request('order', {
-					type: 'queryOrderStatus'
+					type: 'queryOrderStatusMerchant'
 				});
 				user.setOrderMap(res.data, 0);
 			}
