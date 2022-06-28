@@ -54,7 +54,7 @@
 	import getUUID from '@/utils/getUUID';
 	export default {
 		setup() {
-			
+			const eventChannel = reactive({});
 			const orderId = ref("");
 			const color = ref("");
 			//产品ID
@@ -64,7 +64,7 @@
 				imageShowList: []
 			});
 			//描述相关
-			const startCount = ref(2)
+			const startCount = ref(4)
 			//相符结果
 			const descriptionInfo = reactive([
 				"非常差", "差", "一般", "好", "非常好"
@@ -129,7 +129,6 @@
 					tagMap.delete(tagInfo[index].title)
 					tagInfo[index].color = "#f4f6f8"
 				}
-
 			}
 			/**
 			 * 移出图片
@@ -139,6 +138,9 @@
 			}
 			//提交评论
 			const sentComment = async () => {
+				uni.showLoading({
+					title: "提交中"
+				});
 				form.goodId = goodId.value;
 				form.startCount = startCount.value;
 				form.content = content.value;
@@ -163,19 +165,22 @@
 						...form
 					}
 				})
-				const goodItem =ref({
-					orderId:orderId.value,
-					goodId:goodId.value
+				const goodItem = ref({
+					orderId: orderId.value,
+					goodId: goodId.value
 				})
-			    console.log(goodItem.value)
-				const temp = await request("order",{
-					type:"completeOrderComment",
-					goodItem:goodItem.value
-				})
-				console.log(temp)
-				await wx.showToast({
+				const temp = await request("order", {
+					type: "completeOrderComment",
+					goodItem: goodItem.value
+				});
+				uni.hideLoading();
+				wx.showToast({
 					title: '发表评论成功',
 					duration: 1000
+				});
+				// 触发上级刷新
+				eventChannel.emit('refresh', {
+					data: {}
 				});
 				setTimeout(() => {
 					uni.navigateBack();
@@ -195,10 +200,13 @@
 				clickTag,
 				color,
 				tagMap,
-				orderId
+				orderId,
+				eventChannel
 			}
 		},
 		async onLoad(data) {
+			Object.assign(this.eventChannel, this.getOpenerEventChannel());
+
 			this.goodId = data.id;
 			this.orderId = data.orderId;
 			console.log(this.orderId)

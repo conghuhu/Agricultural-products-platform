@@ -30,7 +30,8 @@ exports.main = async (event, context) => {
 
 		if (keyword && keyword != "") {
 			temp = await goodDb.where(_.and([{
-						status: true
+						status: true,
+						shopId: _.eq(shopId),
 					},
 					_.or([{
 							goodName: db.RegExp({

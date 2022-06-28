@@ -120,7 +120,7 @@
 							});
 							return;
 						}
-
+						// 订阅消息
 						const templeteList = ['FjniTcotQ5M9gyPI8YQdWlVpmrexOUFZu3O7jHCnE3s'];
 						uni.requestSubscribeMessage({
 							tmplIds: templeteList,

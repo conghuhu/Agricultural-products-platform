@@ -13,6 +13,8 @@ exports.main = async (event, context) => {
 
 	const _ = db.command;
 
+	const log = cloud.logger();
+
 	const {
 		curLocationId,
 		remarkVal,
@@ -47,6 +49,13 @@ exports.main = async (event, context) => {
 				_openid: openid
 			}
 		});
+
+		log.info({
+			name: 'createOrder',
+			message: `用户 ${openid} 创建了 ${addRes._id} 订单`,
+			data: addRes
+		})
+
 		// 2.RPC通知批量删除想要订单
 		cloud.callFunction({
 			// 要调用的云函数名称
@@ -74,11 +83,19 @@ exports.main = async (event, context) => {
 					// 消费者id
 					_openid: openid,
 					shopId: item.shopId,
-					count: item.count
+					count: item.count,
+					// send 是否已发货
+					send: false
 				}
 			});
 			goodOrderIdList.push(goodOrderRes._id);
 		}
+
+		log.info({
+			name: 'createOrder',
+			message: `${addRes._id} 订单生成了各个商品订单`,
+			data: goodOrderIdList
+		});
 
 		// 4.开启15分钟定时器，时间到未付款，取消订单
 		cloud.callFunction({

@@ -290,7 +290,7 @@
 				const res = await request('order', {
 					type: 'queryOrderStatus'
 				});
-				user.setOrderMap(res.data);
+				user.setOrderMap(res.data,1);
 			}
 
 			onMounted(async () => {

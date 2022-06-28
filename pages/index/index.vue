@@ -1,13 +1,12 @@
 <template>
 	<view class="content">
-		<view v-show="!loading">
+		<view v-show="!loading && !videoLoading">
 			<video class="video_back" objectFit="cover" :controls="false" :autoplay="true" :loop="true" :muted="true"
 				@loadedmetadata="loadedmetadata"
 				src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/back.mp4?sign=4d164a9b2c6a6b1d384eb48b89a8a212&t=1653992455"></video>
 
 			<view class="logo">
-				<u-image width="600rpx" mode="aspectFit" height="600rpx"
-					src="/static/images/logo.png">
+				<u-image width="600rpx" mode="aspectFit" height="600rpx" src="/static/images/logo.png">
 				</u-image>
 			</view>
 			<view v-if="!mask" class="action">
@@ -29,10 +28,16 @@
 	import {
 		userStore
 	} from '@/stores/user';
+	import {
+		merchantStore
+	} from '@/stores/merchant';
 	export default {
 		setup() {
 			const user = userStore();
+			const merchant = merchantStore();
+
 			const loading = ref(true);
+			const videoLoading = ref(true);
 			const mask = ref(false);
 			const touristStyle = reactive({
 				marginBottom: '40rpx',
@@ -58,6 +63,7 @@
 					status: 0, // 商家
 					type: 'merChantLogin'
 				});
+				user.updateUserInfo(result);
 				await wx.setStorage({
 					key: "userInfo",
 					data: Object.assign(res.userInfo, result),
@@ -83,11 +89,12 @@
 					status: 1, // 游客
 					type: 'touristLogin'
 				});
+				user.updateUserInfo(result);
 				await wx.setStorage({
 					key: "userInfo",
 					data: Object.assign(res.userInfo, result),
 					encrypt: true,
-				})
+				});
 				wx.hideLoading();
 				uni.switchTab({
 					url: "/pages/Tourists/HomeBar/HomeBar"
@@ -95,17 +102,64 @@
 			}
 
 			const loadedmetadata = (e) => {
-				console.log(e.detail)
+				videoLoading.value = false;
 			};
+
+			/**
+			 * 初始化商家数据
+			 */
+			const initMerchantData = async () => {
+				const allRes = await Promise.all([request('order', {
+					type: 'queryOrderStatusMerchant'
+				}), request("shop", {
+					type: "checkCreatedShop"
+				})]);
+				console.log(allRes);
+				user.setOrderMap(allRes[0].data, 0);
+				merchant.initShopInfo(allRes[1].data[0]);
+			}
+
+			/**
+			 * 初始化游客数据
+			 */
+			const initTouristData = async () => {
+				const allRes = await Promise.all([request('wanted', {
+					type: 'getWanted'
+				}), request('star_focus', {
+					type: 'getOneStarList'
+				}), request('order', {
+					type: 'queryOrderStatus'
+				})]);
+				console.log(allRes);
+
+				// wanted
+				let count = 0;
+				allRes[0].data.forEach(item => {
+					count += item.count;
+					user.wantingGoods.set(item.goodId, item.count);
+				});
+				user.setTotalWantedGoods(count);
+
+				// star_focus
+				allRes[1].data.forEach(item => {
+					user.addToLikeShareSet(item);
+				});
+
+				// order
+				user.setOrderMap(allRes[2].data, 1);
+			}
 			return {
 				user,
 				loading,
+				videoLoading,
 				merChantLogin,
 				touristLogin,
 				touristStyle,
 				merChantStyle,
 				mask,
-				loadedmetadata
+				loadedmetadata,
+				initTouristData,
+				initMerchantData
 			}
 		},
 		async onLoad() {
@@ -117,10 +171,19 @@
 			});
 
 			if (res.data.length === 1) {
-				// console.log(res.data);
+				const currentUserInfo = res.data[0];
+
 				this.mask = true;
-				const curStatus = res.data[0].status;
-				this.user.updateUserInfo(res.data[0]);
+				const curStatus = currentUserInfo.status;
+				this.user.updateUserInfo(currentUserInfo);
+
+				if (curStatus == 0) {
+					this.initMerchantData();
+				} else if (curStatus == 1) {
+					this.initTouristData();
+				} else {
+					throw new Error('未知的人员类型');
+				}
 
 				this.loading = false;
 				wx.hideLoading();
@@ -140,7 +203,6 @@
 				this.loading = false;
 				wx.hideLoading();
 			}
-
 		},
 	}
 </script>

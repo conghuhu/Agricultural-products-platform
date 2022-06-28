@@ -107,10 +107,15 @@
 	import {
 		userStore
 	} from '@/stores/user';
+	import {
+		merchantStore
+	} from '@/stores/merchant';
 
 	export default {
 		setup() {
 			const user = userStore();
+			const merchant = merchantStore();
+
 			const list = reactive(navList);
 			const isNew = ref(false);
 			const totalSale = ref(0);
@@ -172,25 +177,31 @@
 			 * 获取商铺信息
 			 */
 			const getShopInfo = async () => {
-				const {
-					res
-				} = await request("shop", {
+				const res = await request("shop", {
 					type: "checkCreatedShop"
 				});
 				const temp = res.data.length == 0;
 				if (!temp) {
-					console.log(res);
 					Object.assign(shopInfo, res.data[0]);
+					// 初始化shopInfo状态
+					merchant.initShopInfo(res.data[0]);
 				}
 				isNew.value = temp;
 
+				getShopTotalSale();
+
+				await getGoodList();
+			}
+
+			/**
+			 * 查询商铺收入金额
+			 */
+			const getShopTotalSale = async () => {
 				const total = await request('sale', {
 					type: 'queryShopTotalSale',
 					shopId: shopInfo._id
 				})
 				totalSale.value = total.data.totalSale
-
-				await getGoodList();
 			}
 
 			const goodListLoading = ref(true);

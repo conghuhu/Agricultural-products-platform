@@ -3,20 +3,50 @@
 		<view class="centre">
 			<u-empty text="订单为空" mode="order"></u-empty>
 			<view class="explain">
-				<view class="tips">可以去看看有那些想买的</view>
+				<view class="tips">{{tips}}</view>
 			</view>
-			<view class="btn" @click="gotoHome">随便逛逛</view>
+			<view class="btn" @click="gotoHome">{{gotoText}}</view>
 		</view>
 	</view>
 </template>
 
 <script lang="ts">
 	export default {
-		setup() {
+		props: {
+			// 检测类型
+			tips: {
+				type: String,
+				default: '可以去看看有那些想买的',
+				required: false,
+			},
+			// 只能是tarbar界面
+			page: {
+				type: String,
+				default: '/pages/Tourists/HomeBar/HomeBar',
+				required: false
+			},
+			gotoText: {
+				type: String,
+				default: '随便逛逛',
+				required: false
+			},
+			isTarbar: {
+				type: Boolean,
+				default: true,
+				required: false
+			}
+		},
+		setup(props) {
 			const gotoHome = () => {
-				uni.switchTab({
-					url: "/pages/Tourists/HomeBar/HomeBar"
-				})
+				if (props.isTarbar) {
+					uni.switchTab({
+						url: props.page
+					})
+				} else {
+					uni.navigateTo({
+						url: props.page
+					})
+				}
 			};
 			return {
 				gotoHome

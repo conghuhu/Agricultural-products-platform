@@ -10,37 +10,37 @@ const getAllCategory = require('./category/getAllCategory')
 const getGoodsByLocation = require('./goodsCRUD/getGoodsByLocation');
 const getGoodsByScdCategoryId = require('./goodsCRUD/getGoodsByScdCategoryId');
 const getGoodsByKeyword = require('./goodsCRUD/getGoodsByKeyword');
+const downGood = require('./goodsCRUD/downGood');
+
+
+/**
+ * 初始化controllerMap
+ */
+const controllerMap = new Map([
+	['getFirstCategory', getFirstCategory],
+	['getSeondCategory', getSeondCategory],
+	['addGood', addGood],
+	['getGoods', getGoods],
+	['getGoodById', getGoodById],
+	['updateGoodById', updateGoodById],
+	['deleteGoodById', deleteGoodById],
+	['getAllCategory', getAllCategory],
+	['getGoodsByLocation', getGoodsByLocation],
+	['getGoodsByScdCategoryId', getGoodsByScdCategoryId],
+	['getGoodsByKeyword', getGoodsByKeyword],
+	['downGood', downGood]
+]);
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-	switch (event.type) {
-		case 'getFirstCategory':
-			return await getFirstCategory.main(event, context);
-		case 'getSeondCategory':
-			return await getSeondCategory.main(event, context);
-		case 'addGood':
-			return await addGood.main(event, context);
-		case 'getGoods':
-			return await getGoods.main(event, context);
-		case 'getGoodById':
-			return await getGoodById.main(event, context);
-		case 'updateGoodById':
-			return await updateGoodById.main(event, context);
-		case 'deleteGoodById':
-			return await deleteGoodById.main(event, context);
-		case 'getAllCategory':
-			return await getAllCategory.main(event, context);
-		case 'getGoodsByLocation':
-			return await getGoodsByLocation.main(event, context);
-		case 'getGoodsByScdCategoryId':
-			return await getGoodsByScdCategoryId.main(event, context);
-		case 'getGoodsByKeyword':
-			return await getGoodsByKeyword.main(event,context);
-		default:
-			return {
-				success: false,
-					message: '未找到指定的函数，请检查type',
-					data: null,
-			};
+	const type = event.type;
+	if (controllerMap.has(type)) {
+		return await controllerMap.get(type).main(event, context);
+	} else {
+		return {
+			success: false,
+			message: '未找到指定的函数，请检查type',
+			data: null,
+		};
 	}
 }

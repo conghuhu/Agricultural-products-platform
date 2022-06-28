@@ -91,7 +91,6 @@
 
 	export default {
 		setup() {
-			const userId = ref('');
 			const goodInfo = reactive({
 				expirationDate: "",
 				firstCategoryName: "",
@@ -208,13 +207,9 @@
 					type: 'querySaleMonth',
 					goodId: goodId
 				});
-
-				console.log(res);
 				for (let i = 0; i < res.data.length; i++) {
 					goodMonthSaleInfo.push(res.data[i]);
 				}
-				console.log(goodMonthSaleInfo);
-
 			}
 			/**
 			 * 操作分发
@@ -234,22 +229,26 @@
 						title: "确定要下架该商品吗？",
 						success: async function(res) {
 							if (res.confirm) {
-								console.log('用户点击确定');
-								const db = wx.cloud.database();
-								const _ = db.command;
 
-								const res = await db.collection('goods').where({
-									_id: _.eq(goodInfo._id),
-									_openid: _.eq(userId.value)
-								}).update({
-									data: {
-										status: false,
-										unit: '两'
+								try {
+									const res = await request('goods', {
+										type: 'downGood',
+										goodId: goodInfo._id
+									});
+
+									if (res.errMsg === "document.update:ok") {
+										uni.showToast({
+											title: '下架成功'
+										});
+									} else {
+										throw new Error(res.errMsg);
 									}
-								})
-								uni.showToast({
-									title: '下架成功'
-								})
+								} catch (e) {
+									console.trace(e);
+									uni.showToast({
+										title: '下架失败'
+									});
+								}
 								setTimeout(() => {
 									uni.navigateBack();
 								}, 1000);
@@ -264,7 +263,6 @@
 				actionSheetShow,
 				actionList,
 				clickAction,
-				userId,
 				refreshData,
 				getSaleData,
 				getMonthSaleData,
@@ -275,14 +273,8 @@
 			}
 		},
 		async onLoad(option) {
-			await this.refreshData(option.goodId);
-			await this.getSaleData(option.goodId);
-			await this.getMonthSaleData(option.goodId);
-			// const ans = await wx.getStorage({
-			// 	key: 'userInfo',
-			// 	encrypt: true,
-			// });
-			// this.userId = ans.data.openid;
+			await Promise.all([this.refreshData(option.goodId), this.getSaleData(option.goodId), this.getMonthSaleData(
+				option.goodId)]);
 			this.loading = false;
 		},
 		async onReady() {

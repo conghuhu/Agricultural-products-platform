@@ -15,6 +15,8 @@
 			const store = commonStore();
 
 			const timer = ref < NodeJS.Timeout > ();
+			
+			// 获取未读
 			const getRead = async () => {
 				const mNoRead: {
 					data: Array < any >
@@ -72,37 +74,13 @@
 			console.log('App Launch');
 		},
 		async onShow() {
+			// 为节省流量，平时关闭
 			// this.setTimer();
-			const res = await Promise.all([request('wanted', {
-				type: 'getWanted'
-			}), request('star_focus', {
-				type: 'getOneStarList'
-			}), request('order', {
-				type: 'queryOrderStatus'
-			})]);
-			console.log(res);
-			// wanted
-			let count = 0;
-			res[0].data.forEach(item => {
-				count += item.count;
-				this.user.wantingGoods.set(item.goodId, item.count);
-			});
-			this.user.setTotalWantedGoods(count);
 
-			// star_focus
-			res[1].data.forEach(item => {
-				this.user.addToLikeShareSet(item);
-			});
 
-			// order
-			this.user.setOrderMap(res[2].data);
-
-			// console.log(this.user.wantingGoods)
-			console.log('App Show');
 		},
 		async onHide() {
 			console.log('App Hide');
-
 			clearTimeout(this.timer)
 		}
 	}
