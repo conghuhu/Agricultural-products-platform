@@ -267,9 +267,8 @@
 			})
 			Object.assign(this.goodInfo, res.data);
 			console.log(res);
-<<<<<<< HEAD
+
 			this.countLine=this.comments.length-1;
-=======
 			
 			//埋点---访问量
 			const resView = await request('page_view', {
@@ -277,7 +276,6 @@
 				goodId: goodIdRes
 			})
 			console.log(resView);
->>>>>>> ee817c5fa539882b4b46fb0d46ade0bd2090eb90
 		}
 	}
 </script>
