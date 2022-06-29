@@ -68,7 +68,8 @@
 					<view class="comment_card" v-for="(item,index) in comments">
 						<view class="user_card">
 							<view class="user_touxiang">
-								<u-image width="100%" shape="circle" height="80rpx" mode="heightFix" :src="item.userInfo.avatarUrl">
+								<u-image width="100%" shape="circle" height="60rpx" mode="heightFix"
+									:src="item.userInfo.avatarUrl">
 								</u-image>
 							</view>
 							<view class="user_info">
@@ -77,17 +78,16 @@
 							</view>
 							<view class="user_xingxing">
 								<u-rate active-color="#ffaa00" :count="5" size="28" gutter="10"
-									v-model="item.startCount"></u-rate> 
+									v-model="item.startCount"></u-rate>
 							</view>
 						</view>
 						<view class="mid">
-							<view class="time">{{dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
-							<view class="tag" >
-								<view class="tagContent"  v-for="data in item.tagContent">
+							<view class="time">{{dayjs(item.createTime).format('YYYY-MM-DD HH:mm')}}</view>
+							<view class="tag">
+								<view class="tagContent" v-for="(data,idx) in item.tagContent" :key="idx">
 									<u-tag :text="data" shape="circle" type="info" />
 								</view>
 							</view>
-							
 						</view>
 						<view class="pinglun_content">
 							{{item.content}}
@@ -102,7 +102,7 @@
 							<u-line color="#606266" />
 						</view>
 						<view v-else></view>
-						
+
 					</view>
 				</view>
 
@@ -257,19 +257,21 @@
 				type: 'getGoodById',
 				goodId: goodIdRes
 			})
-			const temp:{data:Array<any>} = await request('comments', {
+			const temp: {
+				data: Array < any >
+			} = await request('comments', {
 				type: "getGoodsComment",
 				goodId: goodIdRes
 			})
 			console.log(temp.data)
-			temp.data.forEach(item=>{
+			temp.data.forEach(item => {
 				this.comments.push(item)
 			})
 			Object.assign(this.goodInfo, res.data);
 			console.log(res);
 
-			this.countLine=this.comments.length-1;
-			
+			this.countLine = this.comments.length - 1;
+
 			//埋点---访问量
 			const resView = await request('page_view', {
 				type: 'addView',
@@ -546,23 +548,28 @@
 
 						.mid {
 							display: flex;
-							.tag{
-								flex: 2;
+							margin-top: 10rpx;
+
+							.tag {
+								flex: 1;
 								display: flex;
 								flex-wrap: wrap;
-								.tagContent{
-									align-items: center;
+
+								.tagContent {
+									margin-bottom: 6rpx;
+									margin-right: 8rpx;
 								}
 							}
+
 							.time {
 								align-items: center;
-								margin-right: 10rpx;
+								margin-right: 16rpx;
 								margin-left: 32rpx;
 								margin-top: 14rpx;
 								font-family: SourceHanSansCN-ExtraLight;
-								font-size: 13px;
+								font-size: 26rpx;
 								font-weight: 500;
-								line-height: 11px;
+								line-height: 30rpx;
 								letter-spacing: 0px;
 								color: $u-content-color;
 							}
@@ -619,7 +626,6 @@
 								margin-left: 16rpx;
 								display: flex;
 								align-items: center;
-								width: 20vw;
 
 								.xingxing {
 									width: 100%;

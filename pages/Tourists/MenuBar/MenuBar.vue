@@ -2,10 +2,10 @@
 	<view class="fullScreen">
 		<Nav title="种草"></Nav>
 		<view class="top_tool">
-			<view class="release" @click="gotoRelease">
+<!-- 			<view class="release" @click="gotoRelease">
 				<u-image height="54rpx" width="54rpx" mode="aspectFill"
 					src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/release.png?sign=3e50de66fc62aa3c609afaa17a9fd90d&t=1652690449" />
-			</view>
+			</view> -->
 			<view class="search">
 				<view class="search_content">
 					<u-search borderColor="#909399" placeholder="请输入关键字" v-model="keyword" :clearabled="true"
@@ -33,6 +33,10 @@
 				</u-waterfall>
 			</block>
 		</view>
+		<view class="release" @click="gotoRelease">
+			<u-image mode="aspectfit" width="90%" height="90%" src="/static/images/upload.png"></u-image>
+		</view>
+		
 		<u-tabbar :list="list" :mid-button="true"></u-tabbar>
 	</view>
 
@@ -103,9 +107,14 @@
 		},
 		async onLoad() {
 			// await this.init();
+			uni.startPullDownRefresh();
 		},
 		async onShow() {
+			// await this.init();
+		},
+		async onPullDownRefresh() {
 			await this.init();
+			uni.stopPullDownRefresh();
 		}
 
 	}
@@ -130,11 +139,6 @@
 			z-index: 99;
 			background-color: $background-color;
 
-			.release {
-				padding: 6rpx;
-				flex: 1;
-			}
-
 			.search {
 				flex: 7;
 				display: flex;
@@ -157,6 +161,17 @@
 			background-color: $background-color;
 			padding-bottom: 50rpx;
 			margin-top: 100rpx;
+		}
+		
+		.release {
+			padding: 6rpx;
+			flex: 1;
+			width: 100rpx;
+			height: 100rpx;
+			position: fixed;
+			right: 40rpx;
+			bottom: calc(160rpx + env(safe-area-inset-bottom));
+			z-index: 9999;
 		}
 	}
 </style>

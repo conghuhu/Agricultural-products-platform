@@ -15,8 +15,8 @@ const list = reactive([{
 	pagePath: "/pages/Tourists/ClassificationBar/ClassificationBar"
 },
 {
-	iconPath: "/static/images/upload.png",
-	selectedIconPath: "/static/images/upload.png",
+	iconPath: "/static/images/seeding.png",
+	selectedIconPath: "/static/images/seeding.png",
 	text: '种草',
 	midButton: true,
 	customIcon: false,
