@@ -65,6 +65,51 @@
 						v-model="currentTab" @change="changeTab" :clickChange="true" />
 				</view>
 				<view class="body_content" v-if="currentTab == 0">
+					<view v-if="countLine==0">
+						<u-empty text="评论为空" mode="data"></u-empty>
+					</view>
+					<view v-else>
+						<view class="comment_card" v-for="(item,index) in comments">
+							<view class="user_card">
+								<view class="user_touxiang">
+									<u-image width="100%" shape="circle" height="80rpx" mode="heightFix" :src="item.userInfo.avatarUrl">
+									</u-image>
+								</view>
+								<view class="user_info">
+									<view class="user_name">{{item.userInfo.nickName}}</view>
+						
+								</view>
+								<view class="user_xingxing">
+									<u-rate active-color="#ffaa00" :count="5" size="28" gutter="10"
+										v-model="item.startCount"></u-rate> 
+								</view>
+							</view>
+							<view class="mid">
+								<view class="time">{{dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+								<view class="tag" >
+									<view class="tagContent"  v-for="data in item.tagContent">
+										<u-tag :text="data" shape="circle" type="info" />
+									</view>
+								</view>
+								
+							</view>
+							<view class="pinglun_content">
+								{{item.content}}
+							</view>
+							<view class="pinglun_image">
+								<view class="image_info">
+									<u-upload :fileList="item.imageList.map(item=>{return{
+										url:item
+									} })" :maxCount="item.imageList.length" :deletable="false"></u-upload>
+								</view>
+							</view>
+							<view v-if="index!=countLine-1">
+								<u-line color="#92959b" />
+							</view>
+							<view v-else></view>
+							
+						</view>
+					</view>
 					<view class="comment_card" v-for="(item,index) in comments">
 						<view class="user_card">
 							<view class="user_touxiang">
@@ -104,6 +149,7 @@
 						<view v-else></view>
 
 					</view>
+					
 				</view>
 
 				<view class="body_content" v-else-if="currentTab == 1">
@@ -269,9 +315,7 @@
 			})
 			Object.assign(this.goodInfo, res.data);
 			console.log(res);
-
-			this.countLine = this.comments.length - 1;
-
+			this.countLine=this.comments.length;
 			//埋点---访问量
 			const resView = await request('page_view', {
 				type: 'addView',
@@ -652,9 +696,10 @@
 							margin-right: 40rpx;
 
 							.image_info {
+								margin-bottom: 20rpx;
+								display: flex;
 								margin-left: 26rpx;
-								width: 25vw;
-								height: 25vw;
+								width: 100%;
 							}
 						}
 					}
