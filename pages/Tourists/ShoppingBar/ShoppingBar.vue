@@ -12,7 +12,7 @@
 						<view class="good_content">
 							<view class="list_left">
 								<u-image height="25vw" width="25vw" mode="aspectFit"
-									:src="item.goodInfo[0].imageShowList[0]">
+									:src="item.goodInfo.length == 0 ? '': item.goodInfo[0].imageShowList[0]">
 								</u-image>
 							</view>
 							<view class="list_right">
@@ -137,6 +137,7 @@
 				const res = await request('wanted', {
 					type: 'getWanted'
 				});
+				console.log(res)
 				wantList.length = 0;
 				res.data.forEach(item => {
 					wantList.push({

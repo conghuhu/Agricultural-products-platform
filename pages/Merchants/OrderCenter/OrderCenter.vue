@@ -120,7 +120,7 @@
 										<view class="bottom_right">
 											<view class="cancel btn">查看物流</view>
 											<view class="concat btn" @click.stop="concatTourist(item)">联系客户</view>
-											<view class="pay btn">去发货</view>
+											<view class="pay btn" @click.stop="gotoDeliverGood(item)">去发货</view>
 										</view>
 									</view>
 								</view>
@@ -545,6 +545,24 @@
 				})
 			}
 
+			/**
+			 * 去发货
+			 */
+			const gotoDeliverGood = async (item) => {
+				console.log(item);
+				uni.showLoading({
+					title: '加载中'
+				})
+				const res = await request('order', {
+					type: 'deliverGoodMerchant',
+					orderId: item.orderId,
+					goodId: item._id
+				});
+				console.log(res);
+				uni.hideLoading();
+				initData(2);
+			}
+
 			return {
 				list,
 				current,
@@ -574,7 +592,8 @@
 				shopInfo,
 				waitPayGoodList,
 				concatTourist,
-				gotoGoodDetail
+				gotoGoodDetail,
+				gotoDeliverGood
 			}
 		},
 		async onLoad(option) {

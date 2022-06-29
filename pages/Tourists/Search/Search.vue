@@ -17,8 +17,8 @@
 					<view class="content">搜索发现</view>
 					<view class="tag">
 						<view class="tag_content" v-for="(item,index) in recommendWords" :key="item._id">
-							<u-tag size="large" v-if="item.count > 5" :text="item.keyword" @click="selectTag(item.keyword)"
-								type="error" mode="dark" shape="circle" />
+							<u-tag size="large" v-if="item.count > 5" :text="item.keyword"
+								@click="selectTag(item.keyword)" type="error" mode="dark" shape="circle" />
 							<u-tag size="large" v-else :text="item.keyword" @click="selectTag(item.keyword)"
 								borderColor="transparent" type="info" mode="plain" shape="circle" />
 						</view>
@@ -29,16 +29,19 @@
 						<view class="top_left">商品热卖榜</view>
 						<view class="top_right">全部></view>
 					</view>
-					<view class="card_content">
+					<view class="card_content" v-for="item in hotGoodList" :key="item._id"
+						@click="gotoGoodDetail(item)">
 						<view class="content_info">
 							<view class="info_image">
-								<u-image width="100%" mode="widthFix" height="80px"
-									src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/categoryItem/%E7%95%AA%E8%8C%84.png?sign=a4138baa8d9412d42351c075c5151389&t=1654133092">
+								<u-image width="100%" mode="aspectFit" height="100%" :src="item.imageShowList[0]">
 								</u-image>
 							</view>
 							<view class="info_right">
-								<view class="right_top">蔬菜热卖榜</view>
-								<view class="right_bottom">热卖指数92.5</view>
+								<view class="right_top">{{item.goodName}}</view>
+								<view class="right_bottom">
+									<text>销量：</text>
+									<text>{{item.totalSale}}</text>
+								</view>
 							</view>
 						</view>
 					</view>
@@ -70,6 +73,8 @@
 
 			const loading = ref(true);
 
+			const hotGoodList = reactive([]);
+
 			const searchContent = () => {
 				uni.navigateTo({
 					url: `/pages/Tourists/SearchContent/SearchContent?keyword=${keyword.value}`
@@ -81,21 +86,42 @@
 				searchContent();
 			};
 
+			const getHotGoodList = async () => {
+				const res = await request('hot', {
+					type: 'getHotGoods'
+				})
+				console.log(res);
+				hotGoodList.length = 0;
+				res.data.forEach(item => {
+					hotGoodList.push(item);
+				})
+			}
+
+			const gotoGoodDetail = (item) => {
+				uni.navigateTo({
+					url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${item._id}`
+				})
+			}
+
 			return {
 				search_btn_style,
 				searchContent,
 				keyword,
 				selectTag,
 				recommendWords,
-				loading
+				loading,
+				hotGoodList,
+				getHotGoodList,
+				gotoGoodDetail
 			}
 		},
 		async onLoad(option) {
-			const res = await request('recommend', {
+			const res = await Promise.all([request('recommend', {
 				type: 'getHotwords'
-			});
+			}), this.getHotGoodList()])
+
 			this.recommendWords.length = 0;
-			res.data.forEach(item => {
+			res[0].data.forEach(item => {
 				this.recommendWords.push(item);
 			});
 			this.loading = false;
@@ -203,7 +229,7 @@
 					.info_image {
 						margin: 10rpx;
 						width: 22vw;
-
+						height: 22vw;
 					}
 
 					.info_right {
@@ -213,14 +239,14 @@
 
 						.right_top {
 							margin-left: 20rpx;
-							font-size: 14px;
+							font-size: 32rpx;
 							font-weight: bold;
 						}
 
 						.right_bottom {
 							margin-top: 20rpx;
 							margin-left: 20rpx;
-							font-size: 11px;
+							font-size: 30rpx;
 							color: #ff0000;
 							font-weight: bold;
 						}

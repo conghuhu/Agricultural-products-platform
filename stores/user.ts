@@ -124,7 +124,7 @@ export const userStore = defineStore('user', () => {
 		});
 		if (type === 0) {
 			merchantNavList[3].count = total;
-			merchantNavList[4].count += total;
+			merchantNavList[4].count = total;
 		} else if (type === 1) {
 			navList[4].count = total;
 		} else {

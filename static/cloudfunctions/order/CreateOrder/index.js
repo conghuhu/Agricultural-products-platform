@@ -29,6 +29,7 @@ exports.main = async (event, context) => {
 		const orderDb = db.collection('order');
 		const goodOrderDb = db.collection('good-orders');
 		const shopDb = db.collection('shops');
+		
 		// 1.将订单入库
 		const addRes = await orderDb.add({
 			data: {
