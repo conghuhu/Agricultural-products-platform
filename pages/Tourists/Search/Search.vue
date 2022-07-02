@@ -88,7 +88,8 @@
 
 			const getHotGoodList = async () => {
 				const res = await request('hot', {
-					type: 'getHotGoods'
+					type: 'getHotGoods',
+					limit: 5
 				})
 				console.log(res);
 				hotGoodList.length = 0;

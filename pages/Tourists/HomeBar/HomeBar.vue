@@ -26,21 +26,25 @@
 				<text class="today_text">今日精选商品</text>
 			</view>
 			<scroll-view class="scroll_view_card" scroll-x="true" scroll-y="false">
-				<view class="inline_card_contain" v-for="(item,index) in viewList" :key="index">
+				<view class="" v-if="hotGoodLoading">
+					<MyLoading />
+				</view>
+				<view v-else class="inline_card_contain" v-for="(item,index) in hotGoodList" :key="item._id">
 					<view class="swiper_card" @click="gotoGoodDetail(item)">
 						<view class="card_top">
 							<u-image borderRadius="16rpx" height="100%" width="100%" mode="aspectFill"
-								:src="item.image">
+								:src="item.imageShowList[0]">
 							</u-image>
 						</view>
 						<view class="card_bottom">
 							<view class="bottom_left">
-								<view class="left_title">{{item.title}}</view>
-								<view class="left_location">{{item.loacation}}</view>
+								<view class="left_title">{{item.goodName}}</view>
+								<view class="left_location">{{item.originPlace}}</view>
 							</view>
 							<view class="bottom_right">
-								<view class="right_left">{{item.leftMoney}}</view>
-								<view class="right_right">{{item.rightMoney}}</view>
+								<view class="right_left">{{item.goodPrice}}</view>
+								<text>元/</text>
+								<view class="right_right">{{item.unit}}</view>
 							</view>
 						</view>
 					</view>
@@ -215,11 +219,9 @@
 			 * 跳转至该商品详情页
 			 */
 			const gotoGoodDetail = (item) => {
-				console.log(item);
-				// const goodId = "b69f67c06281bcfa02f3ffff249f0611";
-				// uni.navigateTo({
-				// 	url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${goodId}`
-				// })
+				uni.navigateTo({
+					url: `/pages/Tourists/GoodDetail/GoodDetail?goodId=${item._id}`
+				})
 			}
 
 			/**
@@ -240,6 +242,20 @@
 					url: "../Search/Search"
 				})
 			}
+			const hotGoodList = reactive([]);
+			const hotGoodLoading = ref(true);
+			const getHotGoodList = async () => {
+				hotGoodLoading.value = true;
+				const res = await request('hot', {
+					type: 'getHotGoods',
+					limit: 5
+				})
+				hotGoodList.length = 0;
+				res.data.forEach(item => {
+					hotGoodList.push(item);
+				})
+				hotGoodLoading.value = false;
+			}
 			return {
 				list,
 				rightClick,
@@ -252,12 +268,16 @@
 				currentLocationVal,
 				goodListLoading,
 				categoryLoading,
-				toSearch
+				toSearch,
+				hotGoodList,
+				getHotGoodList,
+				hotGoodLoading
 			}
 		},
 		async onLoad() {
 			this.categoryLoading = true;
 			this.getGoodsList();
+			this.getHotGoodList();
 			const temp: {
 				data: Array < any >
 			} = await request("goods", {

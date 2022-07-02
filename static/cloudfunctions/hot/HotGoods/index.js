@@ -12,6 +12,10 @@ const db = cloud.database();
  */
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
+	
+	const {
+		limit
+	} = event;
 
 	let res = {};
 
@@ -57,7 +61,7 @@ exports.main = async (event, context) => {
 		res = {
 			success: true,
 			message: "",
-			data: sortdataList.slice(0, 5)
+			data: sortdataList.slice(0, limit)
 		}
 	} catch (e) {
 		//TODO handle the exception
