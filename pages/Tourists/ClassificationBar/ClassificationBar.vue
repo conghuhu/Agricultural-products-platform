@@ -2,8 +2,8 @@
 	<view class="fullScreen">
 		<Nav title="分类"></Nav>
 		<view class="u-wrap">
-			<MyLoading v-if="loading" />
-			<view v-else class="u-menu-wrap">
+			<MyLoading v-show="loading" />
+			<view v-show="!loading" class="u-menu-wrap">
 				<scroll-view scroll-y scroll-with-animation class="u-tab-view menu-scroll-view" :scroll-top="scrollTop"
 					:scroll-into-view="itemId">
 					<view v-for="(item,index) in tabbar" :key="index" class="u-tab-item"
@@ -73,6 +73,7 @@
 				menuHeight,
 				menuItemHeight
 			})
+			const init = ref(true);
 			const _this = getCurrentInstance();
 
 			// 点击左边的栏目切换
@@ -217,7 +218,8 @@
 				getAllGoods,
 				toPage,
 				currentCategory,
-				loading
+				loading,
+				init
 			}
 		},
 
@@ -225,13 +227,16 @@
 			await this.getAllGoods();
 			this.loading = false;
 			await this.getMenuItemTop();
-			this.swichMenu(this.currentCategory);
+			await this.swichMenu(this.currentCategory);
+			this.init = false;
 		},
 		async onReady() {
 
 		},
 		async onShow() {
-			this.swichMenu(this.currentCategory);
+			if (!this.init) {
+				await this.swichMenu(this.currentCategory);
+			}
 		}
 
 	}

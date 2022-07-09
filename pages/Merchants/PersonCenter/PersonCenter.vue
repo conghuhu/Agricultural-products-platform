@@ -158,17 +158,17 @@
 
 			// 工具菜单
 			const toolList = reactive([{
-					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%85%B3%E6%B3%A8.png?sign=823e5e8f340f6cf004b527befa4b0b86&t=1653974741',
+					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/subscribed.png?sign=69ec2849d3541c391f876fe03c1a3192&t=1657330082',
 					text: '订阅',
 					type: 'subscribe',
 				},
 				{
-					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E7%A7%8D%E8%8D%89.png?sign=7734a781e420ca814fc11074939baaae&t=1655528876',
-					text: '种草',
-					url: '/pages/Tourists/Location/Location'
+					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E4%BF%AE%E6%94%B9.png?sign=0afab3b5bfb96a3281e33a6699f42262&t=1657330206',
+					text: '店铺',
+					url: '/pages/Merchants/CreateShop/CreateShop?mode=edit'
 				}, {
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%9C%B0%E5%9D%80.png?sign=cec3bc5ea67c8dec43c79dabb404e261&t=1653982220',
-					text: '地址',
+					text: '打烊',
 					url: '/pages/Tourists/Location/Location'
 				}, {
 					icon: 'https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/material/%E5%AE%A2%E6%9C%8D.png?sign=e3c73806b4be9918334f5284c48ca9ae&t=1653982332',
@@ -312,12 +312,12 @@
 	.fullScreen {
 		height: 100vh;
 		width: 100%;
-		background-color: #F3F3F3;
+		background-color: $background-color;
 		position: relative;
 		font-size: 32rpx;
 
 		.content {
-			background-color: #F3F3F3;
+			background-color: $background-color;
 
 			.top_back {
 				width: 100%;

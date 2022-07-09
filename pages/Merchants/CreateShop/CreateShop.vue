@@ -1,6 +1,6 @@
 <template>
 	<view class="fullScreen">
-		<Nav title="创建店铺" isBack />
+		<Nav :title="title" isBack />
 		<view class="content">
 			<u-form :labelWidth="160" :model="createShopForm" ref="createShopFormRef">
 				<u-form-item label="用户名" prop="username">
@@ -16,13 +16,22 @@
 					<u-input v-model="createShopForm.description" type="textarea" placeholder="请输入商铺简介" />
 				</u-form-item>
 				<u-form-item label="店铺头像" prop="shopAvatar">
-					<u-upload @on-choose-complete="chooseComplete" @on-remove="removeImg" :auto-upload="false"
-						:max-size="5 * 1024 * 1024" max-count="1"></u-upload>
+					<block v-if="mode === 'edit'">
+						<u-upload :fileList="createShopForm.shopAvatar !== '' ? [{
+							url: createShopForm.shopAvatar
+						}]:[]" @on-choose-complete="chooseComplete" @on-remove="removeImg" :auto-upload="false"
+							:max-size="5 * 1024 * 1024" max-count="1"></u-upload>
+					</block>
+					<block v-else>
+						<u-upload @on-choose-complete="chooseComplete" @on-remove="removeImg" :auto-upload="false"
+							:max-size="5 * 1024 * 1024" max-count="1"></u-upload>
+					</block>
 				</u-form-item>
 			</u-form>
 		</view>
 		<view class="submit">
-			<u-button type="primary" @click="submitCreateShop">创建</u-button>
+			<u-button v-if="mode === 'edit'" type="primary" @click="submitEditShop">提交</u-button>
+			<u-button v-else type="primary" @click="submitCreateShop">创建</u-button>
 		</view>
 	</view>
 </template>
@@ -40,9 +49,18 @@
 	import {
 		userStore
 	} from '@/stores/user';
+	import {
+		merchantStore
+	} from '@/stores/merchant';
 	import getUUID from '@/utils/getUUID';
+	import isCloudImg from '@/utils/isCloudImg';
 	export default {
 		setup() {
+			const title = ref('创建店铺');
+			const mode = ref('create');
+			const loading = ref(true);
+
+			const merchant = merchantStore();
 			const user = userStore();
 			/**
 			 * 创建表单ref
@@ -89,6 +107,7 @@
 			 * 移出图片
 			 */
 			const removeImg = async (index, lists) => {
+				console.log(lists)
 				createShopForm.shopAvatar = "";
 			}
 			/**
@@ -128,28 +147,6 @@
 								console.log(res);
 								// 申请订阅成功
 								if (res.errMsg === 'requestSubscribeMessage:ok') {
-									// 	wx.cloud
-									// 		.callFunction({
-									// 			name: 'subscribe',
-									// 			data: {
-									// 				data: item,
-									// 				templateId: templeteList[0],
-									// 			},
-									// 		})
-									// 		.then(() => {
-									// 			uni.showToast({
-									// 				title: '订阅成功',
-									// 				icon: 'success',
-									// 				duration: 2000,
-									// 			});
-									// 		})
-									// 		.catch(() => {
-									// 			uni.showToast({
-									// 				title: '订阅失败',
-									// 				icon: 'success',
-									// 				duration: 2000,
-									// 			});
-									// 		});
 
 								} else {
 
@@ -196,21 +193,92 @@
 				})
 			}
 
+			const initEditMode = async () => {
+				mode.value = "edit";
+				title.value = "编辑商铺信息";
+				const shopId = merchant.shopInfo._id;
+				const res = await request('shop', {
+					type: 'getShopInfo',
+					shopId: shopId
+				});
+				const shopInfo = res.data;
+				Object.assign(createShopForm, shopInfo);
+			}
+
+			const submitEditShop = async () => {
+				await createShopFormRef.value.validate(async (valid) => {
+					if (valid) {
+						if (createShopForm.shopAvatar == "") {
+							uni.showToast({
+								icon: 'error',
+								title: '请上传店铺头像'
+							});
+							return;
+						}
+						uni.showLoading({
+							title: '提交中',
+						});
+						try {
+							if (!isCloudImg(createShopForm.shopAvatar)) {
+								const file = await wx.cloud.uploadFile({
+									cloudPath: 'shop/' + new Date().getTime() +
+										getUUID() + 'img.jpg',
+									filePath: createShopForm.shopAvatar,
+								});
+								createShopForm.shopAvatar = file.fileID;
+							}
+
+							const res = await request("shop", {
+								type: "editShop",
+								createShopForm
+							})
+							uni.hideLoading();
+
+							uni.showToast({
+								icon: res.success ? 'success' : 'error',
+								title: res.message
+							})
+
+							setTimeout(() => {
+								uni.navigateBack();
+							}, 1500);
+						} catch (e) {
+							console.trace(e);
+							uni.showToast({
+								icon: 'error',
+								title: "修改失败"
+							})
+						}
+					} else {
+						console.log("验证失败")
+					}
+				})
+			}
+
 			return {
+				title,
 				createShopFormRef,
 				submitCreateShop,
 				getUserInfoFromLocal,
 				rules,
 				createShopForm,
 				chooseComplete,
-				removeImg
+				removeImg,
+				initEditMode,
+				mode,
+				submitEditShop
 			}
 		},
-		async onReady() {
+		async onLoad(option) {
 			const res = await this.getUserInfoFromLocal();
 			this.createShopForm.username = res.nickName;
 			this.createShopFormRef.setRules(this.rules);
-		},
+
+			const mode = option.mode;
+			if (mode === 'edit') {
+				this.initEditMode();
+			}
+		}
 	}
 </script>
 

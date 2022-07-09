@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="fullScreen">
 		<Nav title="商品上架" :isBack="true" />
 		<view class="content">
 			<u-form :model="form" ref="formRef" :label-width="150">
@@ -76,7 +76,7 @@
 	import getUUID from '@/utils/getUUID';
 
 	export default {
-		setup() {
+		setup() {	
 			const form = reactive({
 				goodName: '',
 				goodPrice: NaN,
@@ -347,10 +347,19 @@
 </script>
 
 <style lang="scss" scoped>
-	.content {
+	.fullScreen {
+		height: 100vh;
+		width: 100%;
+		background-color: $background-color;
 		position: relative;
-		display: flex;
-		flex-direction: column;
-		padding: 30rpx;
+		font-size: 32rpx;
+
+		.content {
+			background-color: $background-color;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			padding: 30rpx;
+		}
 	}
 </style>

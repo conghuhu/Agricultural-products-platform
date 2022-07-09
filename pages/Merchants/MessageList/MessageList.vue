@@ -4,18 +4,18 @@
 		<view v-if="loading">
 			<MyLoading></MyLoading>
 		</view>
-		<block v-else>
+		<view class="content" v-else>
 			<uni-list>
 				<uni-list :border="true" v-for="(item,index) in showMessage">
 					<!-- 右侧带角标 -->
-					<uni-list-chat :clickable="true" :to="`../ChatRoom/ChatRoom?openId=${item.openId}`" :avatar-circle="true"
-						:title="item.o_userInfo.nickName" :avatar="item.o_userInfo.avatarUrl" :note="item.content"
-						:time="dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')" :badge-text="item.num"
-						:badge-style="{backgroundColor:'#FF80AB'}"></uni-list-chat>
+					<uni-list-chat :clickable="true" :to="`../ChatRoom/ChatRoom?openId=${item.openId}`"
+						:avatar-circle="true" :title="item.o_userInfo.nickName" :avatar="item.o_userInfo.avatarUrl"
+						:note="item.content" :time="dayjs(item._createTime).format('YYYY-MM-DD HH:mm:ss')"
+						:badge-text="item.num" :badge-style="{backgroundColor:'#FF80AB'}"></uni-list-chat>
 				</uni-list>
 			</uni-list>
-		</block>
-		
+		</view>
+
 	</view>
 </template>
 
@@ -28,7 +28,7 @@
 	import dayjs from 'dayjs';
 
 	export default {
-			
+
 		setup() {
 			//loading
 			const loading = ref(true);
@@ -68,19 +68,19 @@
 				dayjs,
 				showMessage,
 				loading
-				
+
 			}
 		},
 		async onShow() {
-			this.loading=true
-			this.showMessage.length=0;
+			this.loading = true
+			this.showMessage.length = 0;
 			const res: {
 				data: Array < any >
 			} = await request("message", {
 				type: "messageListGet",
 			});
 			console.log(res)
-			this.messageList.length=0;
+			this.messageList.length = 0;
 			await res.data.forEach(item => {
 				this.messageList.push(item);
 			})
@@ -90,34 +90,46 @@
 				type: "messageListCount"
 			})
 			console.log(temp)
-			const idMap = reactive<Map<String,String>>(new Map());
+			const idMap = reactive < Map < String,
+				String >> (new Map());
 			await temp.data.forEach(item => {
 				console.log(item._id)
-				idMap.set(item._id,"1");
-				for(let i = 0; i<this.messageList.length;i++){
-					if(item._id===this.messageList[i].openId){
+				idMap.set(item._id, "1");
+				for (let i = 0; i < this.messageList.length; i++) {
+					if (item._id === this.messageList[i].openId) {
 						this.showMessage.push({
 							...this.messageList[i],
-							num:item.num
+							num: item.num
 						})
 						break;
 					}
 				}
 			})
 			console.log(this.messageList)
-			for(let i = 0;i<this.messageList.length;i++){
-				if(idMap.get(this.messageList[i].openId)==null){
+			for (let i = 0; i < this.messageList.length; i++) {
+				if (idMap.get(this.messageList[i].openId) == null) {
 					this.showMessage.push({
 						...this.messageList[i],
 					})
 				}
-				idMap.set(this.messageList[i].openId,"1");
+				idMap.set(this.messageList[i].openId, "1");
 			}
 			console.log(this.showMessage)
-			this.loading=false
+			this.loading = false
 		}
 	};
 </script>
 
 <style lang="scss" scoped>
+	.fullScreen {
+		height: 100vh;
+		width: 100%;
+		background-color: $background-color;
+		position: relative;
+		font-size: 32rpx;
+
+		.content {
+			background-color: $background-color;
+		}
+	}
 </style>
