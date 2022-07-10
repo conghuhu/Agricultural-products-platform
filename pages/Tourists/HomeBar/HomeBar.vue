@@ -164,7 +164,6 @@
 			 * 获取商品信息
 			 */
 			async function getGoodsList(location ? : number[]) {
-				console.log("获取位置");
 				goodListLoading.value = true;
 				if (location) {
 					const longitude = location[0];
@@ -203,7 +202,6 @@
 					});
 				}
 				goodListLoading.value = false;
-				console.log(flowList)
 			};
 			//接受类别数组
 			const categoryList = reactive([]);
@@ -271,7 +269,8 @@
 				toSearch,
 				hotGoodList,
 				getHotGoodList,
-				hotGoodLoading
+				hotGoodLoading,
+				location
 			}
 		},
 		async onLoad() {
@@ -287,6 +286,12 @@
 				this.categoryList.push(item);
 			});
 			this.categoryLoading = false;
+		},
+		async onPullDownRefresh() {
+			if (this.location && this.location.longitude) {
+				await this.getGoodsList([this.location.longitude, this.location.latitude]);
+				uni.stopPullDownRefresh();
+			}
 		}
 	}
 </script>

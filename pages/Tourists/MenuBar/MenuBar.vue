@@ -2,10 +2,6 @@
 	<view class="fullScreen">
 		<Nav title="种草"></Nav>
 		<view class="top_tool">
-<!-- 			<view class="release" @click="gotoRelease">
-				<u-image height="54rpx" width="54rpx" mode="aspectFill"
-					src="https://636c-cloud1-7giqepei42865a68-1311829757.tcb.qcloud.la/touristImagee/release.png?sign=3e50de66fc62aa3c609afaa17a9fd90d&t=1652690449" />
-			</view> -->
 			<view class="search">
 				<view class="search_content">
 					<u-search borderColor="#909399" placeholder="请输入关键字" v-model="keyword" :clearabled="true"
