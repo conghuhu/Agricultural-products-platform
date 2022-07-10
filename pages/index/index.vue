@@ -15,6 +15,7 @@
 				<u-button :customStyle="merChantStyle" :plain="true" type="primary" shape="circle"
 					@click="merChantLogin">我是商家</u-button>
 			</view>
+			<u-top-tips ref="uToast" :navbar-height="statusBarHeight"></u-top-tips>
 		</view>
 	</view>
 </template>
@@ -23,7 +24,8 @@
 	import request from '@/api/request';
 	import {
 		ref,
-		reactive
+		reactive,
+		computed
 	} from 'vue';
 	import {
 		userStore
@@ -35,6 +37,7 @@
 		setup() {
 			const user = userStore();
 			const merchant = merchantStore();
+			const uToast = ref(null);
 
 			const loading = ref(true);
 			const videoLoading = ref(true);
@@ -49,6 +52,8 @@
 				backgroundColor: 'transparent !important',
 				fontWeight: 'bold'
 			});
+
+			const statusBarHeight = computed(() => uni.getSystemInfoSync().statusBarHeight);
 			async function merChantLogin() {
 				// 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
 				// 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
@@ -70,9 +75,15 @@
 					encrypt: true,
 				})
 				wx.hideLoading();
-				uni.redirectTo({
-					url: "/pages/Merchants/Shop/Shop"
-				})
+				uToast.value && uToast.value.show({
+					title: '登录商家端,可在我的-设置中切换身份',
+					type: 'success',
+				});
+				setTimeout(() => {
+					uni.redirectTo({
+						url: "/pages/Merchants/Shop/Shop"
+					})
+				}, 1500)
 			}
 
 			async function touristLogin() {
@@ -96,9 +107,15 @@
 					encrypt: true,
 				});
 				wx.hideLoading();
-				uni.switchTab({
-					url: "/pages/Tourists/HomeBar/HomeBar"
-				})
+				uToast.value && uToast.value.show({
+					title: '登录用户端,可在我的-设置中切换身份',
+					type: 'success',
+				});
+				setTimeout(() => {
+					uni.switchTab({
+						url: "/pages/Tourists/HomeBar/HomeBar"
+					})
+				}, 1500);
 			}
 
 			const loadedmetadata = (e) => {
@@ -159,10 +176,15 @@
 				mask,
 				loadedmetadata,
 				initTouristData,
-				initMerchantData
+				initMerchantData,
+				uToast,
+				statusBarHeight
 			}
 		},
 		async onLoad() {
+
+		},
+		async onReady() {
 			wx.showLoading({
 				title: '初始化'
 			})
@@ -187,7 +209,10 @@
 
 				this.loading = false;
 				wx.hideLoading();
-
+				this.uToast.show({
+					title: `登录${curStatus == 0 ? '商家端':'用户端'},可在我的-设置中切换身份`,
+					type: 'success',
+				})
 				setTimeout(() => {
 					if (curStatus == 0) {
 						uni.redirectTo({
@@ -198,12 +223,12 @@
 							url: "/pages/Tourists/HomeBar/HomeBar"
 						})
 					}
-				}, 1600);
+				}, 2000);
 			} else {
 				this.loading = false;
 				wx.hideLoading();
 			}
-		},
+		}
 	}
 </script>
 

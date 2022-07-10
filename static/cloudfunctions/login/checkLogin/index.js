@@ -9,16 +9,26 @@ const db = cloud.database()
 exports.main = async (event, context) => {
 	const wxContext = cloud.getWXContext();
 
-    const openId = wxContext.OPENID;
+	const openId = wxContext.OPENID;
 
 	const userDb = db.collection('users');
 	const _ = db.command
 	const isAbsent = await userDb.where({
 		_openid: _.eq(openId)
 	}).get();
-	
+
+	if (isAbsent.data.length !== 0) {
+		await userDb.where({
+			_openid: _.eq(openId)
+		}).update({
+			data: {
+				lastLoginTime: new Date()
+			}
+		})
+	}
+
 	const data = isAbsent.data;
-	
+
 	return {
 		data
 	};

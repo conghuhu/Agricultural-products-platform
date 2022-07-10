@@ -32,6 +32,7 @@ exports.main = async (event, context) => {
         city: userInfo.city,
         language: userInfo.language,
         gender: userInfo.gender,
+		money: 200.00,
         registerTime: new Date(),
         lastLoginTime: new Date()
       }
